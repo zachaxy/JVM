@@ -34,8 +34,8 @@ public class Cmd {
                 index = 4;
                 this.cpOption = args[2];
             }
-            
-            this.clazz = this.args[index - 1];
+
+            this.clazz = args[index - 1];
             this.args = new String[args.length - index];
             for (int i = index; i < args.length; i++) {
                 this.args[i - index] = args[i];
