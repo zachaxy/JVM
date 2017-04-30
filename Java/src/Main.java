@@ -25,6 +25,10 @@ public class Main {
     }
 
     static void startJVM(Cmd cmd) {
-        System.out.println("哈哈");
+        System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
+        System.out.print("args:");
+        for (int i = 0; i < cmd.args.length; i++) {
+            System.out.print(cmd.args[i] + " ");
+        }
     }
 }
