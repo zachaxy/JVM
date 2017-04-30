@@ -9,9 +9,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         String argsLine = in.nextLine();
-        Cmd cmd = new Cmd().parseCmd(argsLine);
+        Cmd cmd = new Cmd(argsLine);
 
-        if (cmd != null) {
+        if (!cmd.isRightFmt) {
+            cmd.printUsage();
+        } else {
             if (cmd.versionFlag) {
                 System.out.println("java version \"1.8.0_20\"\n"
                         + "Java(TM) SE Runtime Environment (build 1.8.0_20-b26)\n"
