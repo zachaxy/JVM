@@ -1,0 +1,7 @@
+*.iml
+/local.properties
+/.idea/
+/out
+.DS_Store
+/captures
+/Java/src/help.java
