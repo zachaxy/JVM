@@ -2,7 +2,6 @@ package classpath;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
@@ -12,13 +11,25 @@ import java.util.zip.ZipInputStream;
  * Desc: ZipJarEntry表示ZIP或JAR文件形式的类路径,避免和Java中的ZipEntry冲突,起名为ZipJarEntry;
  */
 public class ZipJarEntry extends Entry {
-    String absDir;
-    byte[] data;
+    String absPath;    // E:\JavaSrc\JVMByHand\tmp\test.zip  全路径
+    String zipName;     // test     压缩包名,不带 .zip 或者 jar
 
     public ZipJarEntry(String path) {
         File dir = new File(path);
         if (dir.exists()) {
-            absDir = dir.getAbsolutePath();
+            absPath = dir.getParentFile().getAbsolutePath();
+            zipName = dir.getName();
+            //去掉结尾的.zip或者.jar 千万别碰上其它情况,要不直接异常了;
+            zipName = zipName.substring(0, zipName.length() - 4);
+        }
+    }
+
+    public ZipJarEntry(String path, String zipName) {
+        File dir = new File(path, zipName);
+        if (dir.exists()) {
+            absPath = dir.getAbsolutePath();
+            //去掉结尾的.zip或者.jar 千万别碰上其它情况,要不直接异常了;
+            this.zipName = zipName.substring(0, zipName.length() - 4);
         }
     }
 
@@ -28,78 +39,44 @@ public class ZipJarEntry extends Entry {
      * @param className class文件的相对路径，路径之间用斜线 / 分隔，文件名有.class后缀
      */
     @Override
-    void readClass(String className) {
-        File file = new File(absDir, "test.zip");
+    byte[] readClass(String className) throws IOException {
+        File file = new File(absPath);
 
         ZipInputStream zin = null;
         BufferedInputStream in = null;
         ByteArrayOutputStream out = null;
-        try {
-            ZipFile zf = new ZipFile(file);
-            zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)));
-            ZipEntry ze;
-            boolean isExist = false;
-            while ((ze = zin.getNextEntry()) != null) {
-                if (ze.isDirectory()) {
-                    //TODO:如果是文件夹的话,需要继续进行深入的遍历...
-                } else {
-//                    System.err.println("file - " + ze.getName() + " : " + ze.getSize() + " bytes");
-                    if (ze.getName().equals(className)) {
-                        isExist = true;
-                        byte[] temp = new byte[1024];
-                        int size = 0;
 
-                        in = new BufferedInputStream(zf.getInputStream(ze));
-                        out = new ByteArrayOutputStream(1024);
+        ZipFile zf = new ZipFile(file);
+//        ZipEntry ze = zf.getEntry(zipName + "/" + className);
+        ZipEntry ze = zf.getEntry(className);
+        if (ze == null) {
+            return null;
+        }
+        in = new BufferedInputStream(zf.getInputStream(ze));
+        out = new ByteArrayOutputStream(1024);
+        int size = 0;
+        byte[] temp = new byte[1024];
+        while ((size = in.read(temp)) != -1) {
+            out.write(temp, 0, size);
+        }
+        if (zin != null) {
 
-                        while ((size = in.read(temp)) != -1) {
-                            out.write(temp, 0, size);
-                        }
-                        data = out.toByteArray();
-                        break;
-                    }
-                }
-            }
-            if (!isExist) {
-                throw new FileNotFoundException("jar包中不存在" + className);
-            }
-        } catch (ZipException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (zin != null) {
-                try {
-                    zin.closeEntry();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (in!=null){
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (out!=null){
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            zin.closeEntry();
         }
 
+        if (in != null) {
+            in.close();
+        }
+
+        if (out != null) {
+            out.close();
+        }
+
+        return out.toByteArray();
     }
 
     @Override
     String printClassName() {
-        return absDir;
+        return absPath;
     }
 }
