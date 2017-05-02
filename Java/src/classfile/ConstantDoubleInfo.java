@@ -1,0 +1,21 @@
+package classfile;
+
+import Utils.ByteUtils;
+
+/**
+ * Author: zhangxin
+ * Time: 2017/5/2 0002.
+ * Desc:
+ */
+public class ConstantDoubleInfo extends ConstantInfo {
+    double val;
+    @Override
+    void readInfo(ClassReader reader) {
+        byte[] data = reader.readUint64();
+        val = ByteUtils.byte2Double64(data);
+    }
+
+    public double getVal() {
+        return val;
+    }
+}
