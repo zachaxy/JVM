@@ -16,8 +16,7 @@ attribute_info {
 }
 */
 public abstract class AttributeInfo {
-    ConstantPool constantPool;
-    ClassReader reader;
+
 
     abstract void readInfo(ClassReader reader);
 
@@ -52,7 +51,7 @@ public abstract class AttributeInfo {
     private static AttributeInfo create(String attrName, int attrLen, ConstantPool constantPool) {
         if (attrName.equals("Code")) {
             return new CodeAttribute(constantPool);
-        }/*else if (attrName.equals("ConstantValue")){
+        }else if (attrName.equals("ConstantValue")){
             return new ConstantValueAttribute();
         }else if (attrName.equals("Deprecated")){
             return new DeprecatedAttribute();
@@ -66,7 +65,7 @@ public abstract class AttributeInfo {
             return new SourceFileAttribute(constantPool);
         }else if (attrName.equals("Synthetic")){
             return new SyntheticAttribute();
-        }*/ else {
+        } else {
             return new UnparsedAttribute(attrName, attrLen);
         }
 

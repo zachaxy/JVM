@@ -12,14 +12,17 @@ public class ClassFile {
     //这里使用char,是想使用16位无符号整数
     int minorVersion;
     int majorVersion;
-    //    constantPool ConstantPool;
-    char accessFlags;
-    char thisClass;
-    char superClass;
-    char[] interfaces;
+    ConstantPool constantPool;
+    int accessFlags;
+    int thisClass;
+    int superClass;
+    int[] interfaces;
+    MemberInfo[] fields;
+    MemberInfo[] methods;
+    AttributeInfo[] attributes;
 
 
-    ClassFile(byte[] classData) {
+    public ClassFile(byte[] classData) {
         ClassReader reader = new ClassReader(classData);
         read(reader);
     }
@@ -27,6 +30,14 @@ public class ClassFile {
     void read(ClassReader reader) {
         readAndCheckMagic(reader);
         readAndCheckVersion(reader);
+        constantPool = new ConstantPool(reader);
+        accessFlags = reader.readUint16();
+        thisClass = reader.readUint16();
+        superClass = reader.readUint16();
+        interfaces = reader.readUint16s();
+        fields = MemberInfo.readMembers(reader, constantPool);
+        methods = MemberInfo.readMembers(reader, constantPool);
+        attributes = AttributeInfo.readAttributes(reader, constantPool);
     }
 
 
@@ -49,5 +60,66 @@ public class ClassFile {
             return;
         }
         throw new RuntimeException("java.lang.UnsupportedClassVersionError!");
+    }
+
+    public int getMinorVersion() {
+        return minorVersion;
+    }
+
+    public int getMajorVersion() {
+        return majorVersion;
+    }
+
+    public ConstantPool getConstantPool() {
+        return constantPool;
+    }
+
+    public int getAccessFlags() {
+        return accessFlags;
+    }
+
+    public int getThisClass() {
+        return thisClass;
+    }
+
+    public int getSuperClass() {
+        return superClass;
+    }
+
+    public int[] getInterfaces() {
+        return interfaces;
+    }
+
+    public MemberInfo[] getFields() {
+        return fields;
+    }
+
+    public MemberInfo[] getMethods() {
+        return methods;
+    }
+
+    public AttributeInfo[] getAttributes() {
+        return attributes;
+    }
+
+    public String getClassName() {
+        return constantPool.getClassName(thisClass);
+    }
+
+    public String getSuperClassName() {
+        if (superClass > 0) {
+            return constantPool.getClassName(superClass);
+        } else {
+            return "";
+        }
+    }
+
+    public String[] getInterfaceNames() {
+        String[] interfaceNames = new String[interfaces.length];
+        for (int i = 0; i < interfaceNames.length; i++) {
+            interfaceNames[i] = constantPool.getClassName(interfaces[i]);
+        }
+        return interfaceNames;
+
     }
 }

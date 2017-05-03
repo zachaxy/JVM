@@ -55,10 +55,14 @@ public class ClassReader {
         return res;
     }
 
-    // TODO: 2017/5/2 0002 待实现的方法;
-    /*public byte[] readUint16s() {
+    public int[] readUint16s() {
         int n = readUint16();
-    }*/
+        int[] data = new int[n];
+        for (int i = 0; i < n; i++) {
+            data[i] = readUint16();
+        }
+        return data;
+    }
 
     public byte[] readBytes(int n) {
         byte[] res = new byte[n];
@@ -67,5 +71,6 @@ public class ClassReader {
         }
         return res;
     }
+
 
 }

@@ -68,4 +68,8 @@ public class ConstantPool {
     String getUtf8(int index) {
         return ((ConstantUtf8Info) getConstantInfo(index)).val;
     }
+
+    public int getConstantPoolCount() {
+        return constantPoolCount;
+    }
 }

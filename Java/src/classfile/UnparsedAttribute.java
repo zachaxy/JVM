@@ -6,12 +6,18 @@ package classfile;
  * Desc:
  */
 public class UnparsedAttribute extends AttributeInfo {
-    public UnparsedAttribute(String attrName, int attrLen) {
+    String attrName;
+    int attrLen;
 
+    byte[] info;
+
+    public UnparsedAttribute(String attrName, int attrLen) {
+        this.attrName = attrName;
+        this.attrLen = attrLen;
     }
 
     @Override
     void readInfo(ClassReader reader) {
-
+        info = reader.readBytes(attrLen);
     }
 }
