@@ -6,7 +6,7 @@ package classfile;
  * Desc:
  */
 public class MemberInfo {
-    //    cp              ConstantPool
+    ConstantPool constantPool;
     int accessFlags;
     int nameIndex;
     int descriptorIndex;

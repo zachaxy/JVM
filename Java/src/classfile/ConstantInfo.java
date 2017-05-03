@@ -49,38 +49,25 @@ public abstract class ConstantInfo {
                 return new ConstantStringInfo(constantPool);
             case CONSTANT_Class:
                 return new ConstantClassInfo(constantPool);
-           /* case CONSTANT_Fieldref:
-                return new ConstantFieldrefInfo {
-                ConstantMemberrefInfo {
-                    cp:
-                    cp
-                }
-            }
+            case CONSTANT_Fieldref:
+                return new ConstantMemberRefInfo(constantPool);
             case CONSTANT_Methodref:
-                return new ConstantMethodrefInfo {
-                ConstantMemberrefInfo {
-                    cp:
-                    cp
-                }
-            }
+                return new ConstantMemberRefInfo(constantPool);
             case CONSTANT_InterfaceMethodref:
-                return new ConstantInterfaceMethodrefInfo {
-                ConstantMemberrefInfo {
-                    cp:
-                    cp
-                }
-            }*/
+                return new ConstantMemberRefInfo(constantPool);
             case CONSTANT_NameAndType:
                 return new ConstantNameAndTypeInfo();
+            // TODO: 2017/5/3 0003 下面三个类还未编码; 
             case CONSTANT_MethodType:
                 return new ConstantMethodTypeInfo();
             case CONSTANT_MethodHandle:
                 return new ConstantMethodHandleInfo();
             case CONSTANT_InvokeDynamic:
                 return new ConstantInvokeDynamicInfo();
-
+            default:
+                throw new RuntimeException("java.lang.ClassFormatError: constant pool tag!");
         }
-        throw new RuntimeException("java.lang.ClassFormatError: constant pool tag!");
     }
-
 }
+
+

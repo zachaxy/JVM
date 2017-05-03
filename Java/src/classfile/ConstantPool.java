@@ -46,9 +46,18 @@ public class ConstantPool {
         return getUtf8(info.nameIndex);
     }
 
+    //常量池查找字段或方法的描述符,描述符其实就是由其对应的类型名字对应而成;
     String getType(int index) {
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         return getUtf8(info.descriptorIndex);
+    }
+
+    String[] getNameAndType(int index) {
+        String[] str = new String[2];
+        ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
+        str[0] = getUtf8(info.nameIndex);
+        str[1] = getUtf8(info.descriptorIndex);
+        return str;
     }
 
     String getClassName(int index) {

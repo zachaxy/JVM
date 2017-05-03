@@ -6,8 +6,13 @@ package classfile;
  * Desc:
  */
 public class ConstantMethodHandleInfo extends ConstantInfo {
+    // TODO: 2017/5/3 0003 关于byte上界,自行处理;
+    byte referenceKind;
+    int referenceIndex;
+
     @Override
     void readInfo(ClassReader reader) {
-
+        referenceKind = reader.readUint8();
+        referenceIndex = reader.readUint16();
     }
 }
