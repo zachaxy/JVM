@@ -9,8 +9,8 @@ import java.util.EmptyStackException;
  * 最多持有1024个栈帧,当然这个值可以设置;
  */
 public class Zstack {
-    int maxSize;
-    int size;
+    int maxSize;    //虚拟机栈中所包含栈帧的最大容量
+    int size;       //当前虚拟机栈中包含帧的数量
     private Zframe _top; //栈顶的帧
 
     public Zstack(int maxSize) {
@@ -21,7 +21,9 @@ public class Zstack {
     //新添加一个栈帧,将这个栈帧设置为top,当然如果当前栈之前有元素,那么将要push进的frame的lower是指为之前的top,当前frame变为top;
     void push(Zframe frame) {
         if (size > maxSize) {
-            throw new RuntimeException("java.lang.StackOverflowError");
+            //throw new RuntimeException("java.lang.StackOverflowError");
+            //如果栈已经满了，按照Java虚拟机规范，应该抛出StackOverflowError异常
+            throw new StackOverflowError();
         }
         if (_top != null) {
             frame.lower = _top; // frame中保存前一个帧的引用,使得当前帧被push的时,前一个帧顶上去;
