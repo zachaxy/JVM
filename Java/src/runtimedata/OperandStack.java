@@ -3,7 +3,9 @@ package runtimedata;
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.
- * Desc:
+ * Desc:操作数栈;
+ * 包含的操作和局部变量表类似
+ * 操作数栈的大小是编译器已经确定的，所以可以用[]Slot实现
  */
 public class OperandStack {
 
@@ -71,6 +73,8 @@ public class OperandStack {
 
     Zobject popRef() {
         size--;
-        return slots[size].ref;
+        Zobject ref = slots[size].ref;
+        slots[size].ref = null; //避免内存泄露;
+        return ref;
     }
 }
