@@ -6,6 +6,7 @@ import java.util.EmptyStackException;
  * Author: zhangxin
  * Time: 2017/5/4 0004.
  * Desc: 并没有采用数组的形式来保存栈帧,而是使用单向链表的形式,Zframe中保存这前一个帧的引用;
+ * 最多持有1024个栈帧,当然这个值可以设置;
  */
 public class Zstack {
     int maxSize;
