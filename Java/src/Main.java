@@ -1,6 +1,9 @@
 import classfile.ClassFile;
 import classfile.MemberInfo;
 import classpath.ClassPath;
+import runtimedata.LocalVars;
+import runtimedata.OperandStack;
+import runtimedata.Zframe;
 
 /**
  * Author: zhangxin
@@ -38,7 +41,7 @@ public class Main {
     }
 
     static void startJVM(Cmd cmd) {
-        System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
+       /* System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
         System.out.print("args:");
         for (int i = 0; i < cmd.args.length; i++) {
             System.out.print(cmd.args[i] + " ");
@@ -49,15 +52,13 @@ public class Main {
         System.out.println("className: " + className);
 
         ClassPath cp = new ClassPath(cmd.XjreOption, cmd.cpOption);
-        /*
-        //将class文件的字节码打印出来;
-        byte[] data = cp.readClass(className);
-        for (int i = 0; i < data.length; i++) {
-            System.out.print(data[i] + " ");
-        }*/
 
         ClassFile classFile = loadClass(className, cp);
-        printClassInfo(classFile);
+        printClassInfo(classFile);*/
+
+        Zframe frame = new Zframe(100, 100);
+        testLocalVars(frame.getLocalVars());
+        testOperandStack(frame.getOperandStack());
     }
 
     private static void printClassInfo(ClassFile classFile) {
@@ -91,5 +92,41 @@ public class Main {
     private static ClassFile loadClass(String className, ClassPath cp) {
         byte[] data = cp.readClass(className);
         return new ClassFile(data);
+    }
+
+
+    static void testLocalVars(LocalVars vars) {
+        vars.setInt(0, 100);
+        vars.setInt(1, -100);
+        vars.setLong(2, 2997924580L);
+        vars.setLong(4, -2997924580L);
+        vars.setFloat(6, 3.1415926f);
+        vars.setDouble(7, 2.71828182845);
+        vars.setRef(9, null);
+        System.out.println(vars.getInt(0));
+        System.out.println(vars.getInt(1));
+        System.out.println(vars.getLong(2));
+        System.out.println(vars.getLong(4));
+        System.out.println(vars.getFloat(6));
+        System.out.println(vars.getDouble(7));
+        System.out.println(vars.getRef(9));
+    }
+
+    static void testOperandStack(OperandStack ops) {
+        ops.pushInt(100);
+        ops.pushInt(-100);
+        ops.pushLong(2997924580L);
+        ops.pushLong(-2997924580L);
+        ops.pushFloat(3.1415926f);
+        ops.pushDouble(2.71828182845);
+        ops.pushRef(null);
+        System.out.println(ops.popRef());
+        System.out.println(ops.popDouble());
+        System.out.println(ops.popFloat());
+        System.out.println(ops.popLong());
+        System.out.println(ops.popLong());
+        System.out.println(ops.popInt());
+        System.out.println(ops.popInt());
+
     }
 }

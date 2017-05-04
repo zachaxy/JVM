@@ -8,11 +8,8 @@ package runtimedata;
  * 导致了一半内存的浪费;
  */
 public class Slot {
-    int num;
-    Zobject ref;
+    public int num;
+    public Zobject ref;
 
-    public Slot(int num, Zobject ref) {
-        this.num = num;
-        this.ref = ref;
-    }
+    public Slot() {}
 }

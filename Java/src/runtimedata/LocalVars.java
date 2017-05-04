@@ -11,58 +11,68 @@ public class LocalVars {
     private Slot[] localVars; //局部变量表,JVM规定其按照索引访问,所以将其设置为数组
 
     public LocalVars(int maxLocals) {
-        if (maxLocals>0) {
+        if (maxLocals > 0) {
             localVars = new Slot[maxLocals];
-        }else{
+        } else {
             throw new NullPointerException("maxLocals<0");
         }
     }
 
     //提供了对int,float,long,double,引用的存取,这里要注意的是long和double是占用8字节的,所以使用了局部变量表中的两个槽位分别存储前四字节和后四字节
-    void setInt(int index, int val) {
-        localVars[index].num = val;
+    public void setInt(int index, int val) {
+        Slot slot = new Slot();
+        slot.num = val;
+        localVars[index] = slot;
     }
 
-    int getInt(int index) {
+    public int getInt(int index) {
         return localVars[index].num;
     }
 
-    void setFloat(int index, float val) {
-        localVars[index].num = Float.floatToIntBits(val);
+    public void setFloat(int index, float val) {
+        Slot slot = new Slot();
+        slot.num = Float.floatToIntBits(val);
+        localVars[index] = slot;
     }
 
-    float getFloat(int index) {
+    public float getFloat(int index) {
         return Float.intBitsToFloat(localVars[index].num);
     }
 
-    void setLong(int index, long val) {
+    public void setLong(int index, long val) {
         //先存低32位
-        localVars[index].num = (int) (val & 0xFFFFFFFF);
+        Slot slot1 = new Slot();
+        slot1.num = (int) (val);
+        localVars[index] = slot1;
         //再存高32位
-        localVars[index + 1].num = (int) (val >> 32);
+        Slot slot2 = new Slot();
+        slot2.num = (int) (val >> 32);
+        localVars[index + 1] = slot2;
     }
 
-    long getLong(int index) {
+    public long getLong(int index) {
         int low = localVars[index].num;
-        int high = localVars[index + 1].num;
-        return (high << 32) | (low);
+        long high = localVars[index + 1].num;
+        return ((high & 0x000000ffffffffL) << 32) | (low & 0x00000000ffffffffL);
     }
 
-    void setDouble(int index, double val) {
+    public void setDouble(int index, double val) {
         long bits = Double.doubleToLongBits(val);
         setLong(index, bits);
     }
 
-    double getDouble(int index) {
+    public double getDouble(int index) {
         long bits = getLong(index);
         return Double.longBitsToDouble(bits);
     }
 
-    void setRef(int index, Zobject ref) {
-        localVars[index].ref = ref;
+    public void setRef(int index, Zobject ref) {
+        Slot slot = new Slot();
+        slot.ref = ref;
+        localVars[index] = slot;
     }
 
-    Zobject getRef(int index) {
+    public Zobject getRef(int index) {
         return localVars[index].ref;
     }
 

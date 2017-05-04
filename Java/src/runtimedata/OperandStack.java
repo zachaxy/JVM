@@ -9,8 +9,8 @@ package runtimedata;
  */
 public class OperandStack {
 
-    int size;  //初始值为0,在运行中,代表当前栈顶的index,还未使用,可以直接用,用完记得size++;
-    Slot[] slots;
+    private int size;  //初始值为0,在运行中,代表当前栈顶的index,还未使用,可以直接用,用完记得size++;
+    private Slot[] slots;
 
     public OperandStack(int maxStack) {
         if (maxStack > 0) {
@@ -20,58 +20,68 @@ public class OperandStack {
         }
     }
 
-    void pushInt(int val) {
-        slots[size].num = val;
+    public void pushInt(int val) {
+        Slot slot = new Slot();
+        slot.num = val;
+        slots[size] = slot;
         size++;
     }
 
-    int popInt() {
+    public int popInt() {
         size--;
         return slots[size].num;
     }
 
-    void pushFloat(float val) {
-        slots[size].num = Float.floatToIntBits(val);
+    public void pushFloat(float val) {
+        Slot slot = new Slot();
+        slot.num = Float.floatToIntBits(val);
+        slots[size] = slot;
         size++;
     }
 
-    float popFloat() {
+    public float popFloat() {
         size--;
         return Float.intBitsToFloat(slots[size].num);
     }
 
-    void pushLong(long val) {
+    public void pushLong(long val) {
         //低位
-        slots[size].num = (int) (val & 0xFFFFFFFF);
+        Slot slot1 = new Slot();
+        slot1.num = (int) (val);
+        slots[size] = slot1;
         size++;
         //高位
-        slots[size].num = (int) (val >> 32);
+        Slot slot2 = new Slot();
+        slot2.num = (int) (val >> 32);
+        slots[size] = slot2;
         size++;
     }
 
-    long popLong() {
+    public long popLong() {
         size -= 2;
         int low = slots[size].num;
-        int high = slots[size + 1].num;
-        return (high << 32) | (low);
+        long high = slots[size + 1].num;
+        return ((high & 0x000000ffffffffL) << 32) | (low & 0x00000000ffffffffL);
     }
 
-    void pushDouble(double val) {
+    public void pushDouble(double val) {
         long bits = Double.doubleToLongBits(val);
         pushLong(bits);
     }
 
-    double popDouble() {
+    public double popDouble() {
         long bits = popLong();
         return Double.longBitsToDouble(bits);
     }
 
-    void pushRef(Zobject ref) {
-        slots[size].ref = ref;
+    public void pushRef(Zobject ref) {
+        Slot slot = new Slot();
+        slot.ref = ref;
+        slots[size] = slot;
         size++;
     }
 
-    Zobject popRef() {
+    public Zobject popRef() {
         size--;
         Zobject ref = slots[size].ref;
         slots[size].ref = null; //避免内存泄露;
