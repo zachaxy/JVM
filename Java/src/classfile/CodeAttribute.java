@@ -36,7 +36,7 @@ public class CodeAttribute extends AttributeInfo {
     AttributeInfo[] attributes;
 
     public CodeAttribute(ConstantPool constantPool) {
-
+this.constantPool = constantPool;
     }
 
     @Override

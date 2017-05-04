@@ -13,9 +13,13 @@ public class Main {
         String argsLine = in.nextLine();*/
         args = new String[4];
         args[0] = "java";
+        args[1] = "-cp";
+        /*
         args[1] = "-Xjre";
         args[2] = "C:\\Program Files\\Java\\jdk1.8.0_20\\jre";
-        args[3] = "java.lang.Object";
+        args[3] = "java.lang.String";*/
+        args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
+        args[3] = "ClassFileTest";
         Cmd cmd = new Cmd(args);
 
         if (!cmd.isRightFmt) {
@@ -39,8 +43,10 @@ public class Main {
         for (int i = 0; i < cmd.args.length; i++) {
             System.out.print(cmd.args[i] + " ");
         }
+        System.out.println();
 
         String className = cmd.clazz.replace(".", "/");
+        System.out.println("className: " + className);
 
         ClassPath cp = new ClassPath(cmd.XjreOption, cmd.cpOption);
         /*byte[] data = cp.readClass(className);
