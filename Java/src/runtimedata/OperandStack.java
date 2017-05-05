@@ -61,6 +61,7 @@ public class OperandStack {
         size -= 2;
         int low = slots[size].num;
         long high = slots[size + 1].num;
+        //下面的low在和后面的数进行&运算时自动转换为long;
         return ((high & 0x000000ffffffffL) << 32) | (low & 0x00000000ffffffffL);
     }
 
