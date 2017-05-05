@@ -87,4 +87,16 @@ public class OperandStack {
         slots[size].ref = null; //避免内存泄露;
         return ref;
     }
+
+    public void pushSlot(Slot slot) {
+        slots[size] = slot;
+        size++;
+    }
+
+    public Slot popSlot() {
+        size--;
+        Slot slot = slots[size];
+        slots[size] = null; //释放内存,是GC可以回收该slot;
+        return slot;
+    }
 }

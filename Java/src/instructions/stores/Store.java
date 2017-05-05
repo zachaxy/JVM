@@ -6,7 +6,7 @@ import runtimedata.Zobject;
 /**
  * Author: zhangxin
  * Time: 2017/5/5 0005.
- * Desc:
+ * Desc: 存储指令工具类,针对引用,int,long,double,float五种类型;
  */
 public class Store {
     public static void astore(Zframe frame, int index) {
