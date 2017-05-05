@@ -10,6 +10,8 @@ public class Zframe {
     Zframe lower;       //当前帧的 前一帧的引用;相当于单向链表的前一个指针
     LocalVars localVars;    //局部变量表的引用;
     OperandStack operandStack;  //操作数栈的引用;
+    Zthread thread;
+    int nextPC;
 
     // TODO: 2017/5/4 0004
     public Zframe(int maxLocals, int maxStack) {
@@ -23,5 +25,17 @@ public class Zframe {
 
     public OperandStack getOperandStack() {
         return operandStack;
+    }
+
+    public Zthread getThread() {
+        return thread;
+    }
+
+    public int getNextPC() {
+        return nextPC;
+    }
+
+    public void setNextPC(int nextPC) {
+        this.nextPC = nextPC;
     }
 }
