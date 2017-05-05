@@ -1,4 +1,4 @@
-package instructions.comparisons.fcmp;
+package instructions.comparisons.dcmp;
 
 import runtimedata.OperandStack;
 import runtimedata.Zframe;
@@ -10,11 +10,11 @@ import runtimedata.Zframe;
  * fcmpg和fcmpl指令的区别就在于对第4种结果的定义;
  * 当两个float变量中至少有一个是NaN时，用fcmpg指令比较的结果是1，而用fcmpl指令比较的结果是-1。
  */
-public class FCMP {
-    static void _fcmp(Zframe frame, boolean flag) {
+public class DCMP {
+    static void _dcmp(Zframe frame, boolean flag) {
         OperandStack stack = frame.getOperandStack();
-        float val2 = stack.popFloat();
-        float val1 = stack.popFloat();
+        double val2 = stack.popDouble();
+        double val1 = stack.popDouble();
 
         if (val1 > val2) {
             stack.pushInt(1);
