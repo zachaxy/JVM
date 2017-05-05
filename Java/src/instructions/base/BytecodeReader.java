@@ -21,13 +21,13 @@ public class BytecodeReader {
     }
 
     // TODO: 2017/5/5 0005 下面的两个方法和源码中是不对应的,可能会有问题
-    byte readInt8() {
+    public byte readInt8() {
         byte res = code[pc];
         pc++;
         return res;
     }
 
-    int readUint8() {
+    public int readUint8() {
         int res = code[pc];
         res = (res + 256) % 256;
         pc++;
@@ -35,11 +35,11 @@ public class BytecodeReader {
     }
 
 
-    int readInt16() {
+    public int readInt16() {
         return (short) readUint16();
     }
 
-    int readUint16() {
+    public  int readUint16() {
         int a1 = readUint8();
         int a2 = readUint8();
         return (a1 << 8 | a2);
