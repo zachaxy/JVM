@@ -73,4 +73,16 @@ this.constantPool = constantPool;
             this.catchType = catchType;
         }
     }
+
+    public int getMaxStack() {
+        return maxStack;
+    }
+
+    public int getMaxLocals() {
+        return maxLocals;
+    }
+
+    public byte[] getCode() {
+        return code;
+    }
 }

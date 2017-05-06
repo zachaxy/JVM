@@ -40,4 +40,13 @@ public class MemberInfo {
     public String getDescriptor() {
         return constantPool.getUtf8(descriptorIndex);
     }
+
+    public CodeAttribute getCodeAttribute() {
+        for (AttributeInfo info : attributes) {
+            if (info instanceof CodeAttribute) {
+                return (CodeAttribute) info;
+            }
+        }
+        return null;
+    }
 }

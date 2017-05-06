@@ -6,6 +6,9 @@ package instructions.base;
  * Desc:存储和加载类指令需要根据索引存取局部变量表，索引由单字节操作数给出
  */
 public abstract class Index8Instruction implements Instruction {
+
+    public Index8Instruction(){}
+
     public int index;
 
     @Override

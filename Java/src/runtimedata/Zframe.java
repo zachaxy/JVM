@@ -14,7 +14,8 @@ public class Zframe {
     int nextPC;
 
     // TODO: 2017/5/4 0004
-    public Zframe(int maxLocals, int maxStack) {
+    public Zframe(Zthread thread, int maxLocals, int maxStack) {
+        this.thread = thread;
         localVars = new LocalVars(maxLocals);
         operandStack = new OperandStack(maxStack);
     }

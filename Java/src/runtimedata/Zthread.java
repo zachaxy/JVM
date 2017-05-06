@@ -10,7 +10,7 @@ package runtimedata;
  * <p>
  * 如果Java虚拟机栈有大小限制，且执行线程所需的栈空间超出了这个限制，会导致StackOverflowError异常抛出。
  * 如果Java虚拟机栈可以动态扩展，但是内存已经耗尽，会导致OutOfMemoryError异常抛出。
- *
+ * <p>
  * 其实Java命令提供了-Xss选项来设置Java虚拟机栈大小
  */
 public class Zthread {
@@ -30,15 +30,19 @@ public class Zthread {
         this.pc = pc;
     }
 
-    void pushFrame(Zframe frame) {
+    public void pushFrame(Zframe frame) {
         stack.push(frame);
     }
 
-    Zframe popFrame() {
+    public Zframe popFrame() {
         return stack.pop();
     }
 
     public Zframe getCurrentFrame() {
         return stack.top();
+    }
+
+    public Zframe createFrame(int maxLocals, int maxStack) {
+        return new Zframe(this, maxLocals, maxStack);
     }
 }
