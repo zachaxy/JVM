@@ -3,7 +3,6 @@ import classfile.MemberInfo;
 import classpath.ClassPath;
 import runtimedata.LocalVars;
 import runtimedata.OperandStack;
-import runtimedata.Zframe;
 
 /**
  * Author: zhangxin
@@ -16,13 +15,17 @@ public class Main {
         String argsLine = in.nextLine();*/
         args = new String[4];
         args[0] = "java";
-        args[1] = "-cp";
+//        args[1] = "-cp";
         /*
         args[1] = "-Xjre";
         args[2] = "C:\\Program Files\\Java\\jdk1.8.0_20\\jre";
         args[3] = "java.lang.String";*/
-        args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
-        args[3] = "ClassFileTest";
+        /*args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
+        args[3] = "ClassFileTest";*/
+        args[1] = "-cp";
+        args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch05";
+        args[3] = "GaussTest";
+
         Cmd cmd = new Cmd(args);
 
         if (!cmd.isRightFmt) {
@@ -41,8 +44,8 @@ public class Main {
     }
 
     static void startJVM(Cmd cmd) {
-       /* System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
-        System.out.print("args:");
+        System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
+        System.out.print("方法的参数 args:");
         for (int i = 0; i < cmd.args.length; i++) {
             System.out.print(cmd.args[i] + " ");
         }
@@ -54,11 +57,26 @@ public class Main {
         ClassPath cp = new ClassPath(cmd.XjreOption, cmd.cpOption);
 
         ClassFile classFile = loadClass(className, cp);
-        printClassInfo(classFile);*/
-
+        MemberInfo mainMethod = getMainMethod(classFile);
+        if (mainMethod != null) {
+            Interpreter.interpret(mainMethod);
+        } else {
+            System.out.println("Main method not found in class " + className);
+        }
+      /*   printClassInfo(classFile)
         Zframe frame = new Zframe(100, 100);
         testLocalVars(frame.getLocalVars());
-        testOperandStack(frame.getOperandStack());
+        testOperandStack(frame.getOperandStack());*/
+    }
+
+    private static MemberInfo getMainMethod(ClassFile classFile) {
+        MemberInfo[] methods = classFile.getMethods();
+        for (MemberInfo method : methods) {
+            if (method.getName().equals("main") && method.getDescriptor().equals("([Ljava/lang/String;)V")) {
+                return method;
+            }
+        }
+        return null;
     }
 
     private static void printClassInfo(ClassFile classFile) {

@@ -220,8 +220,8 @@ public class InstructionFactory {
     static DCMPL dcmpl = new DCMPL();
     static DCMPG dcmpg = new DCMPG();
 
-    static Instruction createInstruction(int opCode) {
-        switch (opCode){
+    public static Instruction createInstruction(int opCode) {
+        switch (opCode) {
             case 0x00:
                 return nop;
             case 0x01:
@@ -630,7 +630,7 @@ public class InstructionFactory {
             // case 0xfe: impdep1
             // case 0xff: impdep2
             default:
-                throw new RuntimeException("Unsupported opcode: "+ opCode);
+                throw new RuntimeException("Unsupported opcode: " + opCode);
         }
     }
 }
