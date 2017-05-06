@@ -11,8 +11,8 @@ import runtimedata.Zframe;
  * Desc: iinc指令给局部变量表中的int变量增加常量值，局部变量表索引和常量值都由指令的操作数提供。
  */
 public class IINC implements Instruction {
-    int index;
-    int offset;
+    public int index;
+    public int offset;
 
     @Override
     public void fetchOperands(BytecodeReader reader) {
