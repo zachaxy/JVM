@@ -9,7 +9,8 @@ public class Cmd {
     boolean helpFlag;        //是否是help 查看帮助
     boolean versionFlag;    //是否是查看版本
     String cpOption = "";  //classPath 的路径;          java -cp(-classpath) xxx
-    String XjreOption = "";  // 对于使用 -Xjre 的选项;  java -Xjre xxx
+    //使用 -Xjre 的选项:这是一个非标准的选项,java命令中是没有的,使用这个选项目的是用来指定启动类路径来寻找和加载Java标准库中的类
+    String XjreOption = "";
     String clazz;  //要编译的class 文件;
     String[] args; //执行clazz文件需要的参数
 
@@ -18,14 +19,14 @@ public class Cmd {
         parseCmd(cmdLine);
     }
 
-    public Cmd(String[] strs){
+    public Cmd(String[] strs) {
         parseCmd(strs);
     }
 
     public void parseCmd(String[] args) {
         int index = 1;
 
-        if (args.length<2){
+        if (args.length < 2) {
             isRightFmt = false;
             return;
         }

@@ -27,7 +27,7 @@ public class Interpreter {
         Zthread thead = new Zthread();
         //该线程中创建一帧
         Zframe frame = thead.createFrame(maxLocals, maxStack);
-        //把该帧push到虚拟机栈中
+        //把该帧push到虚拟机栈中，这时候虚拟机栈中已经有一帧了
         thead.pushFrame(frame);
 
 /*
@@ -47,14 +47,14 @@ public class Interpreter {
 
     //循环执行“计算pc、解码指令、执行指令”这三个步骤，直到遇到错误
     private static void loop(Zthread thread, byte[] byteCode) {
-        Zframe frame = thread.popFrame();
+        Zframe frame = thread.popFrame();   //得到栈顶的帧。
         BytecodeReader reader = new BytecodeReader();
 
         //这里循环的条件是true,因为在解析指令的时候会遇到return,而现在还没有实现return,所以遇到return 直接抛出异常,那么循环也就终止了
         while (true) {
-            int pc = frame.getNextPC();
+            int pc = frame.getNextPC(); //这第一次frame才刚初始化，获取的pc应该是默认值0吧。
             thread.setPc(pc);
-            reader.reset(byteCode, pc);
+            reader.reset(byteCode, pc); //reset方法，其实是在不断的设置pc的位置。
             int opCode = reader.readUint8();
             //解析指令,创建指令,然后根据不同的指令执行不同的操作
             Instruction instruction = InstructionFactory.createInstruction(opCode);

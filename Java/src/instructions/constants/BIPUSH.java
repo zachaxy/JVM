@@ -19,6 +19,7 @@ public class BIPUSH implements Instruction {
 
     @Override
     public void execute(Zframe frame) {
-        frame.getOperandStack().pushInt(val);
+        // 源码是独到一个int8，然后再用int32将其扩展，那么就变成了实际值。但是在Java中直接扩展还是原值，所以要进行修正在push；
+        frame.getOperandStack().pushInt((val + 256) % 256);
     }
 }

@@ -18,6 +18,7 @@ u2 exception_index_table[number_of_exceptions];
 public class ExceptionsAttribute extends AttributeInfo {
 
     int[] exceptionIndexTable;
+
     @Override
     void readInfo(ClassReader reader) {
         exceptionIndexTable = reader.readUint16s();

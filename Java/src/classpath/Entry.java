@@ -24,15 +24,19 @@ public abstract class Entry {
     abstract String printClassName();
 
 
+    /**
+     * 工厂方法,根据传入的path的形式不同,
+     * @param path 命令行得到的路径字符串
+     * @return 创建具体的Entry
+     */
     static Entry createEntry(String path) {
         if (path != null) {
             if (path.contains(pathListSeparator)) {
                 return new CompositeEntry(path, pathListSeparator);
             } else if (path.contains("*")) {
                 return new WildcardEntry("");
-            } else if (path.contains(".jar") || path.contains(".JAR") || path.contains(".zip") || path.contains("" +
-                    ".ZIP")) {
-
+            } else if (path.contains(".jar") || path.contains(".JAR") || path.contains(".zip")
+                    || path.contains("" + ".ZIP")) {
                 return new ZipJarEntry(path);
             }
             return new DirEntry(path);

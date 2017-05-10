@@ -20,7 +20,6 @@ public class BytecodeReader {
         return pc;
     }
 
-    // TODO: 2017/5/5 0005 下面的两个方法和源码中是不对应的,可能会有问题
     public byte readInt8() {
         byte res = code[pc];
         pc++;
@@ -39,7 +38,7 @@ public class BytecodeReader {
         return (short) readUint16();
     }
 
-    public  int readUint16() {
+    public int readUint16() {
         int a1 = readUint8();
         int a2 = readUint8();
         return (a1 << 8 | a2);

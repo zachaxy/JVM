@@ -19,6 +19,6 @@ public class SIPUSH implements Instruction {
 
     @Override
     public void execute(Zframe frame) {
-        frame.getOperandStack().pushInt(val);
+        frame.getOperandStack().pushInt((val + 65536) % 65536);
     }
 }

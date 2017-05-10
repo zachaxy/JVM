@@ -36,7 +36,7 @@ public class CodeAttribute extends AttributeInfo {
     AttributeInfo[] attributes;
 
     public CodeAttribute(ConstantPool constantPool) {
-this.constantPool = constantPool;
+        this.constantPool = constantPool;
     }
 
     @Override
@@ -60,6 +60,7 @@ this.constantPool = constantPool;
     }
 
 
+    //异常表，包含四个指针，分别为
     static class ExceptionTableEntry {
         int startPc;
         int endPc;

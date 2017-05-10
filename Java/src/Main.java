@@ -55,8 +55,13 @@ public class Main {
         System.out.println("className: " + className);
 
         ClassPath cp = new ClassPath(cmd.XjreOption, cmd.cpOption);
-
+        /*byte[] data = cp.readClass(className);
+        for (int i = 0; i < data.length; i++) {
+            System.out.print(data[i] + " ");
+        }*/
         ClassFile classFile = loadClass(className, cp);
+        System.out.println(classFile.getClassName());
+        System.out.println(classFile.getSuperClassName());
         MemberInfo mainMethod = getMainMethod(classFile);
         if (mainMethod != null) {
             Interpreter.interpret(mainMethod);

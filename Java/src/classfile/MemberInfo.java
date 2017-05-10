@@ -3,7 +3,16 @@ package classfile;
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
- * Desc:
+ * Desc: 字段表和方法表，共用该类，因为二者在虚拟机规范中的定义是相同的
+ */
+/*
+field_info {
+  u2 access_flags;
+  u2 name_index;
+  u2 descriptor_index;
+  u2 attributes_count;
+  attribute_info attributes[attributes_count];
+}
  */
 public class MemberInfo {
     ConstantPool constantPool;

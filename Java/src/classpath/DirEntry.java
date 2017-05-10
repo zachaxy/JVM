@@ -71,7 +71,6 @@ public class DirEntry extends Entry {
             out.close();
         }
         return out.toByteArray();
-
     }
 
 

@@ -16,7 +16,7 @@ public class ClassPath {
 
     //parse()函数使用 -Xjre 选项解析启动类路径和扩展类路径
     // 使用-classpath/-cp选项解析用户类路径
-
+    //以此来初始化成员变量的三种路径
     public ClassPath(String jreOption, String cpOption) {
         parseBootAndExtClasspath(jreOption);
         parseUserClasspath(cpOption);
@@ -38,18 +38,20 @@ public class ClassPath {
 
     String getJreDir(String jreOption) {
         File jreFile;
-        if (jreOption != null && jreOption != "") {
+        if (jreOption != null && !jreOption.equals("")) {
             jreFile = new File(jreOption);
             if (jreFile.exists()) {
                 return jreOption;
             }
         }
 
+        //在当前路径找
         jreFile = new File("jre");
         if (jreFile.exists()) {
             return jreFile.getAbsolutePath();
         }
 
+        //在JAVA_HOME中找
         String java_home = System.getenv("JAVA_HOME");
         if (java_home != null) {
             return java_home + File.separator + "jre";

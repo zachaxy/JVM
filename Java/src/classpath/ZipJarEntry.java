@@ -47,8 +47,8 @@ public class ZipJarEntry extends Entry {
         ByteArrayOutputStream out = null;
 
         ZipFile zf = new ZipFile(file);
-//        ZipEntry ze = zf.getEntry(zipName + "/" + className);
-        ZipEntry ze = zf.getEntry(className);
+//        ZipEntry ze = zf.getEntry(zipName + "/" + className); //如果是zip文件,获取ZipEntry的时候,直接用zipName+"/"+className
+        ZipEntry ze = zf.getEntry(className); //如果是jar包,获取ZipEntry的时候,直接用className,
         if (ze == null) {
             return null;
         }
@@ -59,8 +59,8 @@ public class ZipJarEntry extends Entry {
         while ((size = in.read(temp)) != -1) {
             out.write(temp, 0, size);
         }
-        if (zin != null) {
 
+        if (zin != null) {
             zin.closeEntry();
         }
 

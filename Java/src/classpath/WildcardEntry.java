@@ -7,8 +7,7 @@ import java.util.ArrayList;
  * Author: zhangxin
  * Time: 2017/4/30 0030.
  * Desc:处理的是路径匹配的 xxx.* 的清理
- * 首先把路径末尾的星号去掉，得到baseDir，
- * 然后调用filepath包的Walk（）函数遍历baseDir创建ZipEntry
+ * 首先把路径末尾的星号去掉，得到baseDir，然后遍历该baseDir路径下的文件,只取以 .jar 结尾的文件;
  *
  * 这个类其实是CompositeEntry的一个包装类;
  */

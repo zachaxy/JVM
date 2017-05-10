@@ -9,14 +9,16 @@ import Utils.ByteUtils;
  */
 public class ClassFile {
 
-    //这里使用char,是想使用16位无符号整数
     int minorVersion;
     int majorVersion;
     ConstantPool constantPool;
     int accessFlags;
+
+    //该索引值指向常量池中一个类型为 CONSTANT_Class_info的类描述符常量,
+    // 再通过 CONSTANT_Class_info类型的常量中的索引值,可以找到定义在CONSTANT_Utf8_info类型的常量中的全限定名字符串。
     int thisClass;
-    int superClass;
-    int[] interfaces;
+    int superClass;         //同 thisClass 的索引值。
+    int[] interfaces;     //存放所实现的接口在常量池中的索引。同 thisClass 的索引值。
     MemberInfo[] fields;
     MemberInfo[] methods;
     AttributeInfo[] attributes;

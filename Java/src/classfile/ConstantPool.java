@@ -3,7 +3,9 @@ package classfile;
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
- * Desc: 常量池实际上也是一个表
+ * Desc: 常量池实际上也是一个表,这里用数组来实现，所以常量池这个类中持有一个常量数据
+ * 至于这个数组的每一项的初始化，则根据读到的字节的tag不同而创建不同的常量子类
+ * 常量池有多中项目类型，这个根据读取到的tag的不同创建不同的常量类，
  */
 public class ConstantPool {
     ConstantInfo[] infos;  //保存类文件常量池中的所有常量,常量分为多种类型,基本类型都有对应的常量,以及字符串等;(简言之,这就是常量池的抽象)
@@ -29,15 +31,15 @@ public class ConstantPool {
 
     }
 
-    //按索引查找常量,如果么有的话,直接抛异常;
-    ConstantInfo getConstantInfo(int index) {
+    //按索引查找常量,如果没有的话,直接抛异常;
+    private ConstantInfo getConstantInfo(int index) {
         if (0 < index && index <= constantPoolCount) {
             ConstantInfo info = infos[index];
             if (info != null) {
                 return info;
             }
         }
-        throw new RuntimeException("Invalid constant pool index!");
+        throw new NullPointerException("Invalid constant pool index!");
     }
 
     //常量池查找字段或方法的名字和描述符
@@ -65,6 +67,7 @@ public class ConstantPool {
         return getUtf8(info.nameIndex);
     }
 
+    //只要调用这个方法，一定是想去读字符串常量了，所以拿到index所对应的常量后，直接强转为ConstantUtf8Info，然后获取其val值；
     String getUtf8(int index) {
         return ((ConstantUtf8Info) getConstantInfo(index)).val;
     }
@@ -73,3 +76,5 @@ public class ConstantPool {
         return constantPoolCount;
     }
 }
+
+
