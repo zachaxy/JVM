@@ -3,7 +3,7 @@ package instructions.extended;
 import instructions.base.BranchInstruction;
 import instructions.base.BranchLogic;
 import runtimedata.Zframe;
-import runtimedata.Zobject;
+import runtimedata.heap.Zobject;
 
 /**
  * Author: zhangxin

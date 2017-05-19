@@ -1,7 +1,7 @@
 package instructions.loads;
 
 import runtimedata.Zframe;
-import runtimedata.Zobject;
+import runtimedata.heap.Zobject;
 
 /**
  * Author: zhangxin

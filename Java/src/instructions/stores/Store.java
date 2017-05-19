@@ -1,7 +1,7 @@
 package instructions.stores;
 
 import runtimedata.Zframe;
-import runtimedata.Zobject;
+import runtimedata.heap.Zobject;
 
 /**
  * Author: zhangxin

@@ -1,5 +1,7 @@
 package runtimedata;
 
+import runtimedata.heap.Zobject;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.

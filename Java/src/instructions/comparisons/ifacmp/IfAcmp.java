@@ -2,7 +2,7 @@ package instructions.comparisons.ifacmp;
 
 import runtimedata.OperandStack;
 import runtimedata.Zframe;
-import runtimedata.Zobject;
+import runtimedata.heap.Zobject;
 
 /**
  * Author: zhangxin
