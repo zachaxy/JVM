@@ -36,6 +36,7 @@ public class ConstantMemberRefInfo extends ConstantInfo {
     String getClassName() {
         return constantPool.getClassName(classIndex);
     }
+
     String[] getNameAndDescriptor(){
         return constantPool.getNameAndType(nameAndTypeIndex);
     }

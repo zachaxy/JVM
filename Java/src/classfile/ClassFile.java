@@ -19,9 +19,9 @@ public class ClassFile {
     int thisClass;
     int superClass;         //同 thisClass 的索引值。
     int[] interfaces;     //存放所实现的接口在常量池中的索引。同 thisClass 的索引值。
-    MemberInfo[] fields;
-    MemberInfo[] methods;
-    AttributeInfo[] attributes;
+    MemberInfo[] fields;    //存放类中所有的字段，包括静态的非静态的；不同的属性通过字段的访问修饰符来读取；
+    MemberInfo[] methods;   //存放类中所有的方法，包括静态的非静态的；不同的属性通过字段的访问修饰符来读取；
+    AttributeInfo[] attributes; //属性表，存放类的属性；
 
 
     public ClassFile(byte[] classData) {

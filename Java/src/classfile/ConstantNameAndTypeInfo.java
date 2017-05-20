@@ -17,7 +17,7 @@ package classfile;
  * <p>
  * (2)字段描述符就是字段类型的描述符。
  * (3)方法描述符是（分号分隔的参数类型描述符）+返回值类型描述符，其中void返回值由单个字母V表示。eg:(Ljava.lang.String;I)Ljava.lang.String
- * 代表的就是 String (String int),方法名有name_index给出;ok;
+ * 代表的就是 String (String int),方法名由name_index给出;
  */
 
 /*

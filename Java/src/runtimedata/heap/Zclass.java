@@ -1,7 +1,6 @@
 package runtimedata.heap;
 
 import classfile.ClassFile;
-import classfile.ConstantPool;
 import runtimedata.Slot;
 
 /**
@@ -14,50 +13,57 @@ public class Zclass {
     String thisClassName;
     String superClassName;
     String[] interfaceNames;
-    ConstantPool constantPool;
+    ZconstantPool constantPool;
     Zfield[] fileds;
     Zmethod[] methods;
     ZclassLoader loader;
     Zclass superClass;
     Zclass[] interfaces;
-    int instanceSlotCount;
-    int staticSlotCount;
-    Slot[] staticVars;
+    int instanceSlotCount;  // 实例变量所占空间大小
+    int staticSlotCount;    // 类变量所占空间大小
+    Slot[] staticVars;      // 存放静态变量
 
     public Zclass(ClassFile classFile) {
         accessFlags = classFile.getAccessFlags();
         thisClassName = classFile.getClassName();
         superClassName = classFile.getSuperClassName();
         interfaceNames = classFile.getInterfaceNames();
-//        constantPool = new ConstantPool();
-//        fileds = Zfield.getFileds(this,classFile.getFields());
-//        methods = Zmethod.getMethods(this,classFile.getMethods());
+//        constantPool = new ZconstantPool(this,classFile.getConstantPool());
+        fileds = Zfield.makeFields(this,classFile.getFields());
+        methods = Zmethod.makeMethods(this,classFile.getMethods());
 
     }
 
 
-    public boolean isPublic()  {
-        return 0 != (accessFlags&AccessFlag.ACC_PUBLIC);
+    public boolean isPublic() {
+        return 0 != (accessFlags & AccessFlag.ACC_PUBLIC);
     }
-    public boolean isFinal()  {
-        return 0 != (accessFlags&AccessFlag.ACC_FINAL);
+
+    public boolean isFinal() {
+        return 0 != (accessFlags & AccessFlag.ACC_FINAL);
     }
-    public boolean isSuper()  {
-        return 0 != (accessFlags&AccessFlag.ACC_SUPER);
+
+    public boolean isSuper() {
+        return 0 != (accessFlags & AccessFlag.ACC_SUPER);
     }
-    public boolean isInterface()  {
-        return 0 != (accessFlags&AccessFlag.ACC_INTERFACE);
+
+    public boolean isInterface() {
+        return 0 != (accessFlags & AccessFlag.ACC_INTERFACE);
     }
-    public boolean isAbstract()  {
-        return 0 != (accessFlags&AccessFlag.ACC_ABSTRACT);
+
+    public boolean isAbstract() {
+        return 0 != (accessFlags & AccessFlag.ACC_ABSTRACT);
     }
-    public boolean isSynthetic()  {
-        return 0 != (accessFlags&AccessFlag.ACC_SYNTHETIC);
+
+    public boolean isSynthetic() {
+        return 0 != (accessFlags & AccessFlag.ACC_SYNTHETIC);
     }
-    public boolean isAnnotation()  {
-        return 0 != (accessFlags&AccessFlag.ACC_ANNOTATION);
+
+    public boolean isAnnotation() {
+        return 0 != (accessFlags & AccessFlag.ACC_ANNOTATION);
     }
-    public boolean isEnum()  {
-        return 0 != (accessFlags&AccessFlag.ACC_ENUM);
+
+    public boolean isEnum() {
+        return 0 != (accessFlags & AccessFlag.ACC_ENUM);
     }
 }
