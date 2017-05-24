@@ -10,7 +10,11 @@ package classfile;
 public class ConstantPool {
     ConstantInfo[] infos;  //保存类文件常量池中的所有常量,常量分为多种类型,基本类型都有对应的常量,以及字符串等;(简言之,这就是常量池的抽象)
 
-    int constantPoolCount; //class文件中常量池中的常量数量
+    public ConstantInfo[] getInfos() {
+        return infos;
+    }
+
+    int constantPoolCount; //class文件中常量池中的常量数量,注意返回的这个数量是包含0的，但是0是空的；
 
     public ConstantPool(ClassReader reader) {
         /*读出常量池的大小;接下来根据这个大小,生成常量信息数组;

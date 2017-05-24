@@ -14,9 +14,11 @@ public class ConstantClassInfo extends ConstantInfo {
     ConstantPool constantPool;
     int nameIndex;
 
-    public ConstantClassInfo(ConstantPool constantPool) {
+    public ConstantClassInfo(ConstantPool constantPool,int i) {
         this.constantPool = constantPool;
+        type = i;
     }
+
 
     @Override
     void readInfo(ClassReader reader) {

@@ -5,7 +5,7 @@ import classfile.MemberInfo;
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc:
+ * Desc: 根据class文件的字段信息创建字段表，也不在外部单独使用，而是通过makeFields产生的字段数组来访问其中的某一个字段；
  */
 public class Zfield {
     ClassMember classMember;

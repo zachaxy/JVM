@@ -19,6 +19,11 @@ import java.io.UTFDataFormatException;
 public class ConstantUtf8Info extends ConstantInfo {
     String val;
 
+    public ConstantUtf8Info(int i) {
+        type = i;
+    }
+
+
     @Override
     void readInfo(ClassReader reader) {
         int len = reader.readUint16();

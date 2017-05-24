@@ -10,9 +10,11 @@ public class ConstantStringInfo extends ConstantInfo {
     ConstantPool constantPool;
     int stringIndex;
 
-    public ConstantStringInfo(ConstantPool constantPool) {
+    public ConstantStringInfo(ConstantPool constantPool,int i) {
         this.constantPool = constantPool;
+        type = i;
     }
+
 
     //读取常量池索引
     @Override

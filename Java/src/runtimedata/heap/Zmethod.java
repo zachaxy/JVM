@@ -7,6 +7,7 @@ import classfile.MemberInfo;
  * Author: zhangxin
  * Time: 2017/5/19 0019.
  * Desc: Method对象不单独使用，而是在使用了makeMethods之后，得到一个Method对象，然后在使用对用的方法；
+ * 该对象比Zfield要复杂的多，因为其还有方法内的字节码
  */
 public class Zmethod {
     ClassMember classMember;
@@ -28,6 +29,7 @@ public class Zmethod {
         return methods;
     }
 
+    //该方法用来初始化成员变量：maxStack，maxLocals，code
     public void copyAttributes(MemberInfo cfMethod) {
         CodeAttribute codeAttribute = cfMethod.getCodeAttribute();
         if (codeAttribute != null) {

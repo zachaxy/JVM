@@ -9,7 +9,7 @@ package classfile;
  * 字段或方法名由name_index给出，对应的就是代码中真实的成员变量名或者方法名
  * 字段或方法的描述符由descriptor_index给出
  * 描述符:描述字段的类型,描述方法的参数类型;
- *
+ * <p>
  * (1)
  * a:基本类型byte、short、char、int、long、float和double的描述符是单个字母，分别对应B、S、C、I、J、F和D。注意，long的描述符是J而不是L。
  * b:引用类型的描述符是 L ＋ 类的完全限定名 ＋ 分号 eg: Ljava.lang.String;
@@ -30,6 +30,11 @@ CONSTANT_NameAndType_info {
 public class ConstantNameAndTypeInfo extends ConstantInfo {
     int nameIndex;
     int descriptorIndex;
+
+    public ConstantNameAndTypeInfo(int i) {
+        type = i;
+    }
+
 
     @Override
     void readInfo(ClassReader reader) {

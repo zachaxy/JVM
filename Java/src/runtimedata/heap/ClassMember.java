@@ -8,10 +8,10 @@ import classfile.MemberInfo;
  * Desc: 字段和方法都属于类的成员，它们有一些相同的信息（访问标志、名字、描述符），所以这里定义一个类ClassMember用来存放字段和方法共同的部分；
  */
 public class ClassMember {
-    int accessFlags;
-    String name;
-    String descriptor;
-    Zclass clazz;
+    int accessFlags;    //访问标示
+    String name;        //字段、方法名称
+    String descriptor;  //字段、方法描述
+    Zclass clazz;       //所属的类，这样可以通过字段或方法访问到它所属的类
 
     public ClassMember(Zclass clazz, MemberInfo cfField) {
         copyMemberInfo(cfField);

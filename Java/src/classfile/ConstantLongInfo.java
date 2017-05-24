@@ -10,6 +10,11 @@ import Utils.ByteUtils;
 public class ConstantLongInfo extends ConstantInfo {
     long val;
 
+    public ConstantLongInfo(int i) {
+       type = i;
+    }
+
+
     @Override
     void readInfo(ClassReader reader) {
         byte[] data = reader.readUint64();

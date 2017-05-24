@@ -27,6 +27,11 @@ public abstract class ConstantInfo {
     //抽象方法来读取信息,需要各自具体类去实现;因为每种常量所占的字节数并不相同。
     abstract void readInfo(ClassReader reader);
 
+    int type;
+
+    public int getType() {
+        return type;
+    }
 
     public static ConstantInfo readConstantInfo(ClassReader reader, ConstantPool constantPool) {
         int tag = (reader.readUint8() + 256) % 256;
@@ -38,34 +43,34 @@ public abstract class ConstantInfo {
     private static ConstantInfo create(int tag, ConstantPool constantPool) {
         switch (tag) {
             case CONSTANT_Integer:
-                return new ConstantIntegerInfo();
+                return new ConstantIntegerInfo(3);
             case CONSTANT_Float:
-                return new ConstantFloatInfo();
+                return new ConstantFloatInfo(4);
             case CONSTANT_Long:
-                return new ConstantLongInfo();
+                return new ConstantLongInfo(5);
             case CONSTANT_Double:
-                return new ConstantDoubleInfo();
+                return new ConstantDoubleInfo(6);
             case CONSTANT_Utf8:
-                return new ConstantUtf8Info();
+                return new ConstantUtf8Info(1);
             case CONSTANT_String:
-                return new ConstantStringInfo(constantPool);
+                return new ConstantStringInfo(constantPool, 8);
             case CONSTANT_Class:
-                return new ConstantClassInfo(constantPool);
+                return new ConstantClassInfo(constantPool, 7);
             case CONSTANT_Fieldref:
-                return new ConstantMemberRefInfo(constantPool);
+                return new ConstantMemberRefInfo(constantPool, 9);
             case CONSTANT_Methodref:
-                return new ConstantMemberRefInfo(constantPool);
+                return new ConstantMemberRefInfo(constantPool, 10);
             case CONSTANT_InterfaceMethodref:
-                return new ConstantMemberRefInfo(constantPool);
+                return new ConstantMemberRefInfo(constantPool, 11);
             case CONSTANT_NameAndType:
-                return new ConstantNameAndTypeInfo();
+                return new ConstantNameAndTypeInfo(12);
             // TODO: 2017/5/3 0003 下面三个类还未编码; 
             case CONSTANT_MethodType:
-                return new ConstantMethodTypeInfo();
+                return new ConstantMethodTypeInfo(16);
             case CONSTANT_MethodHandle:
-                return new ConstantMethodHandleInfo();
+                return new ConstantMethodHandleInfo(15);
             case CONSTANT_InvokeDynamic:
-                return new ConstantInvokeDynamicInfo();
+                return new ConstantInvokeDynamicInfo(18);
             default:
                 throw new RuntimeException("java.lang.ClassFormatError: constant pool tag!");
         }
