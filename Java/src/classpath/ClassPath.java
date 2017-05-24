@@ -23,7 +23,7 @@ public class ClassPath {
     }
 
 
-    //这里参数掺进来的是: C:\Program Files\Java\jdk1.8.0_20\jre
+    //这里参数传进来的是: C:\Program Files\Java\jdk1.8.0_20\jre
     void parseBootAndExtClasspath(String jreOption) {
         String jreDir = getJreDir(jreOption);
 
@@ -36,6 +36,7 @@ public class ClassPath {
         extClasspath = new WildcardEntry(jreExtPath);
     }
 
+    //确定传进来的jre的路径是否有效；
     String getJreDir(String jreOption) {
         File jreFile;
         if (jreOption != null && !jreOption.equals("")) {
@@ -45,7 +46,7 @@ public class ClassPath {
             }
         }
 
-        //在当前路径找
+        //jreOption选项为空，那么在当前路径找
         jreFile = new File("jre");
         if (jreFile.exists()) {
             return jreFile.getAbsolutePath();
@@ -65,6 +66,7 @@ public class ClassPath {
     }
 
     public byte[] readClass(String className) {
+        //注意，用命令行加载java文件时，只写文件名，所有这里统一为文件名后补上“.class”的后缀；
         className = className + ".class";
         byte[] data;
         try {
