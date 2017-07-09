@@ -23,6 +23,11 @@ public class ConstantMemberRefInfo extends ConstantInfo {
     int classIndex;
     int nameAndTypeIndex;
 
+    public ConstantMemberRefInfo(ConstantPool constantPool) {
+        this.constantPool = constantPool;
+    }
+
+
     public ConstantMemberRefInfo(ConstantPool constantPool,int i) {
         this.constantPool = constantPool;
         type = i;
