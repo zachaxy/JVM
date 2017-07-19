@@ -27,6 +27,7 @@ public abstract class ConstantInfo {
     //抽象方法来读取信息,需要各自具体类去实现;因为每种常量所占的字节数并不相同。
     abstract void readInfo(ClassReader reader);
 
+//    表明当前常量的类型是哪种;
     int type;
 
     public int getType() {
@@ -64,7 +65,6 @@ public abstract class ConstantInfo {
                 return new ConstantMemberRefInfo(constantPool, 11);
             case CONSTANT_NameAndType:
                 return new ConstantNameAndTypeInfo(12);
-            // TODO: 2017/5/3 0003 下面三个类还未编码; 
             case CONSTANT_MethodType:
                 return new ConstantMethodTypeInfo(16);
             case CONSTANT_MethodHandle:

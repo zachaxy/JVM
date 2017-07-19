@@ -5,7 +5,7 @@ import Utils.ByteUtils;
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
- * Desc:
+ * Desc: 封装的读取 class 字节码文件的 reader,里面包含一个index值,表明当前要读的字节数组的索引.
  */
 public class ClassReader {
 

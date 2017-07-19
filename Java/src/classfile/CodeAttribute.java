@@ -73,6 +73,13 @@ public class CodeAttribute extends AttributeInfo {
             this.handlerPc = handlerPc;
             this.catchType = catchType;
         }
+//        改为传入一个reader的方法,比上面的构造方法更优雅一些;
+        public ExceptionTableEntry(ClassReader reader){
+            this.startPc = reader.readUint16();
+            this.endPc = reader.readUint16();
+            this.handlerPc = reader.readUint16();
+            this.catchType = reader.readUint16();
+        }
     }
 
     public int getMaxStack() {

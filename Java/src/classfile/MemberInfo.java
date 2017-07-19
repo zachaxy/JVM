@@ -4,6 +4,8 @@ package classfile;
  * Author: zhangxin
  * Time: 2017/5/2 0002.
  * Desc: 字段表和方法表，共用该类，因为二者在虚拟机规范中的定义是相同的
+ * 里面包含的是类中的所有字段/方法
+ * 字段/方法中可能还包含属性
  */
 /*
 field_info {

@@ -6,7 +6,7 @@ package classfile;
  * Desc: 用于描述栈帧中局部变量表中的变量和Java源码中定义的变量之间的关系。
  * 这并不是运行时必须的属性，但默认会生成到Class文件中，可以在Javac 中使用 -g：none 来取消这项信息；
  * 如果不生成这项，产生的影响是：当其他人引用这个方法时，IDE将会使用诸如arg0，arg1之类的占位符代替原来的参数名，但对运行毫无影响。
- * 只是在调试期间无法根据参数名冲上下文中获得参数值。
+ * 只是在调试期间无法根据参数名从上下文中获得参数值。
  */
 public class LocalVariableTableAttribute extends AttributeInfo {
     LocalVariableTableEntry[] localVariableTable;

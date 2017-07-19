@@ -9,6 +9,10 @@ import Utils.ByteUtils;
  */
 
 /*  属性表在JVM中的定义;
+虚拟机规范中,每个属性都定义了name_index,用来从常量池中拿到属性名;
+attr_len,用来定义属性的的长度,便于接下来的解读
+其实很多属性的长度都是已知的,
+不确定长度的有:code属性,其长度需要根据len来读取;
 attribute_info {
     u2 attribute_name_index;
     u4 attribute_length;
