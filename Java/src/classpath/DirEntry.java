@@ -8,7 +8,7 @@ import java.io.*;
  * Desc: 表示目录形式的类路径,这是相对来说最简单的一种了,拿到的直接就是指定的路径
  */
 public class DirEntry extends Entry {
-    String absDir;
+    private String absDir;
 
     public DirEntry(String path) {
         File dir = new File(path);

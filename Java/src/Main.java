@@ -23,7 +23,7 @@ public class Main {
         /*args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
         args[3] = "ClassFileTest";*/
         args[1] = "-cp";
-        args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch05";
+        args[2] = "E:\\go_workspace\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch05";
         args[3] = "GaussTest";
 
         Cmd cmd = new Cmd(args);
