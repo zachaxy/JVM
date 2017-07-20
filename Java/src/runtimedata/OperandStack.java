@@ -5,7 +5,7 @@ import runtimedata.heap.Zobject;
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.
- * Desc:操作数栈;
+ * Desc:操作数栈,底层其实还是用数组来实现的,但是对外要暴露的接口是栈的特性
  * 包含的操作和局部变量表类似
  * 操作数栈的大小是编译器已经确定的，所以可以用[]Slot实现
  */
@@ -101,5 +101,22 @@ public class OperandStack {
         Slot slot = slots[size];
         slots[size] = null; //释放内存,是GC可以回收该slot;
         return slot;
+    }
+
+    public static void main(String[] args) {
+        OperandStack stack = new OperandStack(10);
+        stack.pushInt(100);
+        stack.pushInt(-100);
+        stack.pushLong(2997934580L);
+        stack.pushLong(-2997934580L);
+        stack.pushFloat(3.1415925f);
+        stack.pushDouble(2.141592678912);
+
+        System.out.println(stack.popDouble());
+        System.out.println(stack.popFloat());
+        System.out.println(stack.popLong());
+        System.out.println(stack.popLong());
+        System.out.println(stack.popInt());
+        System.out.println(stack.popInt());
     }
 }
