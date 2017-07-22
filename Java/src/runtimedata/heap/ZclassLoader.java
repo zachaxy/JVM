@@ -1,15 +1,21 @@
 package runtimedata.heap;
 
-import classfile.ClassFile;
-import classpath.ClassPath;
-
-import java.util.Calendar;
 import java.util.HashMap;
+
+import classfile.ClassFile;
+import classfile.ConstantDoubleInfo;
+import classfile.ConstantFloatInfo;
+import classfile.ConstantIntegerInfo;
+import classfile.ConstantLongInfo;
+import classpath.ClassPath;
+import runtimedata.Slot;
+import runtimedata.Slots;
 
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc:
+ * Desc: 类加载器
+ * TODO:应该是单例的
  */
 public class ZclassLoader {
     ClassPath cp;
@@ -21,7 +27,7 @@ public class ZclassLoader {
     }
 
     //go中是将加载的路径的包装类也返回了，目的是为了打印路径信息，这里不需要，如果需要的话，debug即可；
-    byte[] readClass(String name) {
+    private byte[] readClass(String name) {
         byte[] data = cp.readClass(name);
         if (data != null) {
             return data;
@@ -31,8 +37,44 @@ public class ZclassLoader {
         }
     }
 
+    /*
+    * 首先把class文件数据转换成Zclass对象；
+    * */
+    private Zclass defineClass(byte[] data) {
+        Zclass clazz = paraseClass(data);
+        clazz.loader = this;
+        resolveSuperClass(clazz);
+        resolveInterfaces(clazz);
+        map.put(clazz.thisClassName, clazz);
+        return clazz;
+    }
+
+    private Zclass paraseClass(byte[] data) {
+        ClassFile cf = new ClassFile(data);
+        return new Zclass(cf);
+    }
+
+    //加载当前类的父类,除非是Object类，否则需要递归调用LoadClass()方法加载它的超类
+    //默认情况下,父类和子类的类加载器是同一个;
+    private void resolveSuperClass(Zclass clazz) {
+        if (!clazz.superClassName.equals("java/lang/Object")) {
+            clazz.superClass = clazz.loader.loadClass(clazz.superClassName);
+        }
+    }
+
+
+    //加载当前类的接口类
+    private void resolveInterfaces(Zclass clazz) {
+        int count = clazz.interfaceNames.length;
+        clazz.interfaces = new Zclass[count];
+        for (int i = 0; i < count; i++) {
+            clazz.interfaces[i] = clazz.loader.loadClass(clazz.interfaceNames[i]);
+        }
+    }
+
     //先查找classMap，看类是否已经被加载。如果是，直接返回类数据，否则调用loadNonArrayClass（）方法加载类。
-    public Zclass loadClass(String name) {
+    //在类方法中的一个递归调用,也是classLoader中的入口方法
+    private Zclass loadClass(String name) {
         if (map.containsKey(name)) {
             return map.get(name);
         }
@@ -48,49 +90,93 @@ public class ZclassLoader {
         return clazz;
     }
 
-    /*
-    * 首先把class文件数据转换成Zclass对象；
-    * */
-    Zclass defineClass(byte[] data) {
-        Zclass clazz = paraseClass(data);
-        clazz.loader = this;
-        resolveSuperClass(clazz);
-        resolveInterfaces(clazz);
-        map.put(clazz.thisClassName, clazz);
-        return clazz;
-    }
-
-    //加载当前类的接口类
-    private void resolveInterfaces(Zclass clazz) {
-        int count = clazz.interfaceNames.length;
-        clazz.interfaces = new Zclass[count];
-        for (int i = 0; i < count; i++) {
-            clazz.interfaces[i] = clazz.loader.loadClass(clazz.interfaceNames[i]);
-        }
-    }
-
-    //加载当前类的父类,除非是Object类，否则需要递归调用LoadClass()方法加载它的超类
-    private void resolveSuperClass(Zclass clazz) {
-        if (!clazz.superClassName.equals("java/lang/Object")) {
-            clazz.superClass = clazz.loader.loadClass(clazz.superClassName);
-        }
-    }
-
-    private Zclass paraseClass(byte[] data) {
-        ClassFile cf = new ClassFile(data);
-        return new Zclass(cf);
-    }
 
     void link(Zclass clazz) {
         verify(clazz);
         prepare(clazz);
     }
 
+    //在执行类的任何代码之前要对类进行严格的检验,这里忽略检验过程,,作为空实现;
     private void verify(Zclass clazz) {
-        // TODO: 2017/5/24 0024
     }
 
+    //给类变量分配空间并赋予初始值
     private void prepare(Zclass clazz) {
+        calcInstanceFieldSlotIds(clazz);
+        calcStaticFieldSlotIds(clazz);
+        allocAndInitStaticVars(clazz);
+    }
+
+    private void calcInstanceFieldSlotIds(Zclass clazz) {
+        int slotId = 0;
+        if (clazz.superClass != null) {
+            slotId = clazz.superClass.instanceSlotCount;
+        }
+
+        for (Zfield zfield : clazz.fileds) {
+            if (!zfield.classMember.isStatic()) {
+                zfield.slotId = slotId;
+                slotId++;
+                if (zfield.isLongOrDouble()) {
+                    slotId++;
+                }
+            }
+        }
+        clazz.instanceSlotCount = slotId;
+    }
+
+    private void calcStaticFieldSlotIds(Zclass clazz) {
+        int slotId = 0;
+        for (Zfield zfield : clazz.fileds) {
+            if (zfield.classMember.isStatic()) {
+                zfield.slotId = slotId;
+                slotId++;
+                if (zfield.isLongOrDouble()) {
+                    slotId++;
+                }
+            }
+        }
+        clazz.staticSlotCount = slotId;
+    }
+
+    private void allocAndInitStaticVars(Zclass clazz) {
+        clazz.staticVars = new Slots(clazz.staticSlotCount);
+        for (Zfield zfield : clazz.fileds) {
+            if (zfield.classMember.isStatic() && zfield.classMember.isFinal()) {
+                initStaticFinalVar(clazz, zfield);
+            }
+        }
+    }
+
+    private void initStaticFinalVar(Zclass clazz, Zfield zfield) {
+        Slots vars = clazz.staticVars;
+        ZconstantPool cp1 = clazz.constantPool;
+        int cpIndex = zfield.constValueIndex;
+        int slotId = zfield.slotId;
+
+        if (cpIndex > 0) {
+            switch (zfield.classMember.getDescriptor()) {
+                case "Z":
+                case "B":
+                case "C":
+                case "S":
+                case "I":
+                    vars.setInt(slotId, ((ConstantIntegerInfo) cp1.getConstant(cpIndex)).getVal());
+                    break;
+                case "J":
+                    vars.setLong(slotId, ((ConstantLongInfo) cp1.getConstant(cpIndex)).getVal());
+                    break;
+                case "F":
+                    vars.setFloat(slotId, ((ConstantFloatInfo) cp1.getConstant(cpIndex)).getVal());
+                    break;
+                case "D":
+                    vars.setDouble(slotId, ((ConstantDoubleInfo) cp1.getConstant(cpIndex)).getVal());
+                    break;
+                case "Ljava/lang/String;":
+//                    TODO:后面实现;
+                    throw new RuntimeException("暂时为实现字符串解析");
+            }
+        }
 
     }
 

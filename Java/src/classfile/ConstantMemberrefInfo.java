@@ -23,15 +23,15 @@ public class ConstantMemberRefInfo extends ConstantInfo {
     int classIndex;
     int nameAndTypeIndex;
 
-//    该构造方法是供子类调用的,虽然有三个子类,但是并没有使用过该子类,因为当前类(父类)已经满足需求了;
+    //    该构造方法是供子类调用的,虽然有三个子类,但是并没有使用过该子类,因为当前类(父类)已经满足需求了;
     public ConstantMemberRefInfo(ConstantPool constantPool) {
         this.constantPool = constantPool;
     }
 
-//    该构造方法是供外部调用的;
-    public ConstantMemberRefInfo(ConstantPool constantPool,int i) {
-        this.constantPool = constantPool;
-        type = i;
+    //    该构造方法是供外部调用的;
+    public ConstantMemberRefInfo(ConstantPool constantPool, int i) {
+        this(constantPool);
+        type = i; //因为接口,方法,字段通用这一个类,所以在构造方法中传入 i 来区分不同的类型;
     }
 
 
@@ -41,22 +41,21 @@ public class ConstantMemberRefInfo extends ConstantInfo {
         nameAndTypeIndex = reader.readUint16();
     }
 
-    String getClassName() {
+    public String getClassName() {
         return constantPool.getClassName(classIndex);
     }
 
-    String[] getNameAndDescriptor(){
+    public String[] getNameAndDescriptor() {
         return constantPool.getNameAndType(nameAndTypeIndex);
     }
 
 
-
     //下面两个方法是将上面的单独分开拿出来的,
-    String getName() {
+    public String getName() {
         return constantPool.getName(nameAndTypeIndex);
     }
 
-    String getDescriptor() {
+    public String getDescriptor() {
         return constantPool.getType(nameAndTypeIndex);
     }
 

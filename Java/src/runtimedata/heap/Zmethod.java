@@ -13,12 +13,23 @@ public class Zmethod {
     ClassMember classMember;
     int maxStack;
     int maxLocals;
-    byte[] code;
+    byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
 
-    public Zmethod(Zclass clazz, MemberInfo cfMethod) {
+    private Zmethod(Zclass clazz, MemberInfo cfMethod) {
         this.classMember = new ClassMember(clazz, cfMethod);
         copyAttributes(cfMethod);
     }
+
+    //该方法用来初始化成员变量：maxStack，maxLocals，code
+    private void copyAttributes(MemberInfo cfMethod) {
+        CodeAttribute codeAttribute = cfMethod.getCodeAttribute();
+        if (codeAttribute != null) {
+            maxStack = codeAttribute.getMaxStack();
+            maxLocals = codeAttribute.getMaxLocals();
+            code = codeAttribute.getCode();
+        }
+    }
+
 
     public static Zmethod[] makeMethods(Zclass zclass, MemberInfo[] cfMethods) {
         Zmethod[] methods = new Zmethod[cfMethods.length];
@@ -29,15 +40,6 @@ public class Zmethod {
         return methods;
     }
 
-    //该方法用来初始化成员变量：maxStack，maxLocals，code
-    public void copyAttributes(MemberInfo cfMethod) {
-        CodeAttribute codeAttribute = cfMethod.getCodeAttribute();
-        if (codeAttribute != null) {
-            maxStack = codeAttribute.getMaxStack();
-            maxLocals = codeAttribute.getMaxLocals();
-            code = codeAttribute.getCode();
-        }
-    }
 
     public boolean isSynchronized() {
         return 0 != (classMember.accessFlags & AccessFlag.ACC_SYNCHRONIZED);

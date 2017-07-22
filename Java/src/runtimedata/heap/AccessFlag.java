@@ -4,6 +4,7 @@ package runtimedata.heap;
  * Author: zhangxin
  * Time: 2017/5/19 0019.
  * Desc: 访问标示，对于类，方法，字段，都有自己的访问标示；
+ * 这里进行统一的封装,以后类,方法,字段的访问标识都从这个类取
  */
 public class AccessFlag {
     public static final int ACC_PUBLIC = 0x0001;            // class field method

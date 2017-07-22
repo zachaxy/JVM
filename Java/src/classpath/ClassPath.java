@@ -72,6 +72,7 @@ public class ClassPath {
     }
 
     /***
+     * ClassPath 对外的统一接口,实例化ClassPath时传入 userPath 路径和类名就可以读取字节码文件
      * 读取className 对应的字节码,注意顺序,我们的查找次序是:
      * bootClasspath => extClasspath => userClasspath;
      * @param className

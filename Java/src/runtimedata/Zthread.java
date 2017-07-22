@@ -14,7 +14,7 @@ package runtimedata;
  * 其实Java命令提供了-Xss选项来设置Java虚拟机栈大小
  */
 public class Zthread {
-    int pc;
+    int pc;         //该PC也不是自己修改的,而是由外部传入供当前线程所持有的;
     Zstack stack; //Stack结构体（Java虚拟机栈）的引用;
 
     public Zthread() {

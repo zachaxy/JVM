@@ -45,7 +45,7 @@ public abstract class AttributeInfo {
     }
 
     //Java虚拟机规范预定义了23种属性，先解析其中的8种
-    /*
+    /*fixme: 各属性中没有传入attrName和attrLen,只有对应的value;
     23种预定义属性可以分为三组。
     第一组属性是实现Java虚拟机所必需的，共有5种；
     第二组属性是Java类库所必需的，共有12种；

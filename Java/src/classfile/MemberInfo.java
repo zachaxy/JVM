@@ -60,4 +60,14 @@ public class MemberInfo {
         }
         return null;
     }
+
+//    并非每个成员变量都有ConstantValueAttribute属性,该属性只针对于静态变量;
+    public  ConstantValueAttribute getConstantValueAttribute(){
+        for (AttributeInfo info : attributes) {
+            if (info instanceof ConstantValueAttribute) {
+                return (ConstantValueAttribute) info;
+            }
+        }
+        return null;
+    }
 }

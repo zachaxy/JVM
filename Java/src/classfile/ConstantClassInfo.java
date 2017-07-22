@@ -25,7 +25,7 @@ public class ConstantClassInfo extends ConstantInfo {
         nameIndex = reader.readUint16();
     }
 
-    String getName() {
+   public String getName() {
         return constantPool.getUtf8(nameIndex);
     }
 }

@@ -10,8 +10,8 @@ public class Zframe {
     Zframe lower;       //当前帧的 前一帧的引用;相当于单向链表的前一个指针
     LocalVars localVars;    //局部变量表的引用;
     OperandStack operandStack;  //操作数栈的引用;
-    Zthread thread;
-    int nextPC;
+    Zthread thread;         //当前栈帧所在的线程;
+    int nextPC;             //frame中并不改变PC的值,其PC值是由ByteReader读取字节码不断改变的
 
     // TODO: 2017/5/4 0004
     public Zframe(Zthread thread, int maxLocals, int maxStack) {

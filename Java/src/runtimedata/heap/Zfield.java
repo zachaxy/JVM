@@ -1,20 +1,22 @@
 package runtimedata.heap;
 
+import classfile.ConstantValueAttribute;
 import classfile.MemberInfo;
 
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
  * Desc: 根据class文件的字段信息创建字段表，也不在外部单独使用，而是通过makeFields产生的字段数组来访问其中的某一个字段；
+ * 所以包含一个索引
  */
 public class Zfield {
     ClassMember classMember;
-    int constValueIndex;
-    int slotId;
+    int constValueIndex;//其赋值在创建构造方法中,代表字节码文件中常量池中的索引
+    int slotId;         //其赋值在运行时常量池的slotId;
 
-    public Zfield(Zclass clazz, MemberInfo cfField) {
+    private Zfield(Zclass clazz, MemberInfo cfField) {
         this.classMember = new ClassMember(clazz, cfField);
-        // TODO: 2017/5/20 0020  还有 两个字段没有赋值 
+        copyAttributes(cfField);
     }
 
 
@@ -23,14 +25,16 @@ public class Zfield {
         for (int i = 0; i < fields.length; i++) {
             Zfield field = new Zfield(zclass, cfFields[i]);
             fields[i] = field;
-
         }
         return fields;
     }
 
 
     public void copyAttributes(MemberInfo cfField) {
-//        cfField.ConstantValueAttribute();
+        ConstantValueAttribute constantValueAttribute = cfField.getConstantValueAttribute();
+        if(constantValueAttribute!=null){
+            constValueIndex = constantValueAttribute.getConstantValueIndex();
+        }
     }
 
     public boolean isVolatile() {
@@ -55,6 +59,6 @@ public class Zfield {
     }
 
     public boolean isLongOrDouble() {
-        return classMember.descriptor.equals("J") || classMember.descriptor.equals("D");
+        return classMember.getDescriptor().equals("J") || classMember.getDescriptor().equals("D");
     }
 }

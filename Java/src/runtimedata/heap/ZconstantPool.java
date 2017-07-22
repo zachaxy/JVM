@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  * Desc: 运行时常量池,注意和字节码中的常量池做区分，这里指的是线程共享区的常量；
  * 实现的功能是：把class文件中的常量池转换成运行时常量池
  * 既然内部保存的内容是一样的，何不直接拿过来使用，不需要再拷贝一份了；
+ * 原本的做法是只讲常量池中的value拷贝过来;
  * 对于直接字面面可以直接使用，但是对于引用类型如何处理？？？
  */
 public class ZconstantPool {
@@ -18,6 +19,7 @@ public class ZconstantPool {
     Zclass clazz;
     ConstantInfo[] infos;
 
+//    主要作用是将class文件中的常量池转换为运行时常量池;这里没有做转换,而是直接拿过来用;
     public ZconstantPool(Zclass clazz, ConstantPool cfcp) {
         this.clazz = clazz;
         this.infos = cfcp.getInfos();
