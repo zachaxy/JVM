@@ -74,7 +74,7 @@ public class ZclassLoader {
 
     //先查找classMap，看类是否已经被加载。如果是，直接返回类数据，否则调用loadNonArrayClass（）方法加载类。
     //在类方法中的一个递归调用,也是classLoader中的入口方法
-    private Zclass loadClass(String name) {
+    public Zclass loadClass(String name) {
         if (map.containsKey(name)) {
             return map.get(name);
         }
@@ -107,6 +107,7 @@ public class ZclassLoader {
         allocAndInitStaticVars(clazz);
     }
 
+    // 计算new一个对象所需的空间,单位是clazz.instanceSlotCount,主要包含了类的非静态成员变量(包含父类的)
     private void calcInstanceFieldSlotIds(Zclass clazz) {
         int slotId = 0;
         if (clazz.superClass != null) {
@@ -125,6 +126,8 @@ public class ZclassLoader {
         clazz.instanceSlotCount = slotId;
     }
 
+
+//    计算类的静态成员变量所需的空间
     private void calcStaticFieldSlotIds(Zclass clazz) {
         int slotId = 0;
         for (Zfield zfield : clazz.fileds) {
@@ -139,6 +142,8 @@ public class ZclassLoader {
         clazz.staticSlotCount = slotId;
     }
 
+//    为静态变量申请空间,注意:这个申请空间的过程,就是将所有的静态变量赋值为0或者null;
+//    接下来才为 static final 的成员赋初值;
     private void allocAndInitStaticVars(Zclass clazz) {
         clazz.staticVars = new Slots(clazz.staticSlotCount);
         for (Zfield zfield : clazz.fileds) {
@@ -148,6 +153,8 @@ public class ZclassLoader {
         }
     }
 
+
+//    为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真是的值;
     private void initStaticFinalVar(Zclass clazz, Zfield zfield) {
         Slots vars = clazz.staticVars;
         ZconstantPool cp1 = clazz.constantPool;

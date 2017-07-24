@@ -1,13 +1,12 @@
 package runtimedata.heap;
 
 import classfile.ClassFile;
-import runtimedata.Slot;
 import runtimedata.Slots;
 
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc:
+ * Desc: 如何设法保证同一个对象的 class == 返回 true
  */
 public class Zclass {
     int accessFlags;        // 表示当前类的访问标志
@@ -67,5 +66,26 @@ public class Zclass {
 
     public boolean isEnum() {
         return 0 != (accessFlags & AccessFlag.ACC_ENUM);
+    }
+
+    public boolean isAccessibleTo(Zclass other){
+        return isPublic() || getPackageName().equals(other.getPackageName());
+    }
+
+    public String getPackageName(){
+        int i = thisClassName.lastIndexOf("/");
+        if (i>0){
+            return thisClassName.substring(0,i);
+        }
+        return "";
+    }
+
+    public boolean isSubClassOf(Zclass otehr) {
+        for(Zclass c = superClass; c!=null;c = c.superClass){
+            if (c == otehr){
+                return true;
+            }
+        }
+        return false;
     }
 }

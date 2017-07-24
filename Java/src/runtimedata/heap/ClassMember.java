@@ -67,4 +67,20 @@ public class ClassMember {
         return clazz;
     }
 
+    public boolean isAccessTo(Zclass d){
+        if (isPublic()){
+            return true;
+        }
+
+        if (isProtected()){
+            return d == clazz || d.isSubClassOf(clazz) || d.getPackageName().equals(clazz.getPackageName());
+        }
+
+        if (!isPrivate()){
+            return d.getPackageName().equals(clazz.getPackageName());
+        }
+
+        return d == clazz;
+    }
+
 }

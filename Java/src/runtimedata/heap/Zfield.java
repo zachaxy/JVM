@@ -11,7 +11,7 @@ import classfile.MemberInfo;
  */
 public class Zfield {
     ClassMember classMember;
-    int constValueIndex;//其赋值在创建构造方法中,代表字节码文件中常量池中的索引
+    int constValueIndex;//其赋值在创建构造方法中,代表字节码文件中常量池中的索引,该属性只有在成员有初值的情况下才有;
     int slotId;         //其赋值在运行时常量池的slotId;
 
     private Zfield(Zclass clazz, MemberInfo cfField) {
