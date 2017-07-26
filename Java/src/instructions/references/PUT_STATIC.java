@@ -32,6 +32,7 @@ public class PUT_STATIC extends Index16Instruction {
         if (!field.getClassMember().isStatic()) {
             throw new RuntimeException("java.lang.IncompatibleClassChangeError");
         }
+
         if (field.getClassMember().isFinal()) {
             if (currentClass != clazz || "<clinit>".equals(currentMethod.getClassMember().getName())) {
                 throw new RuntimeException("java.lang.IllegalAccessError");
@@ -50,17 +51,22 @@ public class PUT_STATIC extends Index16Instruction {
             case 'S':
             case 'I':
                 slots.setInt(slotId, stack.popInt());
+                break;
             case 'F':
                 slots.setFloat(slotId, stack.popFloat());
+                break;
             case 'J':
                 slots.setLong(slotId, stack.popLong());
+                break;
             case 'D':
                 slots.setDouble(slotId, stack.popDouble());
             case 'L':
             case '[':
                 slots.setRef(slotId, stack.popRef());
+                break;
             default:
                 // todo
+                break;
         }
     }
 }
