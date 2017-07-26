@@ -77,6 +77,10 @@ public class Zclass {
         return isPublic() || getPackageName().equals(other.getPackageName());
     }
 
+    public Slots getStaticVars() {
+        return staticVars;
+    }
+
     public String getPackageName() {
         int i = thisClassName.lastIndexOf("/");
         if (i > 0) {

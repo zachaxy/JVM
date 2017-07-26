@@ -1,8 +1,6 @@
 package instructions.references;
 
-import instructions.base.BytecodeReader;
 import instructions.base.Index16Instruction;
-import instructions.base.Instruction;
 import runtimedata.Zframe;
 import runtimedata.heap.ClassRef;
 import runtimedata.heap.Zclass;

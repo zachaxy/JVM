@@ -61,4 +61,8 @@ public class Zfield {
     public boolean isLongOrDouble() {
         return classMember.getDescriptor().equals("J") || classMember.getDescriptor().equals("D");
     }
+
+    public ClassMember getClassMember() {
+        return classMember;
+    }
 }
