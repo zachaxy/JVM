@@ -1,5 +1,7 @@
 package runtimedata;
 
+import runtimedata.heap.Zmethod;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.
@@ -44,5 +46,9 @@ public class Zthread {
 
     public Zframe createFrame(int maxLocals, int maxStack) {
         return new Zframe(this, maxLocals, maxStack);
+    }
+
+    public Zframe createFrame(Zmethod method) {
+        return new Zframe(this, method);
     }
 }

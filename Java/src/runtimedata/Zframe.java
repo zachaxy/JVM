@@ -1,5 +1,7 @@
 package runtimedata;
 
+import runtimedata.heap.Zmethod;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.
@@ -11,6 +13,7 @@ public class Zframe {
     LocalVars localVars;    //局部变量表的引用;
     OperandStack operandStack;  //操作数栈的引用;
     Zthread thread;         //当前栈帧所在的线程;
+    Zmethod method;
     int nextPC;             //frame中并不改变PC的值,其PC值是由ByteReader读取字节码不断改变的
 
     // TODO: 2017/5/4 0004
@@ -18,6 +21,13 @@ public class Zframe {
         this.thread = thread;
         localVars = new LocalVars(maxLocals);
         operandStack = new OperandStack(maxStack);
+    }
+
+    public Zframe(Zthread thread, Zmethod method) {
+        this.thread = thread;
+        this.method = method;
+        localVars = new LocalVars(method.getMaxLocals());
+        operandStack = new OperandStack(method.getMaxStack());
     }
 
     public LocalVars getLocalVars() {
@@ -39,4 +49,14 @@ public class Zframe {
     public void setNextPC(int nextPC) {
         this.nextPC = nextPC;
     }
+
+    public Zmethod getMethod() {
+        return method;
+    }
+
+    public void setMethod(Zmethod method) {
+        this.method = method;
+    }
+
+
 }

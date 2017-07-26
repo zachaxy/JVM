@@ -3,6 +3,8 @@ package runtimedata.heap;
 import classfile.ClassFile;
 import runtimedata.Slots;
 
+import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte1.other;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
@@ -29,12 +31,15 @@ public class Zclass {
         superClassName = classFile.getSuperClassName();
         interfaceNames = classFile.getInterfaceNames();
         // FIXME: 2017/7/22 这里没有对classFile的常量池进行转换,而是直接拿过来用了
-        constantPool = new ZconstantPool(this,classFile.getConstantPool());
-        fileds = Zfield.makeFields(this,classFile.getFields());
-        methods = Zmethod.makeMethods(this,classFile.getMethods());
+        constantPool = new ZconstantPool(this, classFile.getConstantPool());
+        fileds = Zfield.makeFields(this, classFile.getFields());
+        methods = Zmethod.makeMethods(this, classFile.getMethods());
 
     }
 
+    public ZconstantPool getConstantPool() {
+        return constantPool;
+    }
 
     public boolean isPublic() {
         return 0 != (accessFlags & AccessFlag.ACC_PUBLIC);
@@ -68,24 +73,62 @@ public class Zclass {
         return 0 != (accessFlags & AccessFlag.ACC_ENUM);
     }
 
-    public boolean isAccessibleTo(Zclass other){
+    public boolean isAccessibleTo(Zclass other) {
         return isPublic() || getPackageName().equals(other.getPackageName());
     }
 
-    public String getPackageName(){
+    public String getPackageName() {
         int i = thisClassName.lastIndexOf("/");
-        if (i>0){
-            return thisClassName.substring(0,i);
+        if (i > 0) {
+            return thisClassName.substring(0, i);
         }
         return "";
     }
 
-    public boolean isSubClassOf(Zclass otehr) {
-        for(Zclass c = superClass; c!=null;c = c.superClass){
-            if (c == otehr){
+    public boolean isSubClassOf(Zclass iface) {
+        for (Zclass c = superClass; c != null; c = c.superClass) {
+            if (c == iface) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isSubInterfaceOf(Zclass iface) {
+        for (Zclass superInterface : interfaces) {
+            if (superInterface == iface || superInterface.isSubInterfaceOf(iface)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isImplements(Zclass iface) {
+        for (Zclass c = this; c != null; c = c.superClass) {
+            for (int i = 0; i < c.interfaces.length; i++) {
+                if (c.interfaces[i] == iface || c.interfaces[i].isSubInterfaceOf(iface)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isAssignableFrom(Zclass other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!this.isInterface()) {
+            return other.isSubClassOf(this);
+        } else {
+            return other.isImplements(this);
+        }
+    }
+
+    public Zobject newObject() {
+        return new Zobject(this);
     }
 }

@@ -5,6 +5,7 @@ import instructions.base.BytecodeReader;
 import instructions.base.Instruction;
 import runtimedata.Zframe;
 import runtimedata.Zthread;
+import runtimedata.heap.Zmethod;
 
 /**
  * Author: zhangxin
@@ -44,6 +45,11 @@ public class Interpreter {
         }
     }
 
+
+    public static void interpret(Zmethod method){
+        Zthread thread =new Zthread();
+        Zframe frame = thread.createFrame(method);
+    }
 
     //循环执行“计算pc、解码指令、执行指令”这三个步骤，直到遇到错误
     private static void loop(Zthread thread, byte[] byteCode) {

@@ -76,4 +76,8 @@ public class Zmethod {
     public byte[] getCode() {
         return code;
     }
+
+    public ClassMember getClassMember() {
+        return classMember;
+    }
 }
