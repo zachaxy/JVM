@@ -9,13 +9,14 @@ import runtimedata.heap.Zclass;
 import runtimedata.heap.ZconstantPool;
 import runtimedata.heap.Zfield;
 import runtimedata.heap.Zmethod;
+import runtimedata.heap.Zobject;
 
 /**
  * Author: zhangxin
- * Time: 2017/7/26.
+ * Time: 2017/7/27.
  * Desc:
  */
-public class GET_STATIC extends Index16Instruction {
+public class GET_FIELD extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
@@ -25,18 +26,21 @@ public class GET_STATIC extends Index16Instruction {
         // TODO: 2017/7/26 常量池的转换尚未实现;
         FieldRef fieldRef = null;// cp.getConstant(this.index);
         Zfield field = fieldRef.resolvedField();
-        Zclass clazz = field.getClassMember().getClazz();
         // todo: init class
 
-        if (!field.getClassMember().isStatic()) {
+        if (field.getClassMember().isStatic()) {
             throw new RuntimeException("java.lang.IncompatibleClassChangeError");
         }
 
+
         String descriptor = field.getClassMember().getDescriptor();
         int slotId = field.getSlotId();
-        Slots slots = clazz.getStaticVars();
         OperandStack stack = frame.getOperandStack();
-
+        Zobject ref = stack.popRef();
+        if (ref == null) {
+            throw new RuntimeException("java.lang.NullPointerException");
+        }
+        Slots slots = ref.getFields();
         switch (descriptor.charAt(0)) {
             case 'Z':
             case 'B':
