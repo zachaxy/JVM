@@ -1,8 +1,11 @@
+import Utils.Cmd;
 import classfile.ClassFile;
 import classfile.MemberInfo;
 import classpath.ClassPath;
 import runtimedata.LocalVars;
 import runtimedata.OperandStack;
+
+import java.util.Scanner;
 
 /**
  * Author: zhangxin
@@ -13,48 +16,56 @@ public class Main {
     public static void main(String[] args) {
        /* Scanner in = new Scanner(System.in);
         String argsLine = in.nextLine();*/
-        args = new String[4];
+/*        args = new String[4];
         args[0] = "java";
 //        args[1] = "-cp";
-        /*
+        *//*
         args[1] = "-Xjre";
         args[2] = "C:\\Program Files\\Java\\jdk1.8.0_20\\jre";
-        args[3] = "java.lang.String";*/
-        /*args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
-        args[3] = "ClassFileTest";*/
+        args[3] = "java.lang.String";*//*
+        *//*args[2] = "E:\\Go\\jvmgo-book-master\\v1\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch03";
+        args[3] = "ClassFileTest";*//*
         args[1] = "-cp";
         args[2] = "E:\\go_workspace\\code\\java\\example\\src\\main\\java\\jvmgo\\book\\ch05";
-        args[3] = "GaussTest";
+        args[3] = "GaussTest";*/
 
-        Cmd cmd = new Cmd(args);
 
-        if (!cmd.isRightFmt) {
+        Scanner in = new Scanner(System.in);
+        String cmdLine = in.nextLine();
+        String[] cmds = cmdLine.split("\\s+");
+        Cmd cmd = new Cmd(cmds);
+        if (!cmd.isRightFmt()) {
+            System.out.println("Unrecognized command!");
+            cmd.printUsage();
+        } else if (!cmd.isRightOpt()) {
+            System.out.println("Unrecognized option: " + cmds[1]);
             cmd.printUsage();
         } else {
-            if (cmd.versionFlag) {
+            if (cmd.isVersionFlag()) {
                 System.out.println("java version \"1.8.0_20\"\n"
                         + "Java(TM) SE Runtime Environment (build 1.8.0_20-b26)\n"
                         + "Java HotSpot(TM) 64-Bit Server VM (build 25.20-b23, mixed mode)");
-            } else if (cmd.helpFlag || cmd.args == null) {
+            } else if (cmd.isHelpFlag()) {
                 cmd.printUsage();
             } else {
                 startJVM(cmd);
             }
         }
+
     }
 
-    static void startJVM(Cmd cmd) {
-        System.out.println("classpath: " + cmd.cpOption + " class: " + cmd.clazz);
+    private static void startJVM(Cmd cmd) {
+        System.out.println("classpath: " + cmd.getCpOption() + " class: " + cmd.getClazz());
         System.out.print("方法的参数 args:");
-        for (int i = 0; i < cmd.args.length; i++) {
-            System.out.print(cmd.args[i] + " ");
+        for (int i = 0; i < cmd.getArgs().length; i++) {
+            System.out.print(cmd.getArgs()[i] + " ");
         }
         System.out.println();
 
-        String className = cmd.clazz.replace(".", "/");
+        String className = cmd.getClazz().replace(".", "/");
         System.out.println("className: " + className);
 
-        ClassPath cp = new ClassPath(cmd.XjreOption, cmd.cpOption);
+        ClassPath cp = new ClassPath(cmd.getXjreOption(), cmd.getCpOption());
         /*byte[] data = cp.readClass(className);
         for (int i = 0; i < data.length; i++) {
             System.out.print(data[i] + " ");
@@ -150,6 +161,5 @@ public class Main {
         System.out.println(ops.popLong());
         System.out.println(ops.popInt());
         System.out.println(ops.popInt());
-
     }
 }
