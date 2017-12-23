@@ -65,7 +65,7 @@ public class Main {
         String className = cmd.getClazz().replace(".", "/");
         System.out.println("className: " + className);
 
-        ClassPath cp = new ClassPath(cmd.getXjreOption(), cmd.getCpOption());
+        ClassPath cp = new ClassPath(cmd.getXJreOption(), cmd.getCpOption());
         /*byte[] data = cp.readClass(className);
         for (int i = 0; i < data.length; i++) {
             System.out.print(data[i] + " ");

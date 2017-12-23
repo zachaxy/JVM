@@ -11,12 +11,12 @@ public class Cmd {
     private boolean isRightOpt = true;     //是否是正确的格式;
     private boolean helpFlag;        //是否是help 查看帮助
     private boolean versionFlag;    //是否是查看版本
-    private String cpOption = "";  //classPath 的路径;          java -cp(-classpath) xxx
+    private String cpOption;  //classPath 的路径;          java -cp(-classpath) xxx
     /*使用 -Xjre 的选项:这是一个非标准的选项,java命令中是没有的,使用这个选项目的是用来指定启动类路径来寻找和加载Java标准库中的类
     即JAVA_HOME/jre的路径；
     这里要注意的是，如果真的要指定XjreOption，那么其路径值必须要用双引号包含起来
     */
-    private String XjreOption = "";
+    private String xJreOption;
     private String clazz;  //包含main方法的class文件;
     private String[] args; //执行clazz文件需要的参数
 
@@ -54,12 +54,12 @@ public class Cmd {
             } else if ("-Xjre".equals(args[1])) {
                 if (args.length < 4) {
                     //如果走到这一步,那么命令行必定是java -Xjre "C:\Program Files\Java\jdk1.8.0_20\jre" java.lang.Object 的形式,所以应该至少有4项;
-                    isRightOpt = false;
+                    isRightFmt = false;
                 }
                 classNameIndex = 3;
-                this.XjreOption = args[2];
+                this.xJreOption = args[2];
             } else if (args[1].startsWith("-")) {
-                isRightFmt = false;
+                isRightOpt = false;
             }
 
             this.clazz = args[classNameIndex];
@@ -72,11 +72,10 @@ public class Cmd {
     }
 
     private void parseCmd(String cmdLine) {
-        //TODO:解析命令行参数,以单个或者多个空格分开,这种方式可能不行,因为如果输入的是 文件夹名字 中间有空格也就分开了...
+        //NOTE:解析命令行参数,以单个或者多个空格分开,这种方式目前不支持,因为如果输入的 路径名 中间有空格会导致下面解析失败
         String[] args = cmdLine.trim().split("\\s+");
         parseCmd(args);
     }
-
 
 
     public void printUsage() {
@@ -104,8 +103,8 @@ public class Cmd {
         return cpOption;
     }
 
-    public String getXjreOption() {
-        return XjreOption;
+    public String getXJreOption() {
+        return xJreOption;
     }
 
     public String getClazz() {
