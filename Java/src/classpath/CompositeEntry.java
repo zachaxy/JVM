@@ -10,8 +10,9 @@ import java.util.ArrayList;
  * 构造函数把参数（路径列表）按分隔符分成小路径，然后把每个小路径都转换成具体的 Entry实例
  */
 public class CompositeEntry extends Entry {
-    ArrayList<Entry> compositeEntries;  //不用担心,list中的entry是按照父类来转入的,在真正执行度的时候,是按照各自的实际类型执行readClass()方法
-    String pathList;
+    //不用担心,list中的entry是按照父类来转入的,在真正执行的时候,是按照各自的实际类型执行readClass()方法
+    ArrayList<Entry> compositeEntries;
+    private String pathList;
 
     public CompositeEntry() {
     }
@@ -27,7 +28,7 @@ public class CompositeEntry extends Entry {
 
     @Override
     byte[] readClass(String className) {
-        byte[] data = null;
+        byte[] data;
         for (int i = 0; i < compositeEntries.size(); i++) {
             try {
                 data = compositeEntries.get(i).readClass(className);
@@ -39,7 +40,7 @@ public class CompositeEntry extends Entry {
             }
 
         }
-        return data;
+        return null;
     }
 
     @Override

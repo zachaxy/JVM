@@ -54,6 +54,9 @@ public class DirEntry extends Entry {
     @Override
     byte[] readClass(String className) throws IOException {
         File file = new File(absDir, className);
+        if (!file.exists()) {
+            return null;
+        }
         byte[] temp = new byte[1024];
         BufferedInputStream in = null;
         ByteArrayOutputStream out = null;

@@ -62,22 +62,22 @@ public class Main {
         }
         System.out.println();
 
-        String className = cmd.getClazz().replace(".", "/");
-        System.out.println("className: " + className);
+//        String className = cmd.getClazz().replace(".", "/");
+//        System.out.println("className: " + className);
 
         ClassPath cp = new ClassPath(cmd.getXJreOption(), cmd.getCpOption());
         /*byte[] data = cp.readClass(className);
         for (int i = 0; i < data.length; i++) {
             System.out.print(data[i] + " ");
         }*/
-        ClassFile classFile = loadClass(className, cp);
+        ClassFile classFile = loadClass(cmd.getClazz(), cp);
         System.out.println(classFile.getClassName());
         System.out.println(classFile.getSuperClassName());
         MemberInfo mainMethod = getMainMethod(classFile);
         if (mainMethod != null) {
             Interpreter.interpret(mainMethod);
         } else {
-            System.out.println("Main method not found in class " + className);
+            System.out.println("Main method not found in class " + cmd.getClazz());
         }
       /*   printClassInfo(classFile)
         Zframe frame = new Zframe(100, 100);

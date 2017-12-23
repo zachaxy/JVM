@@ -1,5 +1,6 @@
 package classpath;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -26,6 +27,7 @@ public abstract class Entry {
 
     /**
      * 工厂方法,根据传入的path的形式不同,
+     *
      * @param path 命令行得到的路径字符串
      * @return 创建具体的Entry
      */
@@ -40,8 +42,17 @@ public abstract class Entry {
                 return new ZipJarEntry(path);
             }
             return new DirEntry(path);
+        } else {
+            //如果命令行中没有显式的指定-cp选项,那么默认要找的class就在当前路径下
+            File file = new File("");
+            try {
+                path = file.getCanonicalPath();
+                return new DirEntry(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        throw new RuntimeException("illegal classpath format,or you should point out the classpath explicitly");
     }
 
 }
