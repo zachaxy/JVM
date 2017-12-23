@@ -1,27 +1,30 @@
 package classfile;
 
 import Utils.ByteUtils;
+import classfile.attribute.AttributeInfo;
 
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
- * Desc:
+ * Desc: 由javac编译生成的class文件的bean对象
  */
 public class ClassFile {
 
-    int minorVersion;
-    int majorVersion;
-    ConstantPool constantPool;
-    int accessFlags;
+    private int minorVersion;
+    private int majorVersion;
+    public ConstantPool constantPool;
+    private int accessFlags;
 
-    //该索引值指向常量池中一个类型为 CONSTANT_Class_info的类描述符常量,
-    // 再通过 CONSTANT_Class_info类型的常量中的索引值,可以找到定义在CONSTANT_Utf8_info类型的常量中的全限定名字符串。
-    int thisClass;
-    int superClass;         //同 thisClass 的索引值。
-    int[] interfaces;     //存放所实现的接口在常量池中的索引。同 thisClass 的索引值。
-    MemberInfo[] fields;    //存放类中所有的字段，包括静态的非静态的；不同的属性通过字段的访问修饰符来读取；
-    MemberInfo[] methods;   //存放类中所有的方法，包括静态的非静态的；不同的属性通过字段的访问修饰符来读取；
-    AttributeInfo[] attributes; //属性表，存放类的属性；
+    /*
+    该索引值指向常量池中一个类型为 CONSTANT_Class_info的类描述符常量,
+    再通过 CONSTANT_Class_info类型的常量中的索引值,可以找到定义在CONSTANT_Utf8_info类型的常量中的全限定名字符串。
+     */
+    private int thisClass;
+    private int superClass;         //同 thisClass 的索引值。
+    private int[] interfaces;     //存放所实现的接口在常量池中的索引。同 thisClass 的索引值。
+    private MemberInfo[] fields;    //存放类中所有的字段，包括静态的非静态的；不同的属性通过字段的访问修饰符来读取；
+    private MemberInfo[] methods;   //存放类中所有的方法，包括静态的非静态的；不同的属性通过方法的访问修饰符来读取；
+    private AttributeInfo[] attributes; //属性表，存放类的属性；
 
 
     public ClassFile(byte[] classData) {
@@ -29,7 +32,12 @@ public class ClassFile {
         read(reader);
     }
 
-    void read(ClassReader reader) {
+    /**
+     * 读取class文件,解析各个字段
+     *
+     * @param reader
+     */
+    private void read(ClassReader reader) {
         readAndCheckMagic(reader);
         readAndCheckVersion(reader);
         constantPool = new ConstantPool(reader);
@@ -112,7 +120,7 @@ public class ClassFile {
         if (superClass > 0) {
             return constantPool.getClassName(superClass);
         } else {
-            return "";
+            return "java/lang/Object";
         }
     }
 

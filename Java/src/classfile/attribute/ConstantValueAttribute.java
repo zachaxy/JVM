@@ -1,4 +1,6 @@
-package classfile;
+package classfile.attribute;
+
+import classfile.ClassReader;
 
 /**
  * Author: zhangxin

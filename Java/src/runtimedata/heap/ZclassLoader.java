@@ -3,12 +3,11 @@ package runtimedata.heap;
 import java.util.HashMap;
 
 import classfile.ClassFile;
-import classfile.ConstantDoubleInfo;
-import classfile.ConstantFloatInfo;
-import classfile.ConstantIntegerInfo;
-import classfile.ConstantLongInfo;
+import classfile.classconstant.ConstantDoubleInfo;
+import classfile.classconstant.ConstantFloatInfo;
+import classfile.classconstant.ConstantIntegerInfo;
+import classfile.classconstant.ConstantLongInfo;
 import classpath.ClassPath;
-import runtimedata.Slot;
 import runtimedata.Slots;
 
 /**

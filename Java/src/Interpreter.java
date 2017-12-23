@@ -1,4 +1,4 @@
-import classfile.CodeAttribute;
+import classfile.attribute.CodeAttribute;
 import classfile.MemberInfo;
 import instructions.InstructionFactory;
 import instructions.base.BytecodeReader;

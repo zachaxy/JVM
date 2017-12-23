@@ -1,5 +1,7 @@
 package classfile;
 
+import classfile.classconstant.*;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
@@ -8,13 +10,15 @@ package classfile;
  * 常量池有多中项目类型，这个根据读取到的tag的不同创建不同的常量类，
  */
 public class ConstantPool {
-    ConstantInfo[] infos;  //保存类文件常量池中的所有常量,常量分为多种类型,基本类型都有对应的常量,以及字符串等;(简言之,这就是常量池的抽象)
+    //保存类文件常量池中的所有常量,常量分为多种类型,基本类型都有对应的常量,以及字符串等;(简言之,这就是常量池的抽象)
+    ConstantInfo[] infos;
 
     public ConstantInfo[] getInfos() {
         return infos;
     }
 
-    int constantPoolCount; //class文件中常量池中的常量数量,注意返回的这个数量是包含0的，但是0是空的；
+    //class文件中常量池中的常量数量,注意返回的这个数量是包含0的，但是0是空的；
+    int constantPoolCount;
 
     public ConstantPool(ClassReader reader) {
         /*读出常量池的大小;接下来根据这个大小,生成常量信息数组;
@@ -37,7 +41,7 @@ public class ConstantPool {
 
     //按索引查找常量,如果没有的话,直接抛异常;
     private ConstantInfo getConstantInfo(int index) {
-        if (0 < index && index <= constantPoolCount) {
+        if (0 < index && index < constantPoolCount) {
             ConstantInfo info = infos[index];
             if (info != null) {
                 return info;
@@ -47,18 +51,18 @@ public class ConstantPool {
     }
 
     //常量池查找字段或方法的名字和描述符
-    String getName(int index) {
+    protected String getName(int index) {
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         return getUtf8(info.nameIndex);
     }
 
     //常量池查找字段或方法的描述符,描述符其实就是由其对应的类型名字对应而成;
-    String getType(int index) {
+    protected String getType(int index) {
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         return getUtf8(info.descriptorIndex);
     }
 
-    String[] getNameAndType(int index) {
+    protected String[] getNameAndType(int index) {
         String[] str = new String[2];
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         str[0] = getUtf8(info.nameIndex);
@@ -66,13 +70,13 @@ public class ConstantPool {
         return str;
     }
 
-    String getClassName(int index) {
+    protected String getClassName(int index) {
         ConstantClassInfo info = (ConstantClassInfo) getConstantInfo(index);
         return getUtf8(info.nameIndex);
     }
 
     //只要调用这个方法，一定是想去读字符串常量了，所以拿到index所对应的常量后，直接强转为ConstantUtf8Info，然后获取其val值；
-    String getUtf8(int index) {
+    public String getUtf8(int index) {
         return ((ConstantUtf8Info) getConstantInfo(index)).val;
     }
 

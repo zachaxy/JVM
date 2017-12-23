@@ -1,4 +1,6 @@
-package classfile;
+package classfile.classconstant;
+
+import classfile.ClassReader;
 
 /**
  * Author: zhangxin

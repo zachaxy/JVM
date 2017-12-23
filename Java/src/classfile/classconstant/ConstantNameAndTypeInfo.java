@@ -1,4 +1,6 @@
-package classfile;
+package classfile.classconstant;
+
+import classfile.ClassReader;
 
 /**
  * Author: zhangxin
@@ -28,8 +30,8 @@ CONSTANT_NameAndType_info {
 }
  */
 public class ConstantNameAndTypeInfo extends ConstantInfo {
-    int nameIndex;
-    int descriptorIndex;
+    public int nameIndex;
+    public int descriptorIndex;
 
     public ConstantNameAndTypeInfo(int i) {
         type = i;

@@ -1,12 +1,13 @@
 package runtimedata;
 
+import classfile.attribute.CodeAttribute;
 import runtimedata.heap.Zmethod;
 
 /**
  * Author: zhangxin
  * Time: 2017/5/4 0004.
  * Desc:栈帧,执行方法所需的局部变量表大小和操作数栈深度是由编译器预先计算好的，存储在class文件method_info结构的Code属性中
- * 详细实现参考 {@link classfile.CodeAttribute}
+ * 详细实现参考 {@link CodeAttribute}
  */
 public class Zframe {
     Zframe lower;       //当前帧的 前一帧的引用;相当于单向链表的前一个指针

@@ -1,4 +1,7 @@
-package classfile;
+package classfile.attribute;
+
+import classfile.ClassReader;
+import classfile.ConstantPool;
 
 /**
  * Author: zhangxin

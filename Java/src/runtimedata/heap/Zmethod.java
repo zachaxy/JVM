@@ -1,6 +1,6 @@
 package runtimedata.heap;
 
-import classfile.CodeAttribute;
+import classfile.attribute.CodeAttribute;
 import classfile.MemberInfo;
 
 /**

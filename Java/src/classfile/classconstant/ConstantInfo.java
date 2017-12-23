@@ -1,4 +1,7 @@
-package classfile;
+package classfile.classconstant;
+
+import classfile.ClassReader;
+import classfile.ConstantPool;
 
 /**
  * Author: zhangxin
@@ -8,41 +11,43 @@ package classfile;
  * 根据在常量池的字节码的每个tag字节，可以判断下一个常量类型是什么，每个常量占用多少个字节都是可以确定的，接着再读取下一个tag，确定下一个常量类型；
  */
 public abstract class ConstantInfo {
-    static final int CONSTANT_Utf8 = 1;
-    static final int CONSTANT_Integer = 3;
-    static final int CONSTANT_Float = 4;
-    static final int CONSTANT_Long = 5;
-    static final int CONSTANT_Double = 6;
-    static final int CONSTANT_Class = 7;
-    static final int CONSTANT_String = 8;
-    static final int CONSTANT_Fieldref = 9;
-    static final int CONSTANT_Methodref = 10;
-    static final int CONSTANT_InterfaceMethodref = 11;
-    static final int CONSTANT_NameAndType = 12;
-    static final int CONSTANT_MethodHandle = 15;
-    static final int CONSTANT_MethodType = 16;
-    static final int CONSTANT_InvokeDynamic = 18;
+    private static final int CONSTANT_Utf8 = 1;
+    private static final int CONSTANT_Integer = 3;
+    private static final int CONSTANT_Float = 4;
+    private static final int CONSTANT_Long = 5;
+    private static final int CONSTANT_Double = 6;
+    private static final int CONSTANT_Class = 7;
+    private static final int CONSTANT_String = 8;
+    private static final int CONSTANT_Fieldref = 9;
+    private static final int CONSTANT_Methodref = 10;
+    private static final int CONSTANT_InterfaceMethodref = 11;
+    private static final int CONSTANT_NameAndType = 12;
+    private static final int CONSTANT_MethodHandle = 15;
+    private static final int CONSTANT_MethodType = 16;
+    private static final int CONSTANT_InvokeDynamic = 18;
 
 
     //抽象方法来读取信息,需要各自具体类去实现;因为每种常量所占的字节数并不相同。
     abstract void readInfo(ClassReader reader);
 
-//    表明当前常量的类型是哪种;
-    int type;
+    //表明当前常量的类型是上述常量的哪一种;
+    protected int type;
 
     public int getType() {
         return type;
     }
 
     public static ConstantInfo readConstantInfo(ClassReader reader, ConstantPool constantPool) {
-        int tag = (reader.readUint8() + 256) % 256;
-        ConstantInfo info = create(tag, constantPool);
+        int type = (reader.readUint8() + 256) % 256;
+        ConstantInfo info = create(type, constantPool);
         info.readInfo(reader);
         return info;
     }
 
-    private static ConstantInfo create(int tag, ConstantPool constantPool) {
-        switch (tag) {
+    private static ConstantInfo create(int type, ConstantPool constantPool) {
+        switch (type) {
+            case CONSTANT_Utf8:
+                return new ConstantUtf8Info(1);
             case CONSTANT_Integer:
                 return new ConstantIntegerInfo(3);
             case CONSTANT_Float:
@@ -51,8 +56,6 @@ public abstract class ConstantInfo {
                 return new ConstantLongInfo(5);
             case CONSTANT_Double:
                 return new ConstantDoubleInfo(6);
-            case CONSTANT_Utf8:
-                return new ConstantUtf8Info(1);
             case CONSTANT_String:
                 return new ConstantStringInfo(constantPool, 8);
             case CONSTANT_Class:

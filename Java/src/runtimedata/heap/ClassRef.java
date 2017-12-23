@@ -1,6 +1,6 @@
 package runtimedata.heap;
 
-import classfile.ConstantClassInfo;
+import classfile.classconstant.ConstantClassInfo;
 
 /**
  * Author: zhangxin

@@ -1,4 +1,7 @@
-package classfile;
+package classfile.classconstant;
+
+import classfile.ClassReader;
+import classfile.ConstantPool;
 
 /**
  * Author: zhangxin
@@ -12,9 +15,9 @@ package classfile;
  */
 public class ConstantClassInfo extends ConstantInfo {
     ConstantPool constantPool;
-    int nameIndex;
+    public int nameIndex;
 
-    public ConstantClassInfo(ConstantPool constantPool,int i) {
+    public ConstantClassInfo(ConstantPool constantPool, int i) {
         this.constantPool = constantPool;
         type = i;
     }
@@ -25,7 +28,7 @@ public class ConstantClassInfo extends ConstantInfo {
         nameIndex = reader.readUint16();
     }
 
-   public String getName() {
+    public String getName() {
         return constantPool.getUtf8(nameIndex);
     }
 }

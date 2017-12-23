@@ -9,8 +9,8 @@ import Utils.ByteUtils;
  */
 public class ClassReader {
 
-    byte[] data;
-    int index = 0;
+    private byte[] data;
+    private int index = 0;
 
     public ClassReader(byte[] data) {
         this.data = data;
@@ -55,6 +55,10 @@ public class ClassReader {
         return res;
     }
 
+    /**
+     * 读取连续的16bit长的数组,首先读出16bit,用来表示接下来要去读的多少个16bit
+     * @return
+     */
     public int[] readUint16s() {
         int n = readUint16();
         int[] data = new int[n];

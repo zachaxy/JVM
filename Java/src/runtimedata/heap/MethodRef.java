@@ -1,7 +1,6 @@
 package runtimedata.heap;
 
-import classfile.ConstantFieldRefInfo;
-import classfile.ConstantMethodRefInfo;
+import classfile.classconstant.ConstantMethodRefInfo;
 
 /**
  * Author: zhangxin

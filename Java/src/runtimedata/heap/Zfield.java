@@ -1,6 +1,6 @@
 package runtimedata.heap;
 
-import classfile.ConstantValueAttribute;
+import classfile.attribute.ConstantValueAttribute;
 import classfile.MemberInfo;
 
 /**

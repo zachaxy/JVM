@@ -1,11 +1,16 @@
 package classfile;
 
+import classfile.attribute.AttributeInfo;
+import classfile.attribute.CodeAttribute;
+import classfile.attribute.ConstantValueAttribute;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
  * Desc: 字段表和方法表，共用该类，因为二者在虚拟机规范中的定义是相同的
- * 里面包含的是类中的所有字段/方法
+ * 里面包含的是类中的所定义的成员变量/方法
  * 字段/方法中可能还包含属性
+ * 静态的和非静态的都包含
  */
 /*
 field_info {
@@ -61,8 +66,8 @@ public class MemberInfo {
         return null;
     }
 
-//    并非每个成员变量都有ConstantValueAttribute属性,该属性只针对于静态变量;
-    public  ConstantValueAttribute getConstantValueAttribute(){
+    //    并非每个成员变量都有ConstantValueAttribute属性,该属性只针对于static final 基础类型变量或者String类型变量;
+    public ConstantValueAttribute getConstantValueAttribute() {
         for (AttributeInfo info : attributes) {
             if (info instanceof ConstantValueAttribute) {
                 return (ConstantValueAttribute) info;

@@ -1,4 +1,6 @@
-package classfile;
+package classfile.classconstant;
+
+import classfile.ClassReader;
 
 import java.io.IOException;
 import java.io.UTFDataFormatException;
@@ -17,7 +19,7 @@ import java.io.UTFDataFormatException;
  * 字段名(变量名)、字段描述符等就是以字符串的形式存储在class文件中的
  */
 public class ConstantUtf8Info extends ConstantInfo {
-    String val;
+    public String val;
 
     public ConstantUtf8Info(int i) {
         type = i;

@@ -1,6 +1,6 @@
 package runtimedata.heap;
 
-import classfile.ConstantInfo;
+import classfile.classconstant.ConstantInfo;
 import classfile.ConstantPool;
 
 import java.util.NoSuchElementException;

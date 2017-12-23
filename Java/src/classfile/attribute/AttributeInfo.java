@@ -1,6 +1,8 @@
-package classfile;
+package classfile.attribute;
 
 import Utils.ByteUtils;
+import classfile.ClassReader;
+import classfile.ConstantPool;
 
 /**
  * Author: zhangxin
@@ -21,7 +23,7 @@ attribute_info {
 */
 public abstract class AttributeInfo {
 
-
+    //抽象方法,由各属性自己读取对应的属性信息
     abstract void readInfo(ClassReader reader);
 
     //读取单个属性
@@ -53,21 +55,21 @@ public abstract class AttributeInfo {
     (如果class文件中存在第三组属性，Java虚拟机实现或者Java类库也是可以利用它们的，比如使用LineNumberTable属性在异常堆栈中显示行号。)
      */
     private static AttributeInfo create(String attrName, int attrLen, ConstantPool constantPool) {
-        if (attrName.equals("Code")) {
+        if ("Code".equals(attrName)) {
             return new CodeAttribute(constantPool);
-        }else if (attrName.equals("ConstantValue")){
+        }else if ("ConstantValue".equals(attrName)){
             return new ConstantValueAttribute();
-        }else if (attrName.equals("Deprecated")){
+        }else if ("Deprecated".equals(attrName)){
             return new DeprecatedAttribute();
-        }else if (attrName.equals("Exceptions")){
+        }else if ("Exceptions".equals(attrName)){
             return new ExceptionsAttribute();
-        }else if (attrName.equals("LineNumberTable")){
+        }else if ("LineNumberTable".equals(attrName)){
             return new LineNumberTableAttribute();
-        }else if (attrName.equals("LocalVariableTable")){
+        }else if ("LocalVariableTable".equals(attrName)){
             return new LocalVariableTableAttribute();
-        }else if (attrName.equals("SourceFile")){
+        }else if ("SourceFile".equals(attrName)){
             return new SourceFileAttribute(constantPool);
-        }else if (attrName.equals("Synthetic")){
+        }else if ("Synthetic".equals(attrName)){
             return new SyntheticAttribute();
         } else {
             return new UnparsedAttribute(attrName, attrLen);

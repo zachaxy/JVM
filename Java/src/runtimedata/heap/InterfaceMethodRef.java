@@ -1,6 +1,6 @@
 package runtimedata.heap;
 
-import classfile.ConstantInterfaceMethodRefInfo;
+import classfile.classconstant.ConstantInterfaceMethodRefInfo;
 
 /**
  * Author: zhangxin
