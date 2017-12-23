@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * @author zhangxin
  * @date 2017/12/23 0023
- * testcase:type the String as flow:
+ * testcase as flow:
  * (1)java -cp C:\Users\zhangxin\Desktop Hello
  * (2)java java.lang.Object
  * for the first test case,you must confirm there is a Hello.class in your desktop

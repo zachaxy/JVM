@@ -18,7 +18,8 @@ public class ConstantPool {
     }
 
     //class文件中常量池中的常量数量,注意返回的这个数量是包含0的，但是0是空的；
-    int constantPoolCount;
+    private int constantPoolCount;
+    private int realConstantPoolCount;
 
     public ConstantPool(ClassReader reader) {
         /*读出常量池的大小;接下来根据这个大小,生成常量信息数组;
@@ -32,6 +33,8 @@ public class ConstantPool {
         infos = new ConstantInfo[constantPoolCount];
         for (int i = 1; i < constantPoolCount; i++) {
             infos[i] = ConstantInfo.readConstantInfo(reader, this);
+            realConstantPoolCount++;
+//            System.out.println(i+":"+infos[i].getClass());
             if ((infos[i] instanceof ConstantLongInfo) || (infos[i] instanceof ConstantDoubleInfo)) {
                 i++;
             }
@@ -51,18 +54,18 @@ public class ConstantPool {
     }
 
     //常量池查找字段或方法的名字和描述符
-    protected String getName(int index) {
+    public String getName(int index) {
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         return getUtf8(info.nameIndex);
     }
 
     //常量池查找字段或方法的描述符,描述符其实就是由其对应的类型名字对应而成;
-    protected String getType(int index) {
+    public String getType(int index) {
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         return getUtf8(info.descriptorIndex);
     }
 
-    protected String[] getNameAndType(int index) {
+    public String[] getNameAndType(int index) {
         String[] str = new String[2];
         ConstantNameAndTypeInfo info = (ConstantNameAndTypeInfo) getConstantInfo(index);
         str[0] = getUtf8(info.nameIndex);
@@ -70,7 +73,7 @@ public class ConstantPool {
         return str;
     }
 
-    protected String getClassName(int index) {
+    public String getClassName(int index) {
         ConstantClassInfo info = (ConstantClassInfo) getConstantInfo(index);
         return getUtf8(info.nameIndex);
     }
@@ -81,7 +84,7 @@ public class ConstantPool {
     }
 
     public int getConstantPoolCount() {
-        return constantPoolCount;
+        return realConstantPoolCount;
     }
 }
 

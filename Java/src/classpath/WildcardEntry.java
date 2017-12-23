@@ -27,7 +27,7 @@ public class WildcardEntry extends Entry {
                compositeEntry.compositeEntries.add(new ZipJarEntry(baseDir,file.getName()));
             }
         }
-        System.out.println(compositeEntry.compositeEntries.size());
+//        System.out.println(compositeEntry.compositeEntries.size());
     }
 
     @Override
