@@ -17,7 +17,7 @@ public class Zframe {
     Zmethod method;
     int nextPC;             //frame中并不改变PC的值,其PC值是由ByteReader读取字节码不断改变的
 
-    // TODO: 2017/5/4 0004
+    // TODO: 2017/5/4 0004 冗余的构造方法
     public Zframe(Zthread thread, int maxLocals, int maxStack) {
         this.thread = thread;
         localVars = new LocalVars(maxLocals);

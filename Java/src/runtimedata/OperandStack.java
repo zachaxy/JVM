@@ -7,11 +7,13 @@ import runtimedata.heap.Zobject;
  * Time: 2017/5/4 0004.
  * Desc:操作数栈,底层其实还是用数组来实现的,但是对外要暴露的接口是栈的特性
  * 包含的操作和局部变量表类似
- * 操作数栈的大小是编译器已经确定的，所以可以用[]Slot实现
+ * 操作数栈的大小是编译期已经确定的，保存在code属性中，所以可以用Slot数组实现
+ * 但要和 LocalVars 区分开，本地变量表按索引访问，操作数栈是用数组模拟的栈；方法栈是用单向链表模拟的栈
  */
 public class OperandStack {
 
-    private int size;  //初始值为0,在运行中,代表当前栈顶的index,还未使用,可以直接用,用完记得size++;
+    //初始值为0,在运行中,代表当前栈顶的index,还未使用,可以直接用,用完记得size++;
+    private int size;
     private Slot[] slots;
 
     public OperandStack(int maxStack) {
