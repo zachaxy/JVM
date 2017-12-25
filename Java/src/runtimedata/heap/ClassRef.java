@@ -7,9 +7,9 @@ import classfile.classconstant.ConstantClassInfo;
  * Time: 2017/7/22.
  * Desc: 类引用
  */
-public class ClassRef extends SymRef{
-    public  ClassRef(RuntimeConstantPool runtimeConstantPool, ConstantClassInfo classInfo){
-        this.cp = runtimeConstantPool;
+public class ClassRef extends SymRef {
+    public ClassRef(RuntimeConstantPool runtimeConstantPool, ConstantClassInfo classInfo) {
+        super(runtimeConstantPool);
         this.className = classInfo.getName();
     }
 }

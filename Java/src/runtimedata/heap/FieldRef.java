@@ -10,56 +10,50 @@ import classfile.classconstant.ConstantFieldRefInfo;
 public class FieldRef extends MemberRef {
     Zfield field;
 
-    public FieldRef(RuntimeConstantPool runtimeConstantPool, ConstantFieldRefInfo fieldRefInfo){
+    public FieldRef(RuntimeConstantPool runtimeConstantPool, ConstantFieldRefInfo fieldRefInfo) {
         super(runtimeConstantPool);
         copyMemberRefInfo(fieldRefInfo);
     }
 
-    public Zfield resolvedField(){
-        if (field == null){
+    //字段引用转直接引用
+    public Zfield resolvedField() {
+        if (field == null) {
             resolvedRefField();
         }
 
         return field;
     }
 
-    public void resolvedRefField(){
-        Zclass d = symRef.cp.clazz;
-        Zclass c = symRef.resolvedClass();
-
-        Zfield field = lookupField(c,name,descriptor);
-        if (field == null){
-            throw new RuntimeException("java.lang.NoSuchFieldError");
+    public void resolvedRefField() {
+        Zclass d = runtimeConstantPool.clazz;
+        // 获取 fieldRef 所在的类
+        Zclass c = resolvedClass();
+        //在该类中找到对应的字段 field
+        Zfield field = lookupField(c, name, descriptor);
+        if (field == null) {
+            throw new NoSuchFieldError("NoSuchFieldError：" + name);
         }
 
-        if (!field.isAccessTo(d)){
-            throw  new RuntimeException("java.lang.IllegalAccessError");
+        if (!field.isAccessTo(d)) {
+            throw new IllegalAccessError(d.thisClassName + " can't access " + name + "in Class " + c.thisClassName);
         }
 
         this.field = field;
     }
 
     private Zfield lookupField(Zclass c, String name, String descriptor) {
-        for (int i = 0; i < c.fileds.length; i++) {
-
-        }
-
-        for (Zfield zf:c.fileds) {
-            if (zf.name.equals(name) && zf.getDescriptor().equals(descriptor)){
+        for (Zfield zf : c.fileds) {
+            if (zf.name.equals(name) && zf.getDescriptor().equals(descriptor)) {
                 return zf;
             }
         }
 
-        for (Zclass zin:c.interfaces) {
-            for (Zfield zf:zin.fileds){
-                if (zf.name.equals(name) && zf.getDescriptor().equals(descriptor)){
-                    return zf;
-                }
-            }
+        for (Zclass zin : c.interfaces) {
+            return lookupField(zin, name, descriptor);
         }
 
-        if (c.superClass!=null){
-            return lookupField(c.superClass,name,descriptor);
+        if (c.superClass != null) {
+            return lookupField(c.superClass, name, descriptor);
         }
 
         return null;
