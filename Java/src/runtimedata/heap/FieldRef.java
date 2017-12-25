@@ -32,7 +32,7 @@ public class FieldRef extends MemberRef {
             throw new RuntimeException("java.lang.NoSuchFieldError");
         }
 
-        if (!field.classMember.isAccessTo(d)){
+        if (!field.isAccessTo(d)){
             throw  new RuntimeException("java.lang.IllegalAccessError");
         }
 
@@ -45,14 +45,14 @@ public class FieldRef extends MemberRef {
         }
 
         for (Zfield zf:c.fileds) {
-            if (zf.classMember.name.equals(name) && zf.classMember.getDescriptor().equals(descriptor)){
+            if (zf.name.equals(name) && zf.getDescriptor().equals(descriptor)){
                 return zf;
             }
         }
 
         for (Zclass zin:c.interfaces) {
             for (Zfield zf:zin.fileds){
-                if (zf.classMember.name.equals(name) && zf.classMember.getDescriptor().equals(descriptor)){
+                if (zf.name.equals(name) && zf.getDescriptor().equals(descriptor)){
                     return zf;
                 }
             }

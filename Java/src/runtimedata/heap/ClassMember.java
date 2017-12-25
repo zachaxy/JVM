@@ -6,22 +6,23 @@ import classfile.MemberInfo;
  * Author: zhangxin
  * Time: 2017/5/20 0020.
  * Desc: 字段和方法都属于类的成员，它们有一些相同的信息（访问标志、名字、描述符）
- * 所以这里定义一个类ClassMember用来存放字段和方法共同的部分；
+ * 所以这里定义一个父类ClassMember用来存放字段和方法共同的部分；
  * 但是字段和方法不同的部分还需要分开处理:Zfiled;Zmethod
  */
 public class ClassMember {
-    int accessFlags;    //访问标示
-    String name;        //字段、方法名称
-    private String descriptor;  //字段、方法描述
-    Zclass clazz;       //所属的类，这样可以通过字段或方法访问到它所属的类
+    protected int accessFlags;    //访问标示
+    protected String name;        //字段、方法名称
+    protected String descriptor;  //字段、方法描述
+    protected Zclass clazz;       //所属的类，这样可以通过字段或方法访问到它所属的类
 
-    public ClassMember(Zclass clazz, MemberInfo cfField) {
-        copyMemberInfo(cfField);
+    public ClassMember(Zclass clazz, MemberInfo classFileMemberInfo) {
+        copyMemberInfo(classFileMemberInfo);
         this.clazz = clazz;
     }
 
     /**
      * 从class文件的memberInfo中复制数据
+     *
      * @param memberInfo
      */
     void copyMemberInfo(MemberInfo memberInfo) {
@@ -67,20 +68,28 @@ public class ClassMember {
         return clazz;
     }
 
-    public boolean isAccessTo(Zclass d){
-        if (isPublic()){
+    public boolean isAccessTo(Zclass d) {
+        if (isPublic()) {
             return true;
         }
 
-        if (isProtected()){
+        if (isProtected()) {
             return d == clazz || d.isSubClassOf(clazz) || d.getPackageName().equals(clazz.getPackageName());
         }
 
-        if (!isPrivate()){
+        if (!isPrivate()) {
             return d.getPackageName().equals(clazz.getPackageName());
         }
 
         return d == clazz;
     }
 
+    public int getAccessFlags() {
+        return accessFlags;
+    }
+
+
+    public void setClazz(Zclass clazz) {
+        this.clazz = clazz;
+    }
 }

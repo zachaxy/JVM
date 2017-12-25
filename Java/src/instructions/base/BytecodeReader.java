@@ -11,6 +11,11 @@ public class BytecodeReader {
     byte[] code;  //byte的范围四-128~127,和go中的byte:0~255不同,所以在取数据的时候需要注意;
     int pc;
 
+    /**
+     * TODO:在执行同一个方法时，不断的设置 code 字节码是冗余的，其主要目的是设置 pc，待改进
+     * @param code
+     * @param pc
+     */
     public void reset(byte[] code, int pc) {
         this.code = code;
         this.pc = pc;

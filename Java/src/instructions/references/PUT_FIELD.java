@@ -2,14 +2,8 @@ package instructions.references;
 
 import instructions.base.Index16Instruction;
 import runtimedata.OperandStack;
-import runtimedata.Slots;
 import runtimedata.Zframe;
-import runtimedata.heap.FieldRef;
-import runtimedata.heap.Zclass;
-import runtimedata.heap.ZconstantPool;
-import runtimedata.heap.Zfield;
-import runtimedata.heap.Zmethod;
-import runtimedata.heap.Zobject;
+import runtimedata.heap.*;
 
 /**
  * Author: zhangxin
@@ -20,26 +14,26 @@ public class PUT_FIELD extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
-        Zclass currentClass = currentMethod.getClassMember().getClazz();
+        Zclass currentClass = currentMethod.getClazz();
         ZconstantPool cp = currentClass.getConstantPool();
 
         // TODO: 2017/7/26 常量池的转换尚未实现;
         FieldRef fieldRef = null;// cp.getConstant(this.index);
         Zfield field = fieldRef.resolvedField();
-        Zclass clazz = field.getClassMember().getClazz();
+        Zclass clazz = field.getClazz();
         // todo: init class
 
-        if (field.getClassMember().isStatic()) {
+        if (field.isStatic()) {
             throw new RuntimeException("java.lang.IncompatibleClassChangeError");
         }
 
-        if (field.getClassMember().isFinal()) {
-            if (currentClass != clazz || "<clinit>".equals(currentMethod.getClassMember().getName())) {
+        if (field.isFinal()) {
+            if (currentClass != clazz || "<clinit>".equals(currentMethod.getName())) {
                 throw new RuntimeException("java.lang.IllegalAccessError");
             }
         }
 
-        String descriptor = field.getClassMember().getDescriptor();
+        String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
         OperandStack stack = frame.getOperandStack();
 

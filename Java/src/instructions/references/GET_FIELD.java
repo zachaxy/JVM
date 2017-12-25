@@ -20,7 +20,7 @@ public class GET_FIELD extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
-        Zclass currentClass = currentMethod.getClassMember().getClazz();
+        Zclass currentClass = currentMethod.getClazz();
         ZconstantPool cp = currentClass.getConstantPool();
 
         // TODO: 2017/7/26 常量池的转换尚未实现;
@@ -28,12 +28,12 @@ public class GET_FIELD extends Index16Instruction {
         Zfield field = fieldRef.resolvedField();
         // todo: init class
 
-        if (field.getClassMember().isStatic()) {
+        if (field.isStatic()) {
             throw new RuntimeException("java.lang.IncompatibleClassChangeError");
         }
 
 
-        String descriptor = field.getClassMember().getDescriptor();
+        String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
         OperandStack stack = frame.getOperandStack();
         Zobject ref = stack.popRef();

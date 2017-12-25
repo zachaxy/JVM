@@ -6,17 +6,18 @@ import classfile.MemberInfo;
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc: 根据class文件的字段信息创建字段表，也不在外部单独使用，而是通过makeFields产生的字段数组来访问其中的某一个字段；
- * 所以包含一个索引
+ * Desc: 字段的抽象,是在class中定义的字段,包括静态的和非静态的
  */
-public class Zfield {
-    ClassMember classMember;
-    int constValueIndex;//其赋值在创建构造方法中,代表字节码文件中常量池中的索引,该属性只有在成员有初值的情况下才有;
-    int slotId;         //其赋值在运行时常量池的slotId;
+public class Zfield extends ClassMember{
+    int constValueIndex;//运行时常量池中的索引,该属性只有在成员有初值的情况下才有;
+    //类中字段数组slots中的的索引；其赋值在首次加载 class 文件后，为其分配的 slotId
+    //如果是静态字段，该 slotId 表示的是在 Class 中staticVars数组中的索引
+    //如果是非静态字段，该 slotId 表示的是在 Object 中 fields 数组中的索引
+    int slotId;
 
-    private Zfield(Zclass clazz, MemberInfo cfField) {
-        this.classMember = new ClassMember(clazz, cfField);
-        copyAttributes(cfField);
+    private Zfield(Zclass clazz, MemberInfo classFileField) {
+        super(clazz,classFileField);
+        copyAttributes(classFileField);
     }
 
 
@@ -30,23 +31,23 @@ public class Zfield {
     }
 
 
-    public void copyAttributes(MemberInfo cfField) {
-        ConstantValueAttribute constantValueAttribute = cfField.getConstantValueAttribute();
+    public void copyAttributes(MemberInfo classFileField) {
+        ConstantValueAttribute constantValueAttribute = classFileField.getConstantValueAttribute();
         if(constantValueAttribute!=null){
             constValueIndex = constantValueAttribute.getConstantValueIndex();
         }
     }
 
     public boolean isVolatile() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_VOLATILE);
+        return 0 != (accessFlags & AccessFlag.ACC_VOLATILE);
     }
 
     public boolean isTransient() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_TRANSIENT);
+        return 0 != ( accessFlags & AccessFlag.ACC_TRANSIENT);
     }
 
     public boolean isEnum() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_ENUM);
+        return 0 != (accessFlags & AccessFlag.ACC_ENUM);
     }
 
 
@@ -59,10 +60,6 @@ public class Zfield {
     }
 
     public boolean isLongOrDouble() {
-        return classMember.getDescriptor().equals("J") || classMember.getDescriptor().equals("D");
-    }
-
-    public ClassMember getClassMember() {
-        return classMember;
+        return getDescriptor().equals("J") || getDescriptor().equals("D");
     }
 }

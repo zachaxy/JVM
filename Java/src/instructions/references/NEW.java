@@ -17,7 +17,7 @@ public class NEW extends Index16Instruction {
 
     @Override
     public void execute(Zframe frame) {
-        ZconstantPool cp = frame.getMethod().getClassMember().getClazz().getConstantPool();
+        ZconstantPool cp = frame.getMethod().getClazz().getConstantPool();
         // TODO: 2017/7/26 常量池的转换尚未实现;
         ClassRef classRef = null;//cp.getConstant(index);
         Zclass clazz = classRef.resolvedClass();

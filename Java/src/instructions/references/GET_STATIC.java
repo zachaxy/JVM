@@ -19,20 +19,20 @@ public class GET_STATIC extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
-        Zclass currentClass = currentMethod.getClassMember().getClazz();
+        Zclass currentClass = currentMethod.getClazz();
         ZconstantPool cp = currentClass.getConstantPool();
 
         // TODO: 2017/7/26 常量池的转换尚未实现;
         FieldRef fieldRef = null;// cp.getConstant(this.index);
         Zfield field = fieldRef.resolvedField();
-        Zclass clazz = field.getClassMember().getClazz();
+        Zclass clazz = field.getClazz();
         // todo: init class
 
-        if (!field.getClassMember().isStatic()) {
+        if (!field.isStatic()) {
             throw new RuntimeException("java.lang.IncompatibleClassChangeError");
         }
 
-        String descriptor = field.getClassMember().getDescriptor();
+        String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
         Slots slots = clazz.getStaticVars();
         OperandStack stack = frame.getOperandStack();

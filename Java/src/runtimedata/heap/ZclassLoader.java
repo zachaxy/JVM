@@ -1,7 +1,5 @@
 package runtimedata.heap;
 
-import java.util.HashMap;
-
 import classfile.ClassFile;
 import classfile.classconstant.ConstantDoubleInfo;
 import classfile.classconstant.ConstantFloatInfo;
@@ -9,6 +7,8 @@ import classfile.classconstant.ConstantIntegerInfo;
 import classfile.classconstant.ConstantLongInfo;
 import classpath.ClassPath;
 import runtimedata.Slots;
+
+import java.util.HashMap;
 
 /**
  * Author: zhangxin
@@ -114,7 +114,7 @@ public class ZclassLoader {
         }
 
         for (Zfield zfield : clazz.fileds) {
-            if (!zfield.classMember.isStatic()) {
+            if (!zfield.isStatic()) {
                 zfield.slotId = slotId;
                 slotId++;
                 if (zfield.isLongOrDouble()) {
@@ -130,7 +130,7 @@ public class ZclassLoader {
     private void calcStaticFieldSlotIds(Zclass clazz) {
         int slotId = 0;
         for (Zfield zfield : clazz.fileds) {
-            if (zfield.classMember.isStatic()) {
+            if (zfield.isStatic()) {
                 zfield.slotId = slotId;
                 slotId++;
                 if (zfield.isLongOrDouble()) {
@@ -146,7 +146,7 @@ public class ZclassLoader {
     private void allocAndInitStaticVars(Zclass clazz) {
         clazz.staticVars = new Slots(clazz.staticSlotCount);
         for (Zfield zfield : clazz.fileds) {
-            if (zfield.classMember.isStatic() && zfield.classMember.isFinal()) {
+            if (zfield.isStatic() && zfield.isFinal()) {
                 initStaticFinalVar(clazz, zfield);
             }
         }
@@ -161,7 +161,7 @@ public class ZclassLoader {
         int slotId = zfield.slotId;
 
         if (cpIndex > 0) {
-            switch (zfield.classMember.getDescriptor()) {
+            switch (zfield.getDescriptor()) {
                 case "Z":
                 case "B":
                 case "C":

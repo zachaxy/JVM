@@ -6,23 +6,21 @@ import classfile.MemberInfo;
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc: Method对象不单独使用，而是在使用了makeMethods之后，得到一个Method对象，然后在使用对用的方法；
- * 该对象比Zfield要复杂的多，因为其还有方法内的字节码
+ * Desc: 方法的抽象,是在class中定义的方法,包括静态的和非静态的
  */
-public class Zmethod {
-    ClassMember classMember;
-    int maxStack;
-    int maxLocals;
-    byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
+public class Zmethod extends ClassMember {
+    private int maxStack;
+    private int maxLocals;
+    private byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
 
-    private Zmethod(Zclass clazz, MemberInfo cfMethod) {
-        this.classMember = new ClassMember(clazz, cfMethod);
-        copyAttributes(cfMethod);
+    private Zmethod(Zclass clazz, MemberInfo classFileMethod) {
+        super(clazz, classFileMethod);
+        copyAttributes(classFileMethod);
     }
 
     //该方法用来初始化成员变量：maxStack，maxLocals，code
-    private void copyAttributes(MemberInfo cfMethod) {
-        CodeAttribute codeAttribute = cfMethod.getCodeAttribute();
+    private void copyAttributes(MemberInfo classFileMethod) {
+        CodeAttribute codeAttribute = classFileMethod.getCodeAttribute();
         if (codeAttribute != null) {
             maxStack = codeAttribute.getMaxStack();
             maxLocals = codeAttribute.getMaxLocals();
@@ -31,10 +29,10 @@ public class Zmethod {
     }
 
 
-    public static Zmethod[] makeMethods(Zclass zclass, MemberInfo[] cfMethods) {
-        Zmethod[] methods = new Zmethod[cfMethods.length];
+    public static Zmethod[] makeMethods(Zclass zclass, MemberInfo[] classFileMethods) {
+        Zmethod[] methods = new Zmethod[classFileMethods.length];
         for (int i = 0; i < methods.length; i++) {
-            Zmethod method = new Zmethod(zclass, cfMethods[i]);
+            Zmethod method = new Zmethod(zclass, classFileMethods[i]);
             methods[i] = method;
         }
         return methods;
@@ -42,27 +40,27 @@ public class Zmethod {
 
 
     public boolean isSynchronized() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_SYNCHRONIZED);
+        return 0 != (accessFlags & AccessFlag.ACC_SYNCHRONIZED);
     }
 
     public boolean isBridge() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_BRIDGE);
+        return 0 != (accessFlags & AccessFlag.ACC_BRIDGE);
     }
 
     public boolean isVarargs() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_VARARGS);
+        return 0 != (accessFlags & AccessFlag.ACC_VARARGS);
     }
 
     public boolean isNative() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_NATIVE);
+        return 0 != (accessFlags & AccessFlag.ACC_NATIVE);
     }
 
     public boolean isAbstract() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_ABSTRACT);
+        return 0 != (accessFlags & AccessFlag.ACC_ABSTRACT);
     }
 
     public boolean isStrict() {
-        return 0 != (classMember.accessFlags & AccessFlag.ACC_STRICT);
+        return 0 != (accessFlags & AccessFlag.ACC_STRICT);
     }
 
     public int getMaxStack() {
@@ -77,7 +75,4 @@ public class Zmethod {
         return code;
     }
 
-    public ClassMember getClassMember() {
-        return classMember;
-    }
 }

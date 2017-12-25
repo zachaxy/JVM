@@ -23,7 +23,7 @@ public class INSTANCE_OF extends Index16Instruction {
             return;
         }
 
-        ZconstantPool cp = frame.getMethod().getClassMember().getClazz().getConstantPool();
+        ZconstantPool cp = frame.getMethod().getClazz().getConstantPool();
         ClassRef classRef = null;// cp.getConstant(this.index);
         Zclass clazz = classRef.resolvedClass();
         if (ref.isInstanceOf(clazz)) {
