@@ -6,7 +6,7 @@ import runtimedata.Slots;
 import runtimedata.Zframe;
 import runtimedata.heap.FieldRef;
 import runtimedata.heap.Zclass;
-import runtimedata.heap.ZconstantPool;
+import runtimedata.heap.RuntimeConstantPool;
 import runtimedata.heap.Zfield;
 import runtimedata.heap.Zmethod;
 
@@ -20,7 +20,7 @@ public class GET_STATIC extends Index16Instruction {
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
         Zclass currentClass = currentMethod.getClazz();
-        ZconstantPool cp = currentClass.getConstantPool();
+        RuntimeConstantPool cp = currentClass.getRuntimeConstantPool();
 
         // TODO: 2017/7/26 常量池的转换尚未实现;
         FieldRef fieldRef = null;// cp.getConstant(this.index);

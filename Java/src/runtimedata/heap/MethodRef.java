@@ -10,8 +10,8 @@ import classfile.classconstant.ConstantMethodRefInfo;
 public class MethodRef extends MemberRef {
     Zmethod method;
 
-   public MethodRef(ZconstantPool zconstantPool, ConstantMethodRefInfo methodRefInfo){
-       super(zconstantPool);
+   public MethodRef(RuntimeConstantPool runtimeConstantPool, ConstantMethodRefInfo methodRefInfo){
+       super(runtimeConstantPool);
        copyMemberRefInfo(methodRefInfo);
    }
 }

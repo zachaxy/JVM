@@ -13,9 +13,9 @@ public class MemberRef {
     String name;
     String descriptor;
 
-    public MemberRef(ZconstantPool zconstantPool){
+    public MemberRef(RuntimeConstantPool runtimeConstantPool){
         symRef = new SymRef();
-        symRef.cp = zconstantPool;
+        symRef.cp = runtimeConstantPool;
     }
 
 //    TODO :这里并没有给 sysRef的class属性赋值;

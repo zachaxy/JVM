@@ -15,7 +15,7 @@ public class PUT_FIELD extends Index16Instruction {
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
         Zclass currentClass = currentMethod.getClazz();
-        ZconstantPool cp = currentClass.getConstantPool();
+        RuntimeConstantPool cp = currentClass.getRuntimeConstantPool();
 
         // TODO: 2017/7/26 常量池的转换尚未实现;
         FieldRef fieldRef = null;// cp.getConstant(this.index);

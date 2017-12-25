@@ -4,7 +4,7 @@ import instructions.base.Index16Instruction;
 import runtimedata.Zframe;
 import runtimedata.heap.ClassRef;
 import runtimedata.heap.Zclass;
-import runtimedata.heap.ZconstantPool;
+import runtimedata.heap.RuntimeConstantPool;
 import runtimedata.heap.Zobject;
 
 /**
@@ -17,7 +17,7 @@ public class NEW extends Index16Instruction {
 
     @Override
     public void execute(Zframe frame) {
-        ZconstantPool cp = frame.getMethod().getClazz().getConstantPool();
+        RuntimeConstantPool cp = frame.getMethod().getClazz().getRuntimeConstantPool();
         // TODO: 2017/7/26 常量池的转换尚未实现;
         ClassRef classRef = null;//cp.getConstant(index);
         Zclass clazz = classRef.resolvedClass();

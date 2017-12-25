@@ -8,8 +8,8 @@ import classfile.classconstant.ConstantInterfaceMethodRefInfo;
  * Desc:接口方法引用
  */
 public class InterfaceMethodRef extends MemberRef {
-    public InterfaceMethodRef(ZconstantPool zconstantPool, ConstantInterfaceMethodRefInfo interfaceMethodRefInfo) {
-        super(zconstantPool);
+    public InterfaceMethodRef(RuntimeConstantPool runtimeConstantPool, ConstantInterfaceMethodRefInfo interfaceMethodRefInfo) {
+        super(runtimeConstantPool);
         copyMemberRefInfo(interfaceMethodRefInfo);
     }
 }

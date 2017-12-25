@@ -1,10 +1,6 @@
 package runtimedata.heap;
 
 import classfile.ClassFile;
-import classfile.classconstant.ConstantDoubleInfo;
-import classfile.classconstant.ConstantFloatInfo;
-import classfile.classconstant.ConstantIntegerInfo;
-import classfile.classconstant.ConstantLongInfo;
 import classpath.ClassPath;
 import runtimedata.Slots;
 
@@ -156,7 +152,7 @@ public class ZclassLoader {
 //    为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真是的值;
     private void initStaticFinalVar(Zclass clazz, Zfield zfield) {
         Slots vars = clazz.staticVars;
-        ZconstantPool cp1 = clazz.constantPool;
+        RuntimeConstantPool constantPool = clazz.getRuntimeConstantPool();
         int cpIndex = zfield.constValueIndex;
         int slotId = zfield.slotId;
 
@@ -166,19 +162,19 @@ public class ZclassLoader {
                 case "B":
                 case "C":
                 case "S":
-                case "I":
-                    vars.setInt(slotId, ((ConstantIntegerInfo) cp1.getConstant(cpIndex)).getVal());
-                    break;
-                case "J":
-                    vars.setLong(slotId, ((ConstantLongInfo) cp1.getConstant(cpIndex)).getVal());
-                    break;
-                case "F":
-                    vars.setFloat(slotId, ((ConstantFloatInfo) cp1.getConstant(cpIndex)).getVal());
-                    break;
-                case "D":
-                    vars.setDouble(slotId, ((ConstantDoubleInfo) cp1.getConstant(cpIndex)).getVal());
-                    break;
-                case "Ljava/lang/String;":
+//                case "I":
+//                    vars.setInt(slotId, ((ConstantIntegerInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
+//                    break;
+//                case "J":
+//                    vars.setLong(slotId, ((ConstantLongInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
+//                    break;
+//                case "F":
+//                    vars.setFloat(slotId, ((ConstantFloatInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
+//                    break;
+//                case "D":
+//                    vars.setDouble(slotId, ((ConstantDoubleInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
+//                    break;
+//                case "Ljava/lang/String;":
 //                    TODO:后面实现;
                     throw new RuntimeException("暂时为实现字符串解析");
             }

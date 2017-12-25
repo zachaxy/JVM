@@ -13,7 +13,7 @@ public class Zclass {
     String thisClassName;   //当前类名字(完全限定名)
     String superClassName;  //父类名字(完全限定名)
     String[] interfaceNames;//接口名字(完全限定名,不可以为null,若为实现接口,数组大小为0)
-    ZconstantPool constantPool;//运行时常量池,注意和class文件中常量池区别;
+    RuntimeConstantPool runtimeConstantPool;//运行时常量池,注意和class文件中常量池区别;
     Zfield[] fileds;        //字段表,包括静态和非静态，此时并不分配 slotId；下面的staticVars 是其子集
     Zmethod[] methods;      //方法表，包括静态和非静态
     ZclassLoader loader;    //类加载器
@@ -29,14 +29,14 @@ public class Zclass {
         superClassName = classFile.getSuperClassName();
         interfaceNames = classFile.getInterfaceNames();
         // FIXME: 2017/7/22 这里没有对classFile的常量池进行转换,而是直接拿过来用了
-        constantPool = new ZconstantPool(this, classFile.getConstantPool());
+        runtimeConstantPool = new RuntimeConstantPool(this, classFile.getConstantPool());
         fileds = Zfield.makeFields(this, classFile.getFields());
         methods = Zmethod.makeMethods(this, classFile.getMethods());
 
     }
 
-    public ZconstantPool getConstantPool() {
-        return constantPool;
+    public RuntimeConstantPool getRuntimeConstantPool() {
+        return runtimeConstantPool;
     }
 
     public boolean isPublic() {

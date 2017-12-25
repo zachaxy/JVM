@@ -5,7 +5,7 @@ import runtimedata.OperandStack;
 import runtimedata.Zframe;
 import runtimedata.heap.ClassRef;
 import runtimedata.heap.Zclass;
-import runtimedata.heap.ZconstantPool;
+import runtimedata.heap.RuntimeConstantPool;
 import runtimedata.heap.Zobject;
 
 /**
@@ -23,7 +23,7 @@ public class INSTANCE_OF extends Index16Instruction {
             return;
         }
 
-        ZconstantPool cp = frame.getMethod().getClazz().getConstantPool();
+        RuntimeConstantPool cp = frame.getMethod().getClazz().getRuntimeConstantPool();
         ClassRef classRef = null;// cp.getConstant(this.index);
         Zclass clazz = classRef.resolvedClass();
         if (ref.isInstanceOf(clazz)) {

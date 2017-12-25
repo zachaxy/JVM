@@ -11,20 +11,20 @@ import classfile.ConstantPool;
  * 根据在常量池的字节码的每个tag字节，可以判断下一个常量类型是什么，每个常量占用多少个字节都是可以确定的，接着再读取下一个tag，确定下一个常量类型；
  */
 public abstract class ConstantInfo {
-    private static final int CONSTANT_Utf8 = 1;
-    private static final int CONSTANT_Integer = 3;
-    private static final int CONSTANT_Float = 4;
-    private static final int CONSTANT_Long = 5;
-    private static final int CONSTANT_Double = 6;
-    private static final int CONSTANT_Class = 7;
-    private static final int CONSTANT_String = 8;
-    private static final int CONSTANT_Fieldref = 9;
-    private static final int CONSTANT_Methodref = 10;
-    private static final int CONSTANT_InterfaceMethodref = 11;
-    private static final int CONSTANT_NameAndType = 12;
-    private static final int CONSTANT_MethodHandle = 15;
-    private static final int CONSTANT_MethodType = 16;
-    private static final int CONSTANT_InvokeDynamic = 18;
+    public static final int CONSTANT_Utf8 = 1;
+    public static final int CONSTANT_Integer = 3;
+    public static final int CONSTANT_Float = 4;
+    public static final int CONSTANT_Long = 5;
+    public static final int CONSTANT_Double = 6;
+    public static final int CONSTANT_Class = 7;
+    public static final int CONSTANT_String = 8;
+    public static final int CONSTANT_Fieldref = 9;
+    public static final int CONSTANT_Methodref = 10;
+    public static final int CONSTANT_InterfaceMethodref = 11;
+    public static final int CONSTANT_NameAndType = 12;
+    public static final int CONSTANT_MethodHandle = 15;
+    public static final int CONSTANT_MethodType = 16;
+    public static final int CONSTANT_InvokeDynamic = 18;
 
 
     //抽象方法来读取信息,需要各自具体类去实现;因为每种常量所占的字节数并不相同。

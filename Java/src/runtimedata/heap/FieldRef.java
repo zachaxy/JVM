@@ -10,8 +10,8 @@ import classfile.classconstant.ConstantFieldRefInfo;
 public class FieldRef extends MemberRef {
     Zfield field;
 
-    public FieldRef(ZconstantPool zconstantPool, ConstantFieldRefInfo fieldRefInfo){
-        super(zconstantPool);
+    public FieldRef(RuntimeConstantPool runtimeConstantPool, ConstantFieldRefInfo fieldRefInfo){
+        super(runtimeConstantPool);
         copyMemberRefInfo(fieldRefInfo);
     }
 

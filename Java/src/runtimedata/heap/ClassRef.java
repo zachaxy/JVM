@@ -8,8 +8,8 @@ import classfile.classconstant.ConstantClassInfo;
  * Desc: 类引用
  */
 public class ClassRef extends SymRef{
-    public  ClassRef(ZconstantPool zconstantPool, ConstantClassInfo classInfo){
-        this.cp = zconstantPool;
+    public  ClassRef(RuntimeConstantPool runtimeConstantPool, ConstantClassInfo classInfo){
+        this.cp = runtimeConstantPool;
         this.className = classInfo.getName();
     }
 }
