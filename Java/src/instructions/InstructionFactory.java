@@ -65,9 +65,9 @@ import instructions.math.sub.ISUB;
 import instructions.math.sub.LSUB;
 import instructions.math.xor.IXOR;
 import instructions.math.xor.LXOR;
-import instructions.stack.POP;
-import instructions.stack.POP2;
-import instructions.stack.SWAP;
+import instructions.stack.pop.POP;
+import instructions.stack.pop.POP2;
+import instructions.stack.swap.SWAP;
 import instructions.stack.dup.*;
 import instructions.stores.storedouble.*;
 import instructions.stores.storefloat.*;
@@ -219,6 +219,19 @@ public class InstructionFactory {
     static FCMPG fcmpg = new FCMPG();
     static DCMPL dcmpl = new DCMPL();
     static DCMPG dcmpg = new DCMPG();
+    /*TODO:return指令，数组相关指令未实现
+    static IRETURN ireturn       = new IRETURN();
+	static LRETURN lreturn       = new LRETURN();
+	static FRETURN freturn       = new FRETURN();
+	static DRETURN dreturn       = new DRETURN();
+	static ARETURN areturn       = new ARETURN();
+	static RETURN _return       = new RETURN();
+	static ARRAY_LENGTH arraylength   = new ARRAY_LENGTH();
+	static ATHROW athrow        = new ATHROW();
+	static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
+	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT();
+	static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
+    */
 
     public static Instruction createInstruction(int opCode) {
         switch (opCode) {
@@ -627,7 +640,8 @@ public class InstructionFactory {
             // case 0xc9:
             // 	return new JSR_W();
             // case 0xca: breakpoint
-            // case 0xfe: impdep1
+            // case 0xfe:
+            // return invoke_native
             // case 0xff: impdep2
             default:
                 throw new RuntimeException("Unsupported opcode: " + opCode);

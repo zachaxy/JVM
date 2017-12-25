@@ -1,4 +1,4 @@
-package instructions.stack;
+package instructions.stack.swap;
 
 import instructions.base.NoOperandsInstruction;
 import runtimedata.OperandStack;
