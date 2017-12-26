@@ -5,38 +5,41 @@ import runtimedata.OperandStack;
 import runtimedata.Zframe;
 import runtimedata.heap.*;
 
+
 /**
  * Author: zhangxin
  * Time: 2017/7/27.
- * Desc:
+ * Desc: 给实例变量赋值,所赋的值保存在操作数栈中;
+ * 和静态变量赋值不同的是:静态变量在class中,而实例变量在每一个对象中,该对象也在当前操作数栈;
  */
 public class PUT_FIELD extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
         Zclass currentClass = currentMethod.getClazz();
-        RuntimeConstantPool cp = currentClass.getRuntimeConstantPool();
+        RuntimeConstantPool runtimeConstantPool = currentClass.getRuntimeConstantPool();
 
-        // TODO: 2017/7/26 常量池的转换尚未实现;
-        FieldRef fieldRef = null;// cp.getConstant(this.index);
+        //首先获取到fieldRef引用;
+        FieldRef fieldRef = (FieldRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
+        //根据引用获取到字段;
         Zfield field = fieldRef.resolvedField();
         Zclass clazz = field.getClazz();
-        // todo: init class
 
+        //NOTE:其实是可以通过实例访问类静态变量的，但这样无谓的增加了编译器解析的成本，因此这里直接抛出异常
         if (field.isStatic()) {
-            throw new RuntimeException("java.lang.IncompatibleClassChangeError");
+            throw new IncompatibleClassChangeError("should not call a static field by an instance");
         }
 
         if (field.isFinal()) {
             if (currentClass != clazz || "<clinit>".equals(currentMethod.getName())) {
-                throw new RuntimeException("java.lang.IllegalAccessError");
+                throw new IllegalAccessError(field.getName()+" can't be assigned out of instance");
             }
         }
 
         String descriptor = field.getDescriptor();
         int slotId = field.getSlotId();
         OperandStack stack = frame.getOperandStack();
-
+        Zobject instance;
         switch (descriptor.charAt(0)) {
             case 'Z':
             case 'B':
@@ -44,52 +47,51 @@ public class PUT_FIELD extends Index16Instruction {
             case 'S':
             case 'I': {
                 int val = stack.popInt();
-                Zobject ref = stack.popRef();
-                if (ref == null) {
-                    throw new RuntimeException("java.lang.NullPointerException");
+                instance = stack.popRef();
+                if (instance == null) {
+                    throw new NullPointerException("call "+field.getName()+" on a null object");
                 }
-                ref.getFields().setInt(slotId, val);
+                instance.getFields().setInt(slotId, val);
                 break;
             }
             case 'F': {
                 float val = stack.popFloat();
-                Zobject ref = stack.popRef();
-                if (ref == null) {
-                    throw new RuntimeException("java.lang.NullPointerException");
+                instance = stack.popRef();
+                if (instance == null) {
+                    throw new NullPointerException("call "+field.getName()+" on a null object");
                 }
-                ref.getFields().setFloat(slotId, val);
+                instance.getFields().setFloat(slotId, val);
                 break;
             }
-            case 'J':{
+            case 'J': {
                 long val = stack.popLong();
-                Zobject ref = stack.popRef();
-                if (ref == null) {
-                    throw new RuntimeException("java.lang.NullPointerException");
+                instance = stack.popRef();
+                if (instance == null) {
+                    throw new NullPointerException("call "+field.getName()+" on a null object");
                 }
-                ref.getFields().setLong(slotId, val);
+                instance.getFields().setLong(slotId, val);
                 break;
             }
-            case 'D':{
+            case 'D': {
                 double val = stack.popDouble();
-                Zobject ref = stack.popRef();
-                if (ref == null) {
-                    throw new RuntimeException("java.lang.NullPointerException");
+                instance = stack.popRef();
+                if (instance == null) {
+                    throw new NullPointerException("call "+field.getName()+" on a null object");
                 }
-                ref.getFields().setDouble(slotId, val);
+                instance.getFields().setDouble(slotId, val);
                 break;
             }
             case 'L':
-            case '[':{
+            case '[': {
                 Zobject val = stack.popRef();
-                Zobject ref = stack.popRef();
-                if (ref == null) {
-                    throw new RuntimeException("java.lang.NullPointerException");
+                instance = stack.popRef();
+                if (instance == null) {
+                    throw new NullPointerException("call "+field.getName()+" on a null object");
                 }
-                ref.getFields().setRef(slotId, val);
+                instance.getFields().setRef(slotId, val);
                 break;
             }
             default:
-                // todo
                 break;
         }
     }
