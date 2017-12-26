@@ -13,23 +13,21 @@ import runtimedata.heap.Zmethod;
 /**
  * Author: zhangxin
  * Time: 2017/7/26.
- * Desc:
+ * Desc:获取静态变量的值，将其值放在操作数栈中
  */
 public class GET_STATIC extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
         Zclass currentClass = currentMethod.getClazz();
-        RuntimeConstantPool cp = currentClass.getRuntimeConstantPool();
+        RuntimeConstantPool runtimeConstantPool = currentClass.getRuntimeConstantPool();
 
-        // TODO: 2017/7/26 常量池的转换尚未实现;
-        FieldRef fieldRef = null;// cp.getConstant(this.index);
+        FieldRef fieldRef = (FieldRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
         Zfield field = fieldRef.resolvedField();
         Zclass clazz = field.getClazz();
-        // todo: init class
-
+        // TODO:class的初始化未实现
         if (!field.isStatic()) {
-            throw new RuntimeException("java.lang.IncompatibleClassChangeError");
+            throw new IncompatibleClassChangeError("can't access unstatic field: " + field.getName());
         }
 
         String descriptor = field.getDescriptor();
@@ -59,7 +57,6 @@ public class GET_STATIC extends Index16Instruction {
                 stack.pushRef(slots.getRef(slotId));
                 break;
             default:
-                // todo
                 break;
         }
     }
