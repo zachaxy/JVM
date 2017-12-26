@@ -10,62 +10,16 @@ import java.util.HashMap;
  * Author: zhangxin
  * Time: 2017/5/19 0019.
  * Desc: 类加载器
- * TODO:应该是单例的
  */
 public class ZclassLoader {
-    ClassPath cp;
+    ClassPath classPath;
     HashMap<String, Zclass> map;  //作为缓存，之前加载过这个类，那么就将其class引用保存到map中，后面再用到这个类的时候，直接用map中取；
 
-    public ZclassLoader(ClassPath cp) {
-        this.cp = cp;
+    public ZclassLoader(ClassPath classPath) {
+        this.classPath = classPath;
         this.map = new HashMap<String, Zclass>();
     }
 
-    //go中是将加载的路径的包装类也返回了，目的是为了打印路径信息，这里不需要，如果需要的话，debug即可；
-    private byte[] readClass(String name) {
-        byte[] data = cp.readClass(name);
-        if (data != null) {
-            return data;
-        } else {
-            System.out.println("严重bug！！！");
-            return null;
-        }
-    }
-
-    /*
-    * 首先把class文件数据转换成Zclass对象；
-    * */
-    private Zclass defineClass(byte[] data) {
-        Zclass clazz = paraseClass(data);
-        clazz.loader = this;
-        resolveSuperClass(clazz);
-        resolveInterfaces(clazz);
-        map.put(clazz.thisClassName, clazz);
-        return clazz;
-    }
-
-    private Zclass paraseClass(byte[] data) {
-        ClassFile cf = new ClassFile(data);
-        return new Zclass(cf);
-    }
-
-    //加载当前类的父类,除非是Object类，否则需要递归调用LoadClass()方法加载它的超类
-    //默认情况下,父类和子类的类加载器是同一个;
-    private void resolveSuperClass(Zclass clazz) {
-        if (!clazz.superClassName.equals("java/lang/Object")) {
-            clazz.superClass = clazz.loader.loadClass(clazz.superClassName);
-        }
-    }
-
-
-    //加载当前类的接口类
-    private void resolveInterfaces(Zclass clazz) {
-        int count = clazz.interfaceNames.length;
-        clazz.interfaces = new Zclass[count];
-        for (int i = 0; i < count; i++) {
-            clazz.interfaces[i] = clazz.loader.loadClass(clazz.interfaceNames[i]);
-        }
-    }
 
     //先查找classMap，看类是否已经被加载。如果是，直接返回类数据，否则调用loadNonArrayClass（）方法加载类。
     //在类方法中的一个递归调用,也是classLoader中的入口方法
@@ -85,8 +39,61 @@ public class ZclassLoader {
         return clazz;
     }
 
+    /**
+     * 利用 ClassPath 把 class 文件读进来
+     * @param name 类名，eg：java.lang.String 或者包含 main 方法的主类名
+     * @return class 字节数据
+     */
+    private byte[] readClass(String name) {
+        byte[] data = classPath.readClass(name);
+        if (data != null) {
+            return data;
+        } else {
+            throw new ClassCastException("class name: "+name);
+        }
+    }
 
-    void link(Zclass clazz) {
+
+    /*
+    * 首先把class文件数据转换成 ClassFile 对象，在转为 Zclass 对象；
+    * 加载父类
+    * 加载接口
+    * resolveSuperClass：是一个递归的过程，不断的加载父类信息
+    * */
+    private Zclass defineClass(byte[] data) {
+        Zclass clazz = parseClass(data);
+        clazz.loader = this;
+        resolveSuperClass(clazz);
+        resolveInterfaces(clazz);
+        map.put(clazz.thisClassName, clazz);
+        return clazz;
+    }
+
+    private Zclass parseClass(byte[] data) {
+        ClassFile cf = new ClassFile(data);
+        return new Zclass(cf);
+    }
+
+    //加载当前类的父类,除非是Object类，否则需要递归调用LoadClass()方法加载它的超类
+    //默认情况下,父类和子类的类加载器是同一个;
+    private void resolveSuperClass(Zclass clazz) {
+        if (!"java/lang/Object".equals(clazz.superClassName)) {
+            clazz.superClass = clazz.loader.loadClass(clazz.superClassName);
+        }
+    }
+
+
+    //加载当前类的接口类
+    private void resolveInterfaces(Zclass clazz) {
+        int count = clazz.interfaceNames.length;
+        clazz.interfaces = new Zclass[count];
+        for (int i = 0; i < count; i++) {
+            clazz.interfaces[i] = clazz.loader.loadClass(clazz.interfaceNames[i]);
+        }
+    }
+
+
+    private void link(Zclass clazz) {
         verify(clazz);
         prepare(clazz);
     }
