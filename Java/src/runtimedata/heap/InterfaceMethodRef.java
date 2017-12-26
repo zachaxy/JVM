@@ -2,7 +2,6 @@ package runtimedata.heap;
 
 import classfile.classconstant.ConstantInterfaceMethodRefInfo;
 
-import static runtimedata.heap.MethodLookup.LookupMethodInInterfaces;
 
 /**
  * Author: zhangxin
@@ -18,7 +17,7 @@ public class InterfaceMethodRef extends MemberRef {
     }
 
     //接口方法引用转直接引用
-    public Zmethod ResolvedInterfaceMethod() {
+    public Zmethod resolvedInterfaceMethod() {
         if (method == null) {
             resolveInterfaceMethodRef();
         }
@@ -46,18 +45,11 @@ public class InterfaceMethodRef extends MemberRef {
     }
 
     private Zmethod lookupInterfaceMethod(Zclass iface, String name, String descriptor) {
-//        for _, method := range iface.methods {
-//            if method.name == name && method.descriptor == descriptor {
-//                return method
-//            }
-//        }
-//
-//        return lookupMethodInInterfaces(iface.interfaces, name, descriptor)
         for (Zmethod method : iface.methods) {
             if (method.name.equals(name) && method.descriptor.equals(descriptor)) {
                 return method;
             }
         }
-        return LookupMethodInInterfaces(iface.interfaces, name, descriptor);
+        return MethodLookup.lookupMethodInInterfaces(iface.interfaces, name, descriptor);
     }
 }

@@ -58,12 +58,21 @@ public class RuntimeConstantPool {
                     this.infos[i] = new RuntimeConstantInfo<String>(stringInfo.getString(), ConstantInfo.CONSTANT_String);
                     break;
                 case ConstantInfo.CONSTANT_Class:
+                    ConstantClassInfo classInfo = (ConstantClassInfo) classFileConstantInfo;
+                    //TODO:传入 this，存在内存泄露问题，ref 类中真正需要的是 传入上面的 clazz
+                    this.infos[i] = new RuntimeConstantInfo<ClassRef>(new ClassRef(this, classInfo), ConstantInfo.CONSTANT_Class);
                     break;
                 case ConstantInfo.CONSTANT_Fieldref:
+                    ConstantFieldRefInfo fieldRefInfo = (ConstantFieldRefInfo) classFileConstantInfo;
+                    this.infos[i] = new RuntimeConstantInfo<FieldRef>(new FieldRef(this, fieldRefInfo), ConstantInfo.CONSTANT_Fieldref);
                     break;
                 case ConstantInfo.CONSTANT_Methodref:
+                    ConstantMethodRefInfo methodRefInfo = (ConstantMethodRefInfo) classFileConstantInfo;
+                    this.infos[i] = new RuntimeConstantInfo<MethodRef>(new MethodRef(this, methodRefInfo), ConstantInfo.CONSTANT_Methodref);
                     break;
                 case ConstantInfo.CONSTANT_InterfaceMethodref:
+                    ConstantInterfaceMethodRefInfo interfaceMethodRefInfo = (ConstantInterfaceMethodRefInfo) classFileConstantInfo;
+                    this.infos[i] = new RuntimeConstantInfo<InterfaceMethodRef>(new InterfaceMethodRef(this, interfaceMethodRefInfo), ConstantInfo.CONSTANT_InterfaceMethodref);
                     break;
                 default:
                     //还有一些jdk1.7才开始支持的动态属性,不在本虚拟机的实现范围内

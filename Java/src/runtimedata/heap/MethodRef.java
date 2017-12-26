@@ -2,8 +2,6 @@ package runtimedata.heap;
 
 import classfile.classconstant.ConstantMethodRefInfo;
 
-import static runtimedata.heap.MethodLookup.LookupMethodInClass;
-
 /**
  * Author: zhangxin
  * Time: 2017/7/22.
@@ -12,10 +10,10 @@ import static runtimedata.heap.MethodLookup.LookupMethodInClass;
 public class MethodRef extends MemberRef {
     Zmethod method;
 
-   public MethodRef(RuntimeConstantPool runtimeConstantPool, ConstantMethodRefInfo methodRefInfo){
-       super(runtimeConstantPool);
-       copyMemberRefInfo(methodRefInfo);
-   }
+    public MethodRef(RuntimeConstantPool runtimeConstantPool, ConstantMethodRefInfo methodRefInfo) {
+        super(runtimeConstantPool);
+        copyMemberRefInfo(methodRefInfo);
+    }
 
     //非接口方法引用转直接引用
     public Zmethod resolvedMethod() {
@@ -30,7 +28,7 @@ public class MethodRef extends MemberRef {
         Zclass d = runtimeConstantPool.clazz;
         //获取 methodRef 所在的类
         Zclass c = resolvedClass();
-        if (c.isInterface()){
+        if (c.isInterface()) {
             throw new IncompatibleClassChangeError(c.thisClassName);
         }
         //在该类中找到对应的方法
@@ -48,6 +46,6 @@ public class MethodRef extends MemberRef {
 
     //TODO:需验证方法引用，在父类找不到后，是否需要从其接口中再去找？
     private Zmethod lookupMethod(Zclass c, String name, String descriptor) {
-        return LookupMethodInClass(c,name,descriptor);
+        return MethodLookup.lookupMethodInClass(c, name, descriptor);
     }
 }
