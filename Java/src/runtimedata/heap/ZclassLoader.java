@@ -41,6 +41,7 @@ public class ZclassLoader {
 
     /**
      * 利用 ClassPath 把 class 文件读进来
+     *
      * @param name 类名，eg：java.lang.String 或者包含 main 方法的主类名
      * @return class 字节数据
      */
@@ -49,7 +50,7 @@ public class ZclassLoader {
         if (data != null) {
             return data;
         } else {
-            throw new ClassCastException("class name: "+name);
+            throw new ClassCastException("class name: " + name);
         }
     }
 
@@ -110,17 +111,18 @@ public class ZclassLoader {
     }
 
     // 计算new一个对象所需的空间,单位是clazz.instanceSlotCount,主要包含了类的非静态成员变量(包含父类的)
+    // 但是这里并没有真正的申请空间，只是计算大小，同时为每个非静态变量关联 slotId
     private void calcInstanceFieldSlotIds(Zclass clazz) {
         int slotId = 0;
         if (clazz.superClass != null) {
             slotId = clazz.superClass.instanceSlotCount;
         }
 
-        for (Zfield zfield : clazz.fileds) {
-            if (!zfield.isStatic()) {
-                zfield.slotId = slotId;
+        for (Zfield field : clazz.fileds) {
+            if (!field.isStatic()) {
+                field.slotId = slotId;
                 slotId++;
-                if (zfield.isLongOrDouble()) {
+                if (field.isLongOrDouble()) {
                     slotId++;
                 }
             }
@@ -129,14 +131,14 @@ public class ZclassLoader {
     }
 
 
-//    计算类的静态成员变量所需的空间
+    //    计算类的静态成员变量所需的空间，不包含父类，同样也只是计算和分配 slotId，不申请空间
     private void calcStaticFieldSlotIds(Zclass clazz) {
         int slotId = 0;
-        for (Zfield zfield : clazz.fileds) {
-            if (zfield.isStatic()) {
-                zfield.slotId = slotId;
+        for (Zfield field : clazz.fileds) {
+            if (field.isStatic()) {
+                field.slotId = slotId;
                 slotId++;
-                if (zfield.isLongOrDouble()) {
+                if (field.isLongOrDouble()) {
                     slotId++;
                 }
             }
@@ -144,46 +146,53 @@ public class ZclassLoader {
         clazz.staticSlotCount = slotId;
     }
 
-//    为静态变量申请空间,注意:这个申请空间的过程,就是将所有的静态变量赋值为0或者null;
-//    接下来才为 static final 的成员赋初值;
+    // 为静态变量申请空间,注意:这个申请空间的过程,就是将所有的静态变量赋值为0或者null;
+    // 如果是 static final 的基本类型或者 String，其值会保存在ConstantValueAttribute属性中
     private void allocAndInitStaticVars(Zclass clazz) {
         clazz.staticVars = new Slots(clazz.staticSlotCount);
-        for (Zfield zfield : clazz.fileds) {
-            if (zfield.isStatic() && zfield.isFinal()) {
-                initStaticFinalVar(clazz, zfield);
+        for (Zfield field : clazz.fileds) {
+            if (field.isStatic() && field.isFinal()) {
+                initStaticFinalVar(clazz, field);
             }
         }
     }
 
 
-//    为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真是的值;
+    //    为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真是的值;
     private void initStaticFinalVar(Zclass clazz, Zfield zfield) {
-        Slots vars = clazz.staticVars;
-        RuntimeConstantPool constantPool = clazz.getRuntimeConstantPool();
-        int cpIndex = zfield.constValueIndex;
+        Slots staticVars = clazz.staticVars;
+        RuntimeConstantPool runtimeConstantPool = clazz.getRuntimeConstantPool();
+        int index = zfield.constValueIndex;
         int slotId = zfield.slotId;
 
-        if (cpIndex > 0) {
+        if (index > 0) {
             switch (zfield.getDescriptor()) {
                 case "Z":
                 case "B":
                 case "C":
                 case "S":
-//                case "I":
-//                    vars.setInt(slotId, ((ConstantIntegerInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
-//                    break;
-//                case "J":
-//                    vars.setLong(slotId, ((ConstantLongInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
-//                    break;
-//                case "F":
-//                    vars.setFloat(slotId, ((ConstantFloatInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
-//                    break;
-//                case "D":
-//                    vars.setDouble(slotId, ((ConstantDoubleInfo) constantPool.getRuntimeConstant(cpIndex)).getVal());
-//                    break;
-//                case "Ljava/lang/String;":
-//                    TODO:后面实现;
-                    throw new RuntimeException("暂时为实现字符串解析");
+                case "I":
+                    int intValue = (int) runtimeConstantPool.getRuntimeConstant(index).getValue();
+                    staticVars.setInt(slotId, intValue);
+                    break;
+                case "J":
+                    long longValue = (long) runtimeConstantPool.getRuntimeConstant(index).getValue();
+                    staticVars.setLong(slotId, longValue);
+                    break;
+                case "F":
+                    float floatValue = (float) runtimeConstantPool.getRuntimeConstant(index).getValue();
+                    staticVars.setFloat(slotId, floatValue);
+                    break;
+                case "D":
+                    double doubleValue = (double) runtimeConstantPool.getRuntimeConstant(index).getValue();
+                    staticVars.setDouble(slotId, doubleValue);
+                    break;
+                case "Ljava/lang/String;":
+                    String stringValue = (String) runtimeConstantPool.getRuntimeConstant(index).getValue();
+                    // TODO:字符串解析待数组解析实现后再实现；
+                    throw new RuntimeException("暂时无法解析字符串");
+                default:
+                    break;
             }
         }
 

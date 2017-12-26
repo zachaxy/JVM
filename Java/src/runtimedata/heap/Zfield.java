@@ -9,7 +9,8 @@ import classfile.MemberInfo;
  * Desc: 字段的抽象,是在class中定义的字段,包括静态的和非静态的
  */
 public class Zfield extends ClassMember{
-    int constValueIndex;//运行时常量池中的索引,该属性只有在成员有初值的情况下才有;
+    //运行时常量池中的索引,该属性只有在static final成员有初值的情况下才有;
+    int constValueIndex;
     //类中字段数组slots中的的索引；其赋值在首次加载 class 文件后，为其分配的 slotId
     //如果是静态字段，该 slotId 表示的是在 Class 中staticVars数组中的索引
     //如果是非静态字段，该 slotId 表示的是在 Object 中 fields 数组中的索引
