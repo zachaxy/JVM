@@ -8,7 +8,7 @@ import classfile.ConstantPool;
  * Desc: 方法引用消息
  */
 public class ConstantMethodRefInfo extends ConstantMemberRefInfo {
-    public ConstantMethodRefInfo(ConstantPool constantPool) {
-        super(constantPool);
+    public ConstantMethodRefInfo(ConstantPool constantPool, int type) {
+        super(constantPool, type);
     }
 }

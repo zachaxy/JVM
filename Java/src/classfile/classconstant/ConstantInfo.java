@@ -61,11 +61,11 @@ public abstract class ConstantInfo {
             case CONSTANT_Class:
                 return new ConstantClassInfo(constantPool, 7);
             case CONSTANT_Fieldref:
-                return new ConstantMemberRefInfo(constantPool, 9);
+                return new ConstantFieldRefInfo(constantPool, 9);
             case CONSTANT_Methodref:
-                return new ConstantMemberRefInfo(constantPool, 10);
+                return new ConstantMethodRefInfo(constantPool, 10);
             case CONSTANT_InterfaceMethodref:
-                return new ConstantMemberRefInfo(constantPool, 11);
+                return new ConstantInterfaceMethodRefInfo(constantPool, 11);
             case CONSTANT_NameAndType:
                 return new ConstantNameAndTypeInfo(12);
             case CONSTANT_MethodType:

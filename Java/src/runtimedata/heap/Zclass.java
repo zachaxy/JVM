@@ -137,4 +137,14 @@ public class Zclass {
     public Zobject newObject() {
         return new Zobject(this);
     }
+
+    //根据方法名和描述符获取方法，在测试环境中使用；
+    public Zmethod getMethod(String name, String desc) {
+        for (Zmethod method : methods) {
+            if (method.name.equals(name)&&method.descriptor.equals(desc)){
+                return method;
+            }
+        }
+        return null;
+    }
 }

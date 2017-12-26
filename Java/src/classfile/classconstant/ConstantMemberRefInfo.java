@@ -27,14 +27,14 @@ public class ConstantMemberRefInfo extends ConstantInfo {
     int nameAndTypeIndex;
 
     //    该构造方法是供子类调用的,虽然有三个子类,但是并没有使用过该子类,因为当前类(父类)已经满足需求了;
-    public ConstantMemberRefInfo(ConstantPool constantPool) {
-        this.constantPool = constantPool;
-    }
+//    public ConstantMemberRefInfo(ConstantPool constantPool) {
+//        this.constantPool = constantPool;
+//    }
 
     //    该构造方法是供外部调用的;
-    public ConstantMemberRefInfo(ConstantPool constantPool, int i) {
-        this(constantPool);
-        type = i; //因为接口,方法,字段通用这一个类,所以在构造方法中传入 i 来区分不同的类型;
+    public ConstantMemberRefInfo(ConstantPool constantPool, int type) {
+        this.constantPool = constantPool;
+        this.type = type; //因为接口,方法,字段通用这一个类,所以在构造方法中传入 i 来区分不同的类型;
     }
 
 
