@@ -1,9 +1,6 @@
 package runtimedata.heap;
 
-import runtimedata.Slot;
 import runtimedata.Slots;
-
-import static sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl.ThreadStateMap.Byte1.other;
 
 /**
  * Author: zhangxin
@@ -27,7 +24,8 @@ public class Zobject {
         return clazz;
     }
 
-    public boolean isInstanceOf(Zclass obj){
-        return obj.isAccessibleTo(clazz);
+    //TODO:目前为简易判断版本，待改进！&&命名规范
+    public boolean isInstanceOf(Zclass clazz){
+        return clazz.isAccessibleTo(this.clazz);
     }
 }
