@@ -28,6 +28,7 @@ public class INSTANCE_OF extends Index16Instruction {
         RuntimeConstantPool runtimeConstantPool = frame.getMethod().getClazz().getRuntimeConstantPool();
         ClassRef classRef = (ClassRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
         Zclass clazz = classRef.resolvedClass();
+        //obj是不是class的实例
         if (obj.isInstanceOf(clazz)) {
             stack.pushInt(1);
         } else {

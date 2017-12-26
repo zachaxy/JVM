@@ -8,10 +8,12 @@ import runtimedata.Slots;
  * Desc: 用来模拟Java中的Object类,这里只是简单的模拟定义一个类,用来盛放索引的
  */
 public class Zobject {
-    Zclass clazz;   //存放一个class的成员,用来调用类的方法,静态成员变量'
-    Slots fields;  //存放的是非静态成员变量,包含父类+ 自己的
+    //存放一个class的成员,用来调用类的方法,静态成员变量
+    Zclass clazz;
+    //存放的是非静态成员变量,包含父类+ 自己的
+    Slots fields;
 
-    public  Zobject(Zclass clazz){
+    public Zobject(Zclass clazz) {
         this.clazz = clazz;
         fields = new Slots(clazz.instanceSlotCount);
     }
@@ -24,8 +26,8 @@ public class Zobject {
         return clazz;
     }
 
-    //TODO:目前为简易判断版本，待改进！&&命名规范
-    public boolean isInstanceOf(Zclass clazz){
-        return clazz.isAccessibleTo(this.clazz);
+    // 判断当前类是都是否是 target 的子类
+    public boolean isInstanceOf(Zclass target) {
+        return target.isAssignableFrom(this.clazz);
     }
 }

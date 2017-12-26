@@ -95,6 +95,9 @@ public class Zclass {
         return false;
     }
 
+    //这里不太好理解，该方法是在下面的 isImplements 方法中被调用的，调用方是类的接口
+    //因此下面的 interfaces 数组表明的不是 source 的接口，而是 source 的某一个接口的接口
+    //虽然接口 sub 在java 语法中是用 extends 继承父接口 parent，但是其字节码中，parent 是 sub 的接口而不是父类
     public boolean isSubInterfaceOf(Zclass iface) {
         for (Zclass superInterface : interfaces) {
             if (superInterface == iface || superInterface.isSubInterfaceOf(iface)) {
@@ -117,15 +120,17 @@ public class Zclass {
     }
 
 
-    public boolean isAssignableFrom(Zclass other) {
-        if (other == this) {
+    public boolean isAssignableFrom(Zclass source) {
+        // source 是否由 target 扩展而来（子类）
+        Zclass target = this;
+        if (source == target) {
             return true;
         }
-
-        if (!this.isInterface()) {
-            return other.isSubClassOf(this);
+        //TODO:还要判断是否是数组的情况：
+        if (target.isInterface()) {
+            return source.isImplements(target);
         } else {
-            return other.isImplements(this);
+            return source.isSubClassOf(target);
         }
     }
 
