@@ -14,28 +14,26 @@ import runtimedata.heap.Zmethod;
 /**
  * Author: zhangxin
  * Time: 2017/7/26.
- * Desc:
+ * Desc: 为静态变量赋值，所赋的值在操作数栈中
  */
 public class PUT_STATIC extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         Zmethod currentMethod = frame.getMethod();
         Zclass currentClass = currentMethod.getClazz();
-        RuntimeConstantPool cp = currentClass.getRuntimeConstantPool();
+        RuntimeConstantPool runtimeConstantPool = currentClass.getRuntimeConstantPool();
 
-        // TODO: 2017/7/26 常量池的转换尚未实现;
-        FieldRef fieldRef = null;// cp.getConstant(this.index);
+        FieldRef fieldRef = (FieldRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
         Zfield field = fieldRef.resolvedField();
         Zclass clazz = field.getClazz();
-        // todo: init class
-
+        // TODO:class的初始化未实现
         if (!field.isStatic()) {
-            throw new RuntimeException("java.lang.IncompatibleClassChangeError");
+            throw new IncompatibleClassChangeError("can't access unstatic field: " + field.getName());
         }
 
         if (field.isFinal()) {
             if (currentClass != clazz || "<clinit>".equals(currentMethod.getName())) {
-                throw new RuntimeException("java.lang.IllegalAccessError");
+                throw new IllegalAccessError("java.lang.IllegalAccessError");
             }
         }
 
@@ -65,7 +63,6 @@ public class PUT_STATIC extends Index16Instruction {
                 slots.setRef(slotId, stack.popRef());
                 break;
             default:
-                // todo
                 break;
         }
     }
