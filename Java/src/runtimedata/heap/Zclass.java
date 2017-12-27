@@ -156,4 +156,9 @@ public class Zclass {
         }
         return null;
     }
+
+    //---------------针对数组相关的方法
+    public boolean isArray() {
+        return thisClassName.startsWith("[");
+    }
 }
