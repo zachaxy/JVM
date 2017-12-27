@@ -6,7 +6,9 @@ import runtimedata.Slots;
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
- * Desc: 如何设法保证同一个对象的 class == 返回 true
+ * Desc: 如何设法保证同一个对象的 class == 返回 true?如果不自己定义 classloader，那么由系统提供的统一的
+ * 类加载器去加载 class，可以保证同一个对象的 class == 返回 true；因为加载后的 class 对象保存在方法区的 hashMap中，
+ * key 为类的全限定名。
  */
 public class Zclass {
     private int accessFlags;        // 表示当前类的访问标志
@@ -36,6 +38,10 @@ public class Zclass {
 
     public RuntimeConstantPool getRuntimeConstantPool() {
         return runtimeConstantPool;
+    }
+
+    public Zclass getSuperClass() {
+        return superClass;
     }
 
     public boolean isPublic() {
@@ -86,13 +92,17 @@ public class Zclass {
         return "";
     }
 
-    public boolean isSubClassOf(Zclass iface) {
+    public boolean isSubClassOf(Zclass parent) {
         for (Zclass c = superClass; c != null; c = c.superClass) {
-            if (c == iface) {
+            if (c == parent) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isSuperClassOf(Zclass sub) {
+        return sub.isSubClassOf(this);
     }
 
     //这里不太好理解，该方法是在下面的 isImplements 方法中被调用的，调用方是类的接口
@@ -106,7 +116,6 @@ public class Zclass {
         }
         return false;
     }
-
 
     public boolean isImplements(Zclass iface) {
         for (Zclass c = this; c != null; c = c.superClass) {
