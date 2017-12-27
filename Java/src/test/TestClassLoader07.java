@@ -17,7 +17,7 @@ import java.util.Scanner;
  * @author zachaxy
  * @date 17/12/26
  */
-public class TestClassLoader7 {
+public class TestClassLoader07 {
     public static void main(String[] args) {
         System.out.println("the same as testInterpreter06!");
         Scanner in = new Scanner(System.in);
@@ -51,8 +51,10 @@ public class TestClassLoader7 {
                     System.out.println("current instruction: " + instruction.getClass().getSimpleName());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.print("return:");
-                    //System.out.println(frame.getOperandStack().popInt());
+                    if (!frame.getOperandStack().isEmpty()) {
+                        int returnVar = frame.getOperandStack().popInt();
+                        System.out.println("return: " + returnVar);
+                    }
                     return;
                 }
             }
@@ -69,20 +71,20 @@ public class TestClassLoader7 {
         // ldc
         int x = 31415;
         //new
-        TestClassLoader7 test = new TestClassLoader7();
+        TestClassLoader07 test = new TestClassLoader07();
         //putstatic
-        TestClassLoader7.staticVar = x;
+        TestClassLoader07.staticVar = x;
         //getstatic
-        x = TestClassLoader7.staticVar;
+        x = TestClassLoader07.staticVar;
         //putfield
         test.instanceVar = x;
         //getfield
         x = test.instanceVar;
         Object obj = test;
         //instanceof
-        if (obj instanceof TestClassLoader7) {
+        if (obj instanceof TestClassLoader07) {
             // checkcast
-            test = (TestClassLoader7) obj;
+            test = (TestClassLoader07) obj;
             System.out.println(test.instanceVar);
         }
         return x;
