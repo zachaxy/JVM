@@ -3,6 +3,8 @@ package runtimedata.heap;
 import classfile.attribute.CodeAttribute;
 import classfile.MemberInfo;
 
+import java.util.ArrayList;
+
 /**
  * Author: zhangxin
  * Time: 2017/5/19 0019.
@@ -12,10 +14,14 @@ public class Zmethod extends ClassMember {
     private int maxStack;
     private int maxLocals;
     private byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
+    private MethodDescriptor parsedDescriptor;  //解析后的方法描述符
+    private int argSlotCount;   //方法所需的参数个数;对于非静态方法,至少是1个(this)
 
     private Zmethod(Zclass clazz, MemberInfo classFileMethod) {
         super(clazz, classFileMethod);
         copyAttributes(classFileMethod);
+        parsedDescriptor = new MethodDescriptor(this.descriptor);
+        argSlotCount = calcArgSlotCount(parsedDescriptor.getParameterTypes());
     }
 
     //该方法用来初始化成员变量：maxStack，maxLocals，code
@@ -28,6 +34,20 @@ public class Zmethod extends ClassMember {
         }
     }
 
+    private int calcArgSlotCount(ArrayList<String> args) {
+        int slotCount = 0;
+        //如果当前方法不是静态方法，那么其第一个参数为 ‘this’引用
+        if (!isStatic()) {
+            slotCount++;
+        }
+        for (String arg : args) {
+            slotCount++;
+            if ("J".equals(arg) || "D".equals(arg)) {
+                slotCount++;
+            }
+        }
+        return slotCount;
+    }
 
     public static Zmethod[] makeMethods(Zclass zclass, MemberInfo[] classFileMethods) {
         Zmethod[] methods = new Zmethod[classFileMethods.length];
@@ -75,4 +95,7 @@ public class Zmethod extends ClassMember {
         return code;
     }
 
+    public int getArgSlotCount() {
+        return argSlotCount;
+    }
 }
