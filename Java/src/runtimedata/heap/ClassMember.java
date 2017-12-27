@@ -25,7 +25,7 @@ public class ClassMember {
      *
      * @param memberInfo
      */
-    void copyMemberInfo(MemberInfo memberInfo) {
+    private void copyMemberInfo(MemberInfo memberInfo) {
         accessFlags = memberInfo.getAccessFlags();
         name = memberInfo.getName();
         descriptor = memberInfo.getDescriptor();
