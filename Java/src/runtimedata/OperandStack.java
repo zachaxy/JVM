@@ -9,6 +9,14 @@ import runtimedata.heap.Zobject;
  * 包含的操作和局部变量表类似
  * 操作数栈的大小是编译期已经确定的，保存在code属性中，所以可以用Slot数组实现
  * 但要和 LocalVars 区分开，本地变量表按索引访问，操作数栈是用数组模拟的栈；方法栈是用单向链表模拟的栈
+ *
+ * fixBug:统一说明：在操作数栈中，涉及到引用的操作：popRef 和 popSlot
+ * 之前的做法是将 ref pop 出来之后，将数组中当前位置设置为 null，
+ * 但是存在的问题是：操作数栈中的如果有多个的引用，都指向相同的一个实例对象，
+ * 将其中的一个引用设置为 null，相当于把对象在堆中的空间设置为 null 了，
+ * 这回导致操作数栈中所有的引用都会变成 null，后续会产生 NullPointerException
+ * 所以这里在弹栈之后，不在设置为 null；
+ * 操作数栈本身是不断复用的，故不考虑 GC 问题
  */
 public class OperandStack {
 
@@ -89,7 +97,6 @@ public class OperandStack {
     public Zobject popRef() {
         size--;
         Zobject ref = slots[size].ref;
-        slots[size].ref = null; //避免内存泄露;
         return ref;
     }
 
@@ -101,7 +108,7 @@ public class OperandStack {
     public Slot popSlot() {
         size--;
         Slot slot = slots[size];
-        slots[size] = null; //释放内存,是GC可以回收该slot;
         return slot;
     }
 }
+

@@ -28,8 +28,8 @@ public class TestClassLoader7 {
         ClassPath classPath = new ClassPath(cmd.getXJreOption(), cmd.getCpOption());
         ZclassLoader classLoader = new ZclassLoader(classPath);
         Zclass testClass = classLoader.loadClass(cmd.getClazz());
-        Zmethod testMethod = testClass.getMethod("test","()I");
-        if (testMethod!=null){
+        Zmethod testMethod = testClass.getMethod("test", "()I");
+        if (testMethod != null) {
             Zthread thread = new Zthread();
             Zframe frame = thread.createFrame(testMethod);
 
@@ -37,7 +37,7 @@ public class TestClassLoader7 {
             //start loop
             BytecodeReader reader = new BytecodeReader();
             byte[] byteCode = testMethod.getCode();
-            while (true){
+            while (true) {
                 int pc = frame.getNextPC(); //这第一次frame才刚初始化，获取的pc应该是默认值0吧。
                 thread.setPc(pc);
                 reader.reset(byteCode, pc); //reset方法，其实是在不断的设置pc的位置。
@@ -48,6 +48,7 @@ public class TestClassLoader7 {
                     instruction.fetchOperands(reader);
                     frame.setNextPC(reader.getPc());
                     instruction.execute(frame);
+                    System.out.println("current instruction: " + instruction.getClass().getSimpleName());
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.print("return:");
@@ -55,7 +56,7 @@ public class TestClassLoader7 {
                     return;
                 }
             }
-        }else {
+        } else {
             System.out.println("can't find testMethod!!!");
         }
 
@@ -63,6 +64,7 @@ public class TestClassLoader7 {
 
     public static int staticVar;
     public int instanceVar;
+
     public static int test() {
         // ldc
         int x = 31415;
@@ -78,7 +80,7 @@ public class TestClassLoader7 {
         x = test.instanceVar;
         Object obj = test;
         //instanceof
-        if (obj instanceof TestClassLoader7){
+        if (obj instanceof TestClassLoader7) {
             // checkcast
             test = (TestClassLoader7) obj;
             System.out.println(test.instanceVar);
