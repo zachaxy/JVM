@@ -110,5 +110,11 @@ public class OperandStack {
         Slot slot = slots[size];
         return slot;
     }
+
+    //just for test!
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
 }
 
