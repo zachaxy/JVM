@@ -5,7 +5,10 @@ import runtimedata.heap.Zobject;
 /**
  * Author: zhangxin
  * Time: 2017/7/22.
- * Desc:
+ * Desc: Slots 封装，针对静态变量表，在申请完空间后，如果没有显式赋值，那么获取值应该为0或 null
+ * 然而 Slot[] 在创建完后，并不具备上述功能
+ * 因此在构造方法中，Slot[] 创建完后，再为其每一个元素都创建一个 slot 对象，
+ * 这样在没有为静态变量赋值时，访问Slot[]的元素时，不会引发空指针异常！
  */
 public class Slots {
     private Slot[] slots;
@@ -19,8 +22,6 @@ public class Slots {
 
     //提供了对int,float,long,double,引用的存取,这里要注意的是long和double是占用8字节的,所以使用了局部变量表中的两个槽位分别存储前四字节和后四字节
     public void setInt(int index, int val) {
-//        Slot slot = new Slot();
-//        slot.num = val;
         slots[index].num = val;
     }
 
@@ -29,8 +30,6 @@ public class Slots {
     }
 
     public void setFloat(int index, float val) {
-//        Slot slot = new Slot();
-//        slot.num = Float.floatToIntBits(val);
         slots[index].num = Float.floatToIntBits(val);
     }
 
@@ -40,12 +39,8 @@ public class Slots {
 
     public void setLong(int index, long val) {
         //先存低32位
-//        Slot slot1 = new Slot();
-//        slot1.num = (int) (val);
         slots[index].num = (int) (val);
         //再存高32位
-//        Slot slot2 = new Slot();
-//        slot2.num = (int) (val >> 32);
         slots[index + 1].num = (int) (val >> 32);
     }
 
@@ -66,12 +61,14 @@ public class Slots {
     }
 
     public void setRef(int index, Zobject ref) {
-//        Slot slot = new Slot();
-//        slot.ref = ref;
         slots[index].ref = ref;
     }
 
     public Zobject getRef(int index) {
         return slots[index].ref;
+    }
+
+    public void setSlot(int index, Slot slot) {
+        slots[index] = slot;
     }
 }
