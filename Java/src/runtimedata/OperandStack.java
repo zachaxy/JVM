@@ -25,7 +25,7 @@ public class OperandStack {
     private Slot[] slots;
 
     public OperandStack(int maxStack) {
-        if (maxStack > 0) {
+        if (maxStack >= 0) {
             slots = new Slot[maxStack];
         } else {
             throw new NullPointerException("maxStack<0");
