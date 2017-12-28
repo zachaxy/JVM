@@ -25,8 +25,8 @@ public class INVOKE_INTERFACE extends Index16Instruction {
         Zclass currentClass = frame.getMethod().getClazz();
         RuntimeConstantPool runtimeConstantPool = currentClass.getRuntimeConstantPool();
         //通过index,拿到方法符号引用
-        MethodRef methodRef = (MethodRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
-        Zmethod resolvedMethod = methodRef.resolvedMethod();
+        InterfaceMethodRef methodRef = (InterfaceMethodRef) runtimeConstantPool.getRuntimeConstant(index).getValue();
+        Zmethod resolvedMethod = methodRef.resolvedInterfaceMethod();
         if (resolvedMethod.isStatic() || resolvedMethod.isPrivate()) {
             throw new IncompatibleClassChangeError(resolvedMethod.getName());
         }
