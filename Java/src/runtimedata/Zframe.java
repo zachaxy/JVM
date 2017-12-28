@@ -59,5 +59,12 @@ public class Zframe {
         this.method = method;
     }
 
+    //用在new，getStatic，invokeStatic 等指令中，判断clinit 方法是否执行，如果执行，则需要保存当前thread 的 pc
+    //eg：当前执行的是 new 指令，那么 thead 的 pc 指向的是 new，
+    //再 push 一个新栈去执行<clinit>，等<clinit>直接结束后，在回到当前 frame，拿到 pc，此时的 pc 指向的还是 new
+    //重新执行一遍 new
+    public void revertNextPC() {
+        this.nextPC = thread.getPc();
+    }
 
 }

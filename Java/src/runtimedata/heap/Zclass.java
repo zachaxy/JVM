@@ -24,6 +24,7 @@ public class Zclass {
     int instanceSlotCount;  //非静态变量占用slot大小,这里只是统计个数(从顶级父类Object开始算起)
     int staticSlotCount;    // 静态变量所占空间大小
     Slots staticVars;      // 存放静态变量
+    boolean initStarted;    //判断类是否已经初始化，执行了类的<clinit>方法
 
     public Zclass(ClassFile classFile) {
         accessFlags = classFile.getAccessFlags();
@@ -43,6 +44,15 @@ public class Zclass {
     public Zclass getSuperClass() {
         return superClass;
     }
+
+    public boolean isInitStarted() {
+        return initStarted;
+    }
+
+    public void startInit() {
+        initStarted = true;
+    }
+
 
     public boolean isPublic() {
         return 0 != (accessFlags & AccessFlag.ACC_PUBLIC);
