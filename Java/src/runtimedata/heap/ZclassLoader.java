@@ -78,7 +78,7 @@ public class ZclassLoader {
     //加载当前类的父类,除非是Object类，否则需要递归调用LoadClass()方法加载它的超类
     //默认情况下,父类和子类的类加载器是同一个;
     private void resolveSuperClass(Zclass clazz) {
-        if (!"java/lang/Object".equals(clazz.superClassName)) {
+        if (!"java/lang/Object".equals(clazz.thisClassName)) {
             clazz.superClass = clazz.loader.loadClass(clazz.superClassName);
         }
     }
