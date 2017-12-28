@@ -51,4 +51,8 @@ public class Zthread {
     public Zframe createFrame(Zmethod method) {
         return new Zframe(this, method);
     }
+
+    public boolean isStackEmpty() {
+        return stack.size == 0;
+    }
 }
