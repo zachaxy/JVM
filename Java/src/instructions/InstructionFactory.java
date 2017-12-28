@@ -11,9 +11,7 @@ import instructions.comparisons.ifcond.*;
 import instructions.comparisons.ificmp.*;
 import instructions.comparisons.lcmp.LCMP;
 import instructions.constants.*;
-import instructions.control.GOTO;
-import instructions.control.LOOKUP_SWITCH;
-import instructions.control.TABLE_SWITCH;
+import instructions.control.*;
 import instructions.conversions.d2x.D2F;
 import instructions.conversions.d2x.D2I;
 import instructions.conversions.d2x.D2L;
@@ -220,15 +218,15 @@ public class InstructionFactory {
     static FCMPG fcmpg = new FCMPG();
     static DCMPL dcmpl = new DCMPL();
     static DCMPG dcmpg = new DCMPG();
-    /*TODO:return指令，数组相关指令未实现
-    static IRETURN ireturn       = new IRETURN();
-	static LRETURN lreturn       = new LRETURN();
-	static FRETURN freturn       = new FRETURN();
-	static DRETURN dreturn       = new DRETURN();
-	static ARETURN areturn       = new ARETURN();
-	static RETURN _return       = new RETURN();
-	static ARRAY_LENGTH arraylength   = new ARRAY_LENGTH();
-	static ATHROW athrow        = new ATHROW();
+    static IRETURN ireturn = new IRETURN();
+    static LRETURN lreturn = new LRETURN();
+    static FRETURN freturn = new FRETURN();
+    static DRETURN dreturn = new DRETURN();
+    static ARETURN areturn = new ARETURN();
+    static RETURN _return = new RETURN();
+    // TODO:return指令，数组相关指令未实现
+    /*static ARRAY_LENGTH arraylength   = new ARRAY_LENGTH();
+    static ATHROW athrow        = new ATHROW();
 	static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
 	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT();
 	static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
@@ -580,18 +578,18 @@ public class InstructionFactory {
                 return new TABLE_SWITCH();
             case 0xab:
                 return new LOOKUP_SWITCH();
-            // case 0xac:
-            // 	return ireturn;
-            // case 0xad:
-            // 	return lreturn;
-            // case 0xae:
-            // 	return freturn;
-            // case 0xaf:
-            // 	return dreturn;
-            // case 0xb0:
-            // 	return areturn;
-            // case 0xb1:
-            // 	return _return;
+            case 0xac:
+                return ireturn;
+            case 0xad:
+                return lreturn;
+            case 0xae:
+                return freturn;
+            case 0xaf:
+                return dreturn;
+            case 0xb0:
+                return areturn;
+            case 0xb1:
+                return _return;
             case 0xb2:
                 return new GET_STATIC();
             case 0xb3:
@@ -604,14 +602,14 @@ public class InstructionFactory {
                 return new INVOKE_VIRTUAL();
             case 0xb7:
                 return new INVOKE_SPECIAL();
-            // case 0xb8:
-            // 	return new INVOKE_STATIC();
-            // case 0xb9:
-            // 	return new INVOKE_INTERFACE();
+            case 0xb8:
+                return new INVOKE_STATIC();
+            case 0xb9:
+                return new INVOKE_INTERFACE();
             // case 0xba:
             // 	return new INVOKE_DYNAMIC();
-             case 0xbb:
-             	return new NEW();
+            case 0xbb:
+                return new NEW();
             // case 0xbc:
             // 	return new NEW_ARRAY();
             // case 0xbd:
@@ -620,10 +618,10 @@ public class InstructionFactory {
             // 	return arraylength;
             // case 0xbf:
             // 	return athrow;
-             case 0xc0:
-             	return new CHECK_CAST();
-             case 0xc1:
-             	return new INSTANCE_OF();
+            case 0xc0:
+                return new CHECK_CAST();
+            case 0xc1:
+                return new INSTANCE_OF();
             // case 0xc2:
             // 	return monitorenter;
             // case 0xc3:
