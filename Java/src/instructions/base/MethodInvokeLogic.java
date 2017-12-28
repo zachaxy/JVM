@@ -23,5 +23,14 @@ public class MethodInvokeLogic {
                 newFrame.getLocalVars().setSlot(i,slot);
             }
         }
+
+        //TODO:hack native function,not support yet!
+        if (method.isNative()) {
+            if ("registerNatives".equals(method.getName())) {
+                thread.popFrame();
+            } else {
+                throw new Error(method.getName() + "is native function,not support yet!");
+            }
+        }
     }
 }
