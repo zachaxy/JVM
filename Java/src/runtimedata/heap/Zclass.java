@@ -171,6 +171,11 @@ public class Zclass {
         return new Zobject(this);
     }
 
+    public Zclass arrayClass() {
+        String arrayClassName = ClassNameHelper.getArrayClassName(thisClassName);
+        return loader.loadClass(arrayClassName);
+    }
+
     //根据方法名和描述符获取方法，在测试环境中使用；
     public Zmethod getMethod(String name, String desc) {
         for (Zmethod method : methods) {
