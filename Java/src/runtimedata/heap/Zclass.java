@@ -51,6 +51,10 @@ public class Zclass {
         return runtimeConstantPool;
     }
 
+    public ZclassLoader getLoader() {
+        return loader;
+    }
+
     public Zclass getSuperClass() {
         return superClass;
     }
