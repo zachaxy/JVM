@@ -160,7 +160,7 @@ public class Zclass {
     //根据方法名和描述符获取方法，在测试环境中使用；
     public Zmethod getMethod(String name, String desc) {
         for (Zmethod method : methods) {
-            if (method.name.equals(name)&&method.descriptor.equals(desc)){
+            if (method.name.equals(name) && method.descriptor.equals(desc)) {
                 return method;
             }
         }
@@ -170,5 +170,31 @@ public class Zclass {
     //---------------针对数组相关的方法
     public boolean isArray() {
         return thisClassName.startsWith("[");
+    }
+
+    public Zobject newArray(int count) {
+        if (!isArray()) {
+            throw new RuntimeException("Not array class: " + thisClassName);
+        }
+        switch (thisClassName) {
+            case "[Z":
+                return new Zobject(this, new byte[count], null);
+            case "[B":
+                return new Zobject(this, new byte[count], null);
+            case "[C":
+                return new Zobject(this, new char[count], null);
+            case "[S":
+                return new Zobject(this, new short[count], null);
+            case "[I":
+                return new Zobject(this, new int[count], null);
+            case "[J":
+                return new Zobject(this, new long[count], null);
+            case "[F":
+                return new Zobject(this, new float[count], null);
+            case "[D":
+                return new Zobject(this, new double[count], null);
+            default:
+                return new Zobject(this, new Zobject[count], null);
+        }
     }
 }

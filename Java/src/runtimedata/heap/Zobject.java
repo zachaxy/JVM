@@ -11,12 +11,18 @@ public class Zobject {
     //存放一个class的成员,用来调用类的方法,静态成员变量
     private Zclass clazz;
     //存放的是非静态成员变量,包含父类+ 自己的；或者存放数组
-//    Slots fields;
     private Object data;
+    private Object extra;
 
     public Zobject(Zclass clazz) {
         this.clazz = clazz;
         data = new Slots(clazz.instanceSlotCount);
+    }
+
+    public Zobject(Zclass clazz, Object data, Object extra) {
+        this.clazz = clazz;
+        this.data = data;
+        this.extra = extra;
     }
 
     public Slots getFields() {
