@@ -34,7 +34,17 @@ public class Zclass {
         runtimeConstantPool = new RuntimeConstantPool(this, classFile.getConstantPool());
         fileds = Zfield.makeFields(this, classFile.getFields());
         methods = Zmethod.makeMethods(this, classFile.getMethods());
+    }
 
+    //用来创建数组类型
+    public Zclass(int accessFlags, String thisClassName, ZclassLoader loader,
+                  boolean initStarted, Zclass superClass, Zclass[] interfaces) {
+        this.accessFlags = accessFlags;
+        this.thisClassName = thisClassName;
+        this.loader = loader;
+        this.initStarted = initStarted;
+        this.superClass = superClass;
+        this.interfaces = interfaces;
     }
 
     public RuntimeConstantPool getRuntimeConstantPool() {

@@ -28,14 +28,27 @@ public class ZclassLoader {
             return map.get(name);
         }
 
+        if (name.charAt(0) == '[') {
+            return loadArrayClass(name);
+        }
+
         return loadNonArrayClass(name);
+    }
+
+    //数组类的字节码不是从 class 文件中获取的，而是在加载了基本类型之后，在 JVM 中动态创建的
+    private Zclass loadArrayClass(String name) {
+        Zclass clazz = new Zclass(AccessFlag.ACC_PUBLIC, name, this, true,
+                loadClass("java/lang/Object"),
+                new Zclass[]{loadClass("java/lang/Cloneable"), loadClass("java/io/Serializable")});
+        map.put(name, clazz);
+        return clazz;
     }
 
     private Zclass loadNonArrayClass(String name) {
         byte[] data = readClass(name);
         Zclass clazz = defineClass(data);
         link(clazz);
-        System.out.println("[Loaded  " + name + " from  " + name + "]");//因为我们没有返回加载的路径，所以这里只好以name来代替了；
+//        System.out.println("[Loaded  " + name + " from  " + name + "]");//因为我们没有返回加载的路径，所以这里只好以name来代替了；
         return clazz;
     }
 
