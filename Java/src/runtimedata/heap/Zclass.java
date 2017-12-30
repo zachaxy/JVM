@@ -141,6 +141,10 @@ public class Zclass {
         return false;
     }
 
+    private boolean isSuperInterfaceOf(Zclass source) {
+        return source.isSubInterfaceOf(this);
+    }
+
     public boolean isImplements(Zclass iface) {
         for (Zclass c = this; c != null; c = c.superClass) {
             for (int i = 0; i < c.interfaces.length; i++) {
@@ -159,13 +163,48 @@ public class Zclass {
         if (source == target) {
             return true;
         }
-        //TODO:还要判断是否是数组的情况：
-        if (target.isInterface()) {
-            return source.isImplements(target);
+
+        if (!source.isArray()) {
+            if (!source.isInterface()) {
+                if (!target.isInterface()) {
+                    return source.isSubClassOf(target);
+                } else {
+                    // target 是接口
+                    return source.isImplements(target);
+                }
+            } else {
+                // source 是接口
+                if (!target.isInterface()) {
+                    // TODO:isJlObject()尚未实现
+                    return true;
+                    //return target.isJlObject();
+                } else {
+                    // target 也是接口
+                    return target.isSuperInterfaceOf(source);
+                }
+            }
         } else {
-            return source.isSubClassOf(target);
+            //source 是数组
+            if (!target.isArray()) {
+                if (!target.isInterface()) {
+                    //return target.isJlObject();
+                    return true;
+                } else {
+                    // target 是接口
+                    // t is interface;数组默认实现了Cloneable和Serializable接口
+                    // TODO:isJlCloneable()方法和isJioSerializable()方法尚未实现；
+                    //return target.isJlCloneable() || target.isJioSerializable();
+                    return true;
+                }
+            } else {
+                // target 也是数组
+                Zclass sc = source.getComponentClass();
+                Zclass tc = target.getComponentClass();
+                return sc == tc || tc.isAssignableFrom(source);
+            }
         }
     }
+
 
     public Zobject newObject() {
         return new Zobject(this);
