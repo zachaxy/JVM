@@ -35,7 +35,7 @@ public class Load {
         frame.getOperandStack().pushLong(val);
     }
 
-    //用在 load/store 数组元素时，检测数组是否为 null
+    //用在 load 数组元素时，检测数组是否为 null
     public static void checkNotNull(Zobject arrRef) {
         if (arrRef == null) {
             throw new NullPointerException();

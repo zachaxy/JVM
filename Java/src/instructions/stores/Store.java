@@ -33,4 +33,17 @@ public class Store {
         double val = frame.getOperandStack().popDouble();
         frame.getLocalVars().setDouble(index, val);
     }
+
+    //用在 store 数组元素时，检测数组是否为 null
+    public static void checkNotNull(Zobject arrRef) {
+        if (arrRef == null) {
+            throw new NullPointerException();
+        }
+    }
+
+    public static void checkIndex(int count, int index) {
+        if (index < 0 || index >= count) {
+            throw new ArrayIndexOutOfBoundsException("index: " + index + " array's count: " + count);
+        }
+    }
 }
