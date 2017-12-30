@@ -225,9 +225,9 @@ public class InstructionFactory {
     static ARETURN areturn = new ARETURN();
     static RETURN _return = new RETURN();
     // TODO:return指令，数组相关指令未实现
-    /*static ARRAY_LENGTH arraylength   = new ARRAY_LENGTH();
-    static ATHROW athrow        = new ATHROW();
-	static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
+    static ARRAY_LENGTH arraylength = new ARRAY_LENGTH();
+    /* static ATHROW athrow        = new ATHROW();
+    static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
 	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT();
 	static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
     */
@@ -610,12 +610,12 @@ public class InstructionFactory {
             // 	return new INVOKE_DYNAMIC();
             case 0xbb:
                 return new NEW();
-            // case 0xbc:
-            // 	return new NEW_ARRAY();
-            // case 0xbd:
-            // 	return new ANEW_ARRAY();
-            // case 0xbe:
-            // 	return arraylength;
+            case 0xbc:
+                return new NEW_ARRAY();
+            case 0xbd:
+                return new ANEW_ARRAY();
+            case 0xbe:
+                return arraylength;
             // case 0xbf:
             // 	return athrow;
             case 0xc0:
@@ -628,8 +628,8 @@ public class InstructionFactory {
             // 	return monitorexit;
             case 0xc4:
                 return new WIDE();
-            // case 0xc5:
-            // 	return new MULTI_ANEW_ARRAY();
+            case 0xc5:
+                return new MULTI_ANEW_ARRAY();
             case 0xc6:
                 return new IFNULL();
             case 0xc7:
