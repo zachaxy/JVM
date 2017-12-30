@@ -216,4 +216,9 @@ public class Zclass {
                 return new Zobject(this, new Zobject[count], null);
         }
     }
+
+    public Zclass getComponentClass() {
+        String componentClassName = ClassNameHelper.getComponentClassName(thisClassName);
+        return loader.loadClass(componentClassName);
+    }
 }
