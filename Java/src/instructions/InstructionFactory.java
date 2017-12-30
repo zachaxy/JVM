@@ -31,6 +31,7 @@ import instructions.loads.loadfloat.*;
 import instructions.loads.loadint.*;
 import instructions.loads.loadlong.*;
 import instructions.loads.loadref.*;
+import instructions.loads.loadxarr.*;
 import instructions.math.add.DADD;
 import instructions.math.add.FADD;
 import instructions.math.add.IADD;
@@ -73,6 +74,7 @@ import instructions.stores.storefloat.*;
 import instructions.stores.storeint.*;
 import instructions.stores.storelong.*;
 import instructions.stores.storeref.*;
+import instructions.stores.storexarr.*;
 
 
 /**
@@ -117,14 +119,14 @@ public class InstructionFactory {
     static ALOAD_1 aload_1 = new ALOAD_1();
     static ALOAD_2 aload_2 = new ALOAD_2();
     static ALOAD_3 aload_3 = new ALOAD_3();
-    /*    IALOAD iaload      = new IALOAD();
-      static LALOAD laload      = new LALOAD();
-      static FALOAD faload      = new FALOAD();
-      static DALOAD daload      = new DALOAD();
-      static AALOAD aaload      = new AALOAD();
-      static BALOAD baload      = new BALOAD();
-      static CALOAD caload      = new CALOAD();
-      static SALOAD saload      = new SALOAD();*/
+    static IALOAD iaload = new IALOAD();
+    static LALOAD laload = new LALOAD();
+    static FALOAD faload = new FALOAD();
+    static DALOAD daload = new DALOAD();
+    static AALOAD aaload = new AALOAD();
+    static BALOAD baload = new BALOAD();
+    static CALOAD caload = new CALOAD();
+    static SALOAD saload = new SALOAD();
     static ISTORE_0 istore_0 = new ISTORE_0();
     static ISTORE_1 istore_1 = new ISTORE_1();
     static ISTORE_2 istore_2 = new ISTORE_2();
@@ -145,14 +147,14 @@ public class InstructionFactory {
     static ASTORE_1 astore_1 = new ASTORE_1();
     static ASTORE_2 astore_2 = new ASTORE_2();
     static ASTORE_3 astore_3 = new ASTORE_3();
-    /*    IASTORE iastore  = new IASTORE();
-      static LASTORE lastore  = new LASTORE();
-      static FASTORE fastore  = new FASTORE();
-      static DASTORE dastore  = new DASTORE();
-      static AASTORE aastore  = new AASTORE();
-      static BASTORE bastore  = new BASTORE();
-      static CASTORE castore  = new CASTORE();
-      static SASTORE sastore  = new SASTORE();*/
+    static IASTORE iastore = new IASTORE();
+    static LASTORE lastore = new LASTORE();
+    static FASTORE fastore = new FASTORE();
+    static DASTORE dastore = new DASTORE();
+    static AASTORE aastore = new AASTORE();
+    static BASTORE bastore = new BASTORE();
+    static CASTORE castore = new CASTORE();
+    static SASTORE sastore = new SASTORE();
     static POP pop = new POP();
     static POP2 pop2 = new POP2();
     static DUP dup = new DUP();
@@ -326,22 +328,22 @@ public class InstructionFactory {
                 return aload_2;
             case 0x2d:
                 return aload_3;
-            // case 0x2e:
-            // 	return iaload;
-            // case 0x2f:
-            // 	return laload;
-            // case 0x30:
-            // 	return faload;
-            // case 0x31:
-            // 	return daload;
-            // case 0x32:
-            // 	return aaload;
-            // case 0x33:
-            // 	return baload;
-            // case 0x34:
-            // 	return caload;
-            // case 0x35:
-            // 	return saload;
+            case 0x2e:
+                return iaload;
+            case 0x2f:
+                return laload;
+            case 0x30:
+                return faload;
+            case 0x31:
+                return daload;
+            case 0x32:
+                return aaload;
+            case 0x33:
+                return baload;
+            case 0x34:
+                return caload;
+            case 0x35:
+                return saload;
             case 0x36:
                 return new ISTORE();
             case 0x37:
@@ -392,22 +394,22 @@ public class InstructionFactory {
                 return astore_2;
             case 0x4e:
                 return astore_3;
-            // case 0x4f:
-            // 	return iastore;
-            // case 0x50:
-            // 	return lastore;
-            // case 0x51:
-            // 	return fastore;
-            // case 0x52:
-            // 	return dastore;
-            // case 0x53:
-            // 	return aastore;
-            // case 0x54:
-            // 	return bastore;
-            // case 0x55:
-            // 	return castore;
-            // case 0x56:
-            // 	return sastore;
+            case 0x4f:
+                return iastore;
+            case 0x50:
+                return lastore;
+            case 0x51:
+                return fastore;
+            case 0x52:
+                return dastore;
+            case 0x53:
+                return aastore;
+            case 0x54:
+                return bastore;
+            case 0x55:
+                return castore;
+            case 0x56:
+                return sastore;
             case 0x57:
                 return pop;
             case 0x58:
