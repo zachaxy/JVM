@@ -217,9 +217,24 @@ public class Zclass {
 
     //根据方法名和描述符获取方法，在测试环境中使用；
     public Zmethod getMethod(String name, String desc) {
-        for (Zmethod method : methods) {
-            if (method.name.equals(name) && method.descriptor.equals(desc)) {
-                return method;
+        for (Zclass clazz = this; clazz != null; clazz = clazz.superClass) {
+            for (Zmethod method : methods) {
+                if (method.name.equals(name) && method.descriptor.equals(desc)) {
+                    return method;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Zfield getField(String name, String descriptor, boolean isStatic) {
+        for (Zclass clazz = this; clazz != null; clazz = clazz.superClass) {
+            for (Zfield field : clazz.fileds) {
+                if (field.isStatic() == isStatic &&
+                        field.name.equals(name) &&
+                        field.descriptor.equals(descriptor)) {
+                    return field;
+                }
             }
         }
         return null;

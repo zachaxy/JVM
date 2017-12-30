@@ -202,8 +202,7 @@ public class ZclassLoader {
                     break;
                 case "Ljava/lang/String;":
                     String stringValue = (String) runtimeConstantPool.getRuntimeConstant(index).getValue();
-                    // TODO:字符串解析待数组解析实现后再实现；
-                    throw new RuntimeException("暂时无法解析字符串");
+                    Zobject jStr = StringPool.jString(clazz.getLoader(), stringValue);
                 default:
                     break;
             }

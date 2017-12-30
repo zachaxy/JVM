@@ -93,4 +93,66 @@ public class Zobject {
                 throw new RuntimeException("called length on a none array object!");
         }
     }
+
+
+    // reflection,只实现了 int 和 ref，double 和 float 没有实现；
+    public Zobject getRefVar(String name, String descriptor) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        return slots.getRef(field.slotId);
+    }
+
+    public void setRefVar(String name, String descriptor, Zobject ref) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        slots.setRef(field.slotId, ref);
+    }
+
+    public int getIntVar(String name, String descriptor) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        return slots.getInt(field.slotId);
+    }
+
+    public void setIntVar(String name, String descriptor, int val) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        slots.setInt(field.slotId, val);
+    }
+
+    public long getLongVar(String name, String descriptor) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        return slots.getLong(field.slotId);
+    }
+
+    public void setLongVar(String name, String descriptor, long val) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        slots.setLong(field.slotId, val);
+    }
+
+    public float getFloatVar(String name, String descriptor) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        return slots.getFloat(field.slotId);
+    }
+
+    public void setFloatVar(String name, String descriptor, float val) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        slots.setFloat(field.slotId, val);
+    }
+
+    public double getDoubleVar(String name, String descriptor) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        return slots.getDouble(field.slotId);
+    }
+
+    public void setDoubleVar(String name, String descriptor, double val) {
+        Zfield field = clazz.getField(name, descriptor, false);
+        Slots slots = (Slots) data;
+        slots.setDouble(field.slotId, val);
+    }
 }
