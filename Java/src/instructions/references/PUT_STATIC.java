@@ -37,7 +37,7 @@ public class PUT_STATIC extends Index16Instruction {
         }
 
         if (field.isFinal()) {
-            if (currentClass != clazz || "<clinit>".equals(currentMethod.getName())) {
+            if (currentClass != clazz || !"<clinit>".equals(currentMethod.getName())) {
                 throw new IllegalAccessError("java.lang.IllegalAccessError");
             }
         }
