@@ -5,6 +5,7 @@ import classpath.ClassPath;
 import runtimedata.Slots;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: zhangxin
@@ -18,8 +19,29 @@ public class ZclassLoader {
     public ZclassLoader(ClassPath classPath) {
         this.classPath = classPath;
         this.map = new HashMap<String, Zclass>();
+
+        loadBasicClasses();
+        loadPrimitiveClasses();
     }
 
+    private void loadBasicClasses() {
+        //经过这一步load之后,classMap中就有Class的Class了，已经Object 和 Class 所实现的接口；
+        Zclass jlClassClass = loadClass("java/lang/Class");
+        //接下来对classMap中的每一个Class都创建一个jClass;使用jlClassClass.NewObject()方法;
+        // 通过调用 newObject 方法，为每一个 Class 都创建一个元类对象；这样在使用 String.class 时可以直接获取到；
+        for (Map.Entry<String, Zclass> entry : map.entrySet()) {
+            Zclass jClass = entry.getValue();
+            if (jClass.jObject == null) {
+                jClass.jObject = jlClassClass.newObject();
+                jClass.jObject.extra = jClass;
+            }
+        }
+    }
+
+    //TODO:
+    private void loadPrimitiveClasses() {
+
+    }
 
     //先查找classMap，看类是否已经被加载。如果是，直接返回类数据，否则调用loadNonArrayClass（）方法加载类。
     //在类方法中的一个递归调用,也是classLoader中的入口方法
@@ -28,11 +50,20 @@ public class ZclassLoader {
             return map.get(name);
         }
 
+        Zclass clazz;
         if (name.charAt(0) == '[') {
-            return loadArrayClass(name);
+            clazz = loadArrayClass(name);
+        } else {
+            clazz = loadNonArrayClass(name);
         }
 
-        return loadNonArrayClass(name);
+        //为每一个 class 都关联一个元类
+        Zclass jlClassClass = map.get("java/lang/Class");
+        if (jlClassClass != null) {
+            clazz.jObject = jlClassClass.newObject();
+            clazz.jObject.extra = clazz;
+        }
+        return clazz;
     }
 
     //数组类的字节码不是从 class 文件中获取的，而是在加载了基本类型之后，在 JVM 中动态创建的

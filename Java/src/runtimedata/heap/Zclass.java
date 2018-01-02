@@ -25,6 +25,7 @@ public class Zclass {
     int staticSlotCount;    // 静态变量所占空间大小
     Slots staticVars;      // 存放静态变量
     boolean initStarted;    //判断类是否已经初始化，执行了类的<clinit>方法
+    Zobject jObject;        // jObject 指向的是该类的元类对象obj。 eg：String.class 得到的结果
 
     public Zclass(ClassFile classFile) {
         accessFlags = classFile.getAccessFlags();
@@ -274,5 +275,13 @@ public class Zclass {
     public Zclass getComponentClass() {
         String componentClassName = ClassNameHelper.getComponentClassName(thisClassName);
         return loader.loadClass(componentClassName);
+    }
+
+    public void setjObject(Zobject jObject) {
+        this.jObject = jObject;
+    }
+
+    public Zobject getjObject() {
+        return jObject;
     }
 }
