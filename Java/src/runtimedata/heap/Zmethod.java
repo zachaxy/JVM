@@ -1,7 +1,7 @@
 package runtimedata.heap;
 
-import classfile.attribute.CodeAttribute;
 import classfile.MemberInfo;
+import classfile.attribute.CodeAttribute;
 
 import java.util.ArrayList;
 
@@ -22,9 +22,12 @@ public class Zmethod extends ClassMember {
         copyAttributes(classFileMethod);
         parsedDescriptor = new MethodDescriptor(this.descriptor);
         argSlotCount = calcArgSlotCount(parsedDescriptor.getParameterTypes());
+        if (isNative()) {
+            injectCodeAttribute(parsedDescriptor.getReturnType());
+        }
     }
 
-    //该方法用来初始化成员变量：maxStack，maxLocals，code
+    //该方法用来初始化成员变量：maxStack，maxLocals，code，如果是 native 方法，是没有任何 code 字节码的；
     private void copyAttributes(MemberInfo classFileMethod) {
         CodeAttribute codeAttribute = classFileMethod.getCodeAttribute();
         if (codeAttribute != null) {
@@ -47,6 +50,39 @@ public class Zmethod extends ClassMember {
             }
         }
         return slotCount;
+    }
+
+    //JVM 并没有规定如何实现和调用本地方法，这里我们依然使用 JVM 栈 来执行本地方法
+    // 但是本地方法中并不包含字节码，那么本地方法的调用，这里我们利用接口来实现调用对应的方法；
+    // 同时 JVM 中预留了两条指令，操作码分别是 0xff 和 0xfe，下面使用 0xfe 来实现本地方法的返回
+    private void injectCodeAttribute(String returnType) {
+        //本地方法的操作数栈暂时为4;至少能容纳返回值
+        this.maxStack = 4;
+        //本地方法的局部变量表只用来存放参数,因此直接这样赋值
+        this.maxLocals = this.argSlotCount;
+        //接下来为本地方法构造字节码:起始第一个字节都是0xfe,用来表用这是本地方法;
+        //第二个字节码则根据不同的返回值类型选择相应的xreturn的指令即可
+        //不必担心下面的 byte 的强转，因为在读取字节码时，使用的是 readUint8()方法
+        switch (returnType.charAt(0)) {
+            case 'V':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xb1}; // return
+                break;
+            case 'L':
+            case '[':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xb0}; // areturn
+                break;
+            case 'D':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xaf}; // dreturn
+                break;
+            case 'F':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xae}; // freturn
+                break;
+            case 'J':
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xad}; // lreturn
+                break;
+            default:
+                this.code = new byte[]{(byte) 0xfe, (byte) 0xac};// ireturn
+        }
     }
 
     public static Zmethod[] makeMethods(Zclass zclass, MemberInfo[] classFileMethods) {
