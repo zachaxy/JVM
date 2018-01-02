@@ -59,7 +59,7 @@ public class RuntimeConstantPool {
                     break;
                 case ConstantInfo.CONSTANT_Class:
                     ConstantClassInfo classInfo = (ConstantClassInfo) classFileConstantInfo;
-                    //TODO:传入 this，存在内存泄露问题，ref 类中真正需要的是 传入上面的 clazz
+                    //ref 类中真正需要的是 传入上面的 clazz
                     this.infos[i] = new RuntimeConstantInfo<ClassRef>(new ClassRef(this, classInfo), ConstantInfo.CONSTANT_Class);
                     break;
                 case ConstantInfo.CONSTANT_Fieldref:

@@ -226,13 +226,12 @@ public class InstructionFactory {
     static DRETURN dreturn = new DRETURN();
     static ARETURN areturn = new ARETURN();
     static RETURN _return = new RETURN();
-    // TODO:return指令，数组相关指令未实现
     static ARRAY_LENGTH arraylength = new ARRAY_LENGTH();
     /* static ATHROW athrow        = new ATHROW();
     static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
-	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT();
-	static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
-    */
+	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT(); */
+    static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
+
 
     public static Instruction createInstruction(int opCode) {
         switch (opCode) {
@@ -641,8 +640,8 @@ public class InstructionFactory {
             // case 0xc9:
             // 	return new JSR_W();
             // case 0xca: breakpoint
-            // case 0xfe:
-            // return invoke_native
+            case 0xfe:
+                return invoke_native;
             // case 0xff: impdep2
             default:
                 throw new RuntimeException("Unsupported opcode: " + opCode);

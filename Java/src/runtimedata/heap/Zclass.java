@@ -117,6 +117,10 @@ public class Zclass {
         return "";
     }
 
+    public String getJavaName() {
+        return thisClassName.replace("/", ".");
+    }
+
     public boolean isSubClassOf(Zclass parent) {
         for (Zclass c = superClass; c != null; c = c.superClass) {
             if (c == parent) {

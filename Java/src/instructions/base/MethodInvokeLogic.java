@@ -28,9 +28,9 @@ public class MethodInvokeLogic {
         if (method.isNative()) {
             if ("registerNatives".equals(method.getName())) {
                 thread.popFrame();
-            } else {
+            } /*else {
                 throw new Error(method.getName() + "is native function,not support yet!");
-            }
+            }*/
         }
     }
 }
