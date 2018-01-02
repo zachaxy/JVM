@@ -3,6 +3,7 @@ package classfile;
 import classfile.attribute.AttributeInfo;
 import classfile.attribute.CodeAttribute;
 import classfile.attribute.ConstantValueAttribute;
+import classfile.attribute.ExceptionsAttribute;
 
 /**
  * Author: zhangxin
@@ -66,11 +67,21 @@ public class MemberInfo {
         return null;
     }
 
-    //    并非每个成员变量都有ConstantValueAttribute属性,该属性只针对于static final 基础类型变量或者String类型变量;
+    //并非每个成员变量都有ConstantValueAttribute属性,该属性只针对于static final 基础类型变量或者String类型变量;
     public ConstantValueAttribute getConstantValueAttribute() {
         for (AttributeInfo info : attributes) {
             if (info instanceof ConstantValueAttribute) {
                 return (ConstantValueAttribute) info;
+            }
+        }
+        return null;
+    }
+
+
+    public ExceptionsAttribute getExceptionsAttribute() {
+        for (int i = 0; i < attributes.length; i++) {
+            if (attributes[i] instanceof ExceptionsAttribute) {
+                return (ExceptionsAttribute) attributes[i];
             }
         }
         return null;

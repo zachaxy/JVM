@@ -3,6 +3,7 @@ package znative;
 import runtimedata.Zframe;
 import znative.java.lang.Nclass;
 import znative.java.lang.Nobject;
+import znative.java.lang.Zthrowable;
 
 import java.util.HashMap;
 
@@ -62,5 +63,7 @@ public class RegisterCenter {
 	register("java/lang/Class", "getComponentType", "()Ljava/lang/Class;", new Nclass.getComponentType())
 	register("java/lang/Class", "isAssignableFrom", "(Ljava/lang/Class;)Z", new Nclass.isAssignableFrom())
  */
+        register("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;", new Zthrowable.fillInStackTrace());
+
     }
 }

@@ -55,32 +55,51 @@ public class CodeAttribute extends AttributeInfo {
         int exceptionTableLength = reader.readUint16();
         ExceptionTableEntry[] exceptionTable = new ExceptionTableEntry[exceptionTableLength];
         for (int i = 0; i < exceptionTableLength; i++) {
-            exceptionTable[i] = new ExceptionTableEntry(reader.readUint16(), reader.readUint16(),
-                    reader.readUint16(), reader.readUint16());
+            exceptionTable[i] = new ExceptionTableEntry(reader);
         }
         return exceptionTable;
     }
 
+    public LineNumberTableAttribute lineNumberTableAttribute() {
+        for (int i = 0; i < attributes.length; i++) {
+            if (attributes[i] instanceof LineNumberTableAttribute) {
+                return (LineNumberTableAttribute) attributes[i];
+            }
+        }
+        return null;
+    }
+
 
     //异常表，包含四个指针，分别为
-    static class ExceptionTableEntry {
-        int startPc;
-        int endPc;
-        int handlerPc;
-        int catchType;
+    public static class ExceptionTableEntry {
+        int startPc;        //可能排除异常的代码块的起始字节码（包括）
+        int endPc;          //可能排除异常的代码块的终止字节码（不包括）
+        int handlerPc;      //负责处理异常的 catch 块的其实位置
+        int catchType;      //指向运行时常量池的一个索引，解析后可以得到一个异常类
 
-        public ExceptionTableEntry(int startPc, int endPc, int handlerPc, int catchType) {
-            this.startPc = startPc;
-            this.endPc = endPc;
-            this.handlerPc = handlerPc;
-            this.catchType = catchType;
-        }
-//        改为传入一个reader的方法,比上面的构造方法更优雅一些;
-        public ExceptionTableEntry(ClassReader reader){
+
+        //改为传入一个reader的方法,比上面的构造方法更优雅一些;
+        public ExceptionTableEntry(ClassReader reader) {
             this.startPc = reader.readUint16();
             this.endPc = reader.readUint16();
             this.handlerPc = reader.readUint16();
             this.catchType = reader.readUint16();
+        }
+
+        public int getStartPc() {
+            return startPc;
+        }
+
+        public int getEndPc() {
+            return endPc;
+        }
+
+        public int getHandlerPc() {
+            return handlerPc;
+        }
+
+        public int getCatchType() {
+            return catchType;
         }
     }
 
@@ -95,4 +114,10 @@ public class CodeAttribute extends AttributeInfo {
     public byte[] getCode() {
         return code;
     }
+
+    public ExceptionTableEntry[] getExceptionTable() {
+        return exceptionTable;
+    }
+
+
 }

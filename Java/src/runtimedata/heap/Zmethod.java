@@ -2,6 +2,8 @@ package runtimedata.heap;
 
 import classfile.MemberInfo;
 import classfile.attribute.CodeAttribute;
+import classfile.attribute.ExceptionsAttribute;
+import classfile.attribute.LineNumberTableAttribute;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,9 @@ public class Zmethod extends ClassMember {
     private int maxStack;
     private int maxLocals;
     private byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
+    private ExceptionTable exceptionTable;
+    private LineNumberTableAttribute lineNumberTable;
+    private ExceptionsAttribute exceptions;  //有throws显示声明的异常
     private MethodDescriptor parsedDescriptor;  //解析后的方法描述符
     private int argSlotCount;   //方法所需的参数个数;对于非静态方法,至少是1个(this)
 
@@ -34,7 +39,12 @@ public class Zmethod extends ClassMember {
             maxStack = codeAttribute.getMaxStack();
             maxLocals = codeAttribute.getMaxLocals();
             code = codeAttribute.getCode();
+            lineNumberTable = codeAttribute.lineNumberTableAttribute();
+            //这一步主要是将classFile中的异常处理表(符号引用),转换为运行时的异常处理表(直接引用);主要在于catchType的转换
+            exceptionTable = new ExceptionTable(codeAttribute.getExceptionTable(),
+                    clazz.getRuntimeConstantPool());
         }
+        exceptions = classFileMethod.getExceptionsAttribute();
     }
 
     private int calcArgSlotCount(ArrayList<String> args) {
@@ -134,4 +144,23 @@ public class Zmethod extends ClassMember {
     public int getArgSlotCount() {
         return argSlotCount;
     }
+
+
+    public Zclass[] getExceptionTypes() {
+        if (this.exceptions == null) {
+            return new Zclass[0];
+        }
+
+        int[] exceptionIndexTable = exceptions.getExceptionIndexTable();
+        Zclass[] exClasses = new Zclass[exceptionIndexTable.length];
+        RuntimeConstantPool runtimeConstantPool = clazz.getRuntimeConstantPool();
+
+        for (int i = 0; i < exceptionIndexTable.length; i++) {
+            ClassRef classRef = (ClassRef) runtimeConstantPool.getRuntimeConstant(exceptionIndexTable[i]).getValue();
+            exClasses[i] = classRef.resolvedClass();
+        }
+
+        return exClasses;
+    }
+
 }
