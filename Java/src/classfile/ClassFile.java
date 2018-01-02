@@ -120,7 +120,7 @@ public class ClassFile {
         if (superClass > 0) {
             return constantPool.getClassName(superClass);
         } else {
-            return "java/lang/Object";
+            return "";
         }
     }
 
