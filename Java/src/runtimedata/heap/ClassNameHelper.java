@@ -8,7 +8,7 @@ import java.util.Map;
  * @date 17/12/29
  */
 public class ClassNameHelper {
-    private static HashMap<String, String> primitiveTypes;
+    public static HashMap<String, String> primitiveTypes;
 
     static {
         primitiveTypes = new HashMap<String, String>();

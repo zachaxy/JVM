@@ -38,9 +38,27 @@ public class ZclassLoader {
         }
     }
 
-    //TODO:
+    //加载基本类型的类:void.class;boolean.class;byte.class
     private void loadPrimitiveClasses() {
+        for (Map.Entry<String, String> entry : ClassNameHelper.primitiveTypes.entrySet()) {
+            String className = entry.getKey();
+            loadPrimitiveClass(className);
+        }
+    }
 
+    //加载基本类型,和数组类似,也没有对应的class文件,只能在运行时创建;基本类型:无超类,也没有实现任何接口
+    /* 针对基本类型的三点说明：
+    1. void和基本类型的类型名字就是：void，int，float 等
+    2. 基本类型的类没有超类，也没有实现任何接口
+    3. 非基本类型的类对象是通过 ldc 指令加载到操作数栈中的
+    */
+    private void loadPrimitiveClass(String className) {
+        Zclass clazz = new Zclass(AccessFlag.ACC_PUBLIC, className, this, true,
+                null,
+                new Zclass[]{});
+        clazz.jObject = map.get("java/lang/Class").newObject();
+        clazz.jObject.extra = clazz;
+        map.put(className, clazz);
     }
 
     //先查找classMap，看类是否已经被加载。如果是，直接返回类数据，否则调用loadNonArrayClass（）方法加载类。
