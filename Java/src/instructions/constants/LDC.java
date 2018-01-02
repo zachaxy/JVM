@@ -4,10 +4,7 @@ import classfile.classconstant.ConstantInfo;
 import instructions.base.Index8Instruction;
 import runtimedata.OperandStack;
 import runtimedata.Zframe;
-import runtimedata.heap.RuntimeConstantInfo;
-import runtimedata.heap.StringPool;
-import runtimedata.heap.Zclass;
-import runtimedata.heap.Zobject;
+import runtimedata.heap.*;
 
 /**
  * @author zachaxy
@@ -31,8 +28,11 @@ public class LDC extends Index8Instruction {
                 Zobject internedStr = StringPool.jString(clazz.getLoader(), (String) runtimeConstant.getValue());
                 operandStack.pushRef(internedStr);
                 break;
-//            case ConstantInfo.CONSTANT_Class:
-//                break;
+            case ConstantInfo.CONSTANT_Class:
+                ClassRef classRef = (ClassRef) runtimeConstant.getValue();
+                Zobject jObject = classRef.resolvedClass().getjObject();
+                operandStack.pushRef(jObject);
+                break;
             // case MethodType, MethodHandle //Java7中的特性，不在本虚拟机范围内
             default:
                 break;
