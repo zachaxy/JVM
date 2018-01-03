@@ -50,4 +50,15 @@ public class Zstack {
         }
         return _top;
     }
+
+
+    Zframe[] getFrames() {
+        Zframe[] frames = new Zframe[size];
+        int i = 0;
+        for (Zframe frame = _top;frame!=null;frame = frame.lower) {
+            frames[i] = frame;
+            i++;
+        }
+        return frames;
+    }
 }

@@ -131,5 +131,9 @@ public class OperandStack {
         return size == 0;
     }
 
+    //清空操作数栈，直接将 size 设置为0，而不是将所有的 slot 都设为 null；因为这样可能会引起其它问题
+    public void clear() {
+        size = 0;
+    }
 }
 

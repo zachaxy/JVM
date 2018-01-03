@@ -55,4 +55,14 @@ public class Zthread {
     public boolean isStackEmpty() {
         return stack.size == 0;
     }
+
+    public void clearStack() {
+        while (!isStackEmpty()) {
+            stack.pop();
+        }
+    }
+
+    public Zframe[] getFrames() {
+        return stack.getFrames();
+    }
 }
