@@ -26,6 +26,7 @@ public class Zclass {
     Slots staticVars;      // 存放静态变量
     boolean initStarted;    //判断类是否已经初始化，执行了类的<clinit>方法
     Zobject jObject;        // jObject 指向的是该类的元类对象obj。 eg：String.class 得到的结果
+    String sourceFile;
 
     public Zclass(ClassFile classFile) {
         accessFlags = classFile.getAccessFlags();
@@ -35,6 +36,7 @@ public class Zclass {
         runtimeConstantPool = new RuntimeConstantPool(this, classFile.getConstantPool());
         fileds = Zfield.makeFields(this, classFile.getFields());
         methods = Zmethod.makeMethods(this, classFile.getMethods());
+        sourceFile = classFile.getSourceFile();
     }
 
     //用来创建数组类型
@@ -287,5 +289,9 @@ public class Zclass {
 
     public Zobject getjObject() {
         return jObject;
+    }
+
+    public String getSourceFile() {
+        return sourceFile;
     }
 }

@@ -18,7 +18,7 @@ public class Zmethod extends ClassMember {
     private byte[] code;        //如果没有code属性,取值为null;不过就算是空方法也有一个return 语句;
     private ExceptionTable exceptionTable;
     private LineNumberTableAttribute lineNumberTable;
-    private ExceptionsAttribute exceptions;  //有throws显示声明的异常
+    private ExceptionsAttribute exceptions;  //由方法声明中显式throws显示的异常
     private MethodDescriptor parsedDescriptor;  //解析后的方法描述符
     private int argSlotCount;   //方法所需的参数个数;对于非静态方法,至少是1个(this)
 
@@ -146,6 +146,15 @@ public class Zmethod extends ClassMember {
     }
 
 
+    //搜索自身方法的异常处理表,如果能找到对应的异常处理项,则返回其handlerPC字段(指出负责异常处理的catch块的位置),否则返回-1
+    public int findExceptionHandler(Zclass exClazz, int pc) {
+        ExceptionHandler handler = exceptionTable.findExceptionHandler(exClazz, pc);
+        if (handler != null) {
+            return handler.handlerPc;
+        }
+        return -1;
+    }
+
     public Zclass[] getExceptionTypes() {
         if (this.exceptions == null) {
             return new Zclass[0];
@@ -163,4 +172,14 @@ public class Zmethod extends ClassMember {
         return exClasses;
     }
 
+
+    public int getLineNumber(int pc) {
+        if (isNative()) {
+            return -2;
+        }
+        if (lineNumberTable == null) {
+            return -1;
+        }
+        return lineNumberTable.getLineNumber(pc);
+    }
 }

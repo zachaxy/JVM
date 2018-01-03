@@ -2,6 +2,8 @@ package classfile;
 
 import Utils.ByteUtils;
 import classfile.attribute.AttributeInfo;
+import classfile.attribute.SourceFileAttribute;
+
 
 /**
  * Author: zhangxin
@@ -131,5 +133,15 @@ public class ClassFile {
         }
         return interfaceNames;
 
+    }
+
+
+    public String getSourceFile() {
+        for (AttributeInfo info : attributes) {
+            if (info instanceof SourceFileAttribute) {
+                return ((SourceFileAttribute) info).getFileName();
+            }
+        }
+        return "unknow";
     }
 }
