@@ -227,9 +227,9 @@ public class InstructionFactory {
     static ARETURN areturn = new ARETURN();
     static RETURN _return = new RETURN();
     static ARRAY_LENGTH arraylength = new ARRAY_LENGTH();
-    /* static ATHROW athrow        = new ATHROW();
-    static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
-	static MONITOR_EXIT monitorexit   = new MONITOR_EXIT(); */
+    static ATHROW athrow = new ATHROW();
+    /* static MONITOR_ENTER monitorenter  = new MONITOR_ENTER();
+   static MONITOR_EXIT monitorexit   = new MONITOR_EXIT(); */
     static INVOKE_NATIVE invoke_native = new INVOKE_NATIVE();
 
 
@@ -617,8 +617,8 @@ public class InstructionFactory {
                 return new ANEW_ARRAY();
             case 0xbe:
                 return arraylength;
-            // case 0xbf:
-            // 	return athrow;
+            case 0xbf:
+                return athrow;
             case 0xc0:
                 return new CHECK_CAST();
             case 0xc1:
