@@ -10,7 +10,7 @@ import runtimedata.heap.*;
  * @date 17/12/26
  * desc:调用虚方法,一般用在多态;
  */
-public class INVOKE_VIRTUAL extends Index16Instruction{
+public class INVOKE_VIRTUAL extends Index16Instruction {
     @Override
     public void execute(Zframe frame) {
         //调用该方法所在的类

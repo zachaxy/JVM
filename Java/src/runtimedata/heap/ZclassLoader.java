@@ -161,7 +161,7 @@ public class ZclassLoader {
         prepare(clazz);
     }
 
-    //在执行类的任何代码之前要对类进行严格的检验,这里忽略检验过程,,作为空实现;
+    //在执行类的任何代码之前要对类进行严格的检验,这里忽略检验过程,作为空实现;
     private void verify(Zclass clazz) {
     }
 
@@ -193,7 +193,7 @@ public class ZclassLoader {
     }
 
 
-    //    计算类的静态成员变量所需的空间，不包含父类，同样也只是计算和分配 slotId，不申请空间
+    //计算类的静态成员变量所需的空间，不包含父类，同样也只是计算和分配 slotId，不申请空间
     private void calcStaticFieldSlotIds(Zclass clazz) {
         int slotId = 0;
         for (Zfield field : clazz.fileds) {
@@ -220,7 +220,7 @@ public class ZclassLoader {
     }
 
 
-    //    为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真是的值;
+    // 为static final 修饰的成员赋值,这种类型的成员是ConstantXXXInfo类型的,该info中包含真正的值;
     private void initStaticFinalVar(Zclass clazz, Zfield zfield) {
         Slots staticVars = clazz.staticVars;
         RuntimeConstantPool runtimeConstantPool = clazz.getRuntimeConstantPool();

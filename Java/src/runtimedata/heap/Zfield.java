@@ -8,7 +8,7 @@ import classfile.MemberInfo;
  * Time: 2017/5/19 0019.
  * Desc: 字段的抽象,是在class中定义的字段,包括静态的和非静态的
  */
-public class Zfield extends ClassMember{
+public class Zfield extends ClassMember {
     //运行时常量池中的索引,该属性只有在static final成员有初值的情况下才有;
     int constValueIndex;
     //类中字段数组slots中的的索引；其赋值在首次加载 class 文件后，为其分配的 slotId
@@ -17,7 +17,7 @@ public class Zfield extends ClassMember{
     int slotId;
 
     private Zfield(Zclass clazz, MemberInfo classFileField) {
-        super(clazz,classFileField);
+        super(clazz, classFileField);
         copyAttributes(classFileField);
     }
 
@@ -34,7 +34,7 @@ public class Zfield extends ClassMember{
 
     public void copyAttributes(MemberInfo classFileField) {
         ConstantValueAttribute constantValueAttribute = classFileField.getConstantValueAttribute();
-        if(constantValueAttribute!=null){
+        if (constantValueAttribute != null) {
             constValueIndex = constantValueAttribute.getConstantValueIndex();
         }
     }
@@ -44,7 +44,7 @@ public class Zfield extends ClassMember{
     }
 
     public boolean isTransient() {
-        return 0 != ( accessFlags & AccessFlag.ACC_TRANSIENT);
+        return 0 != (accessFlags & AccessFlag.ACC_TRANSIENT);
     }
 
     public boolean isEnum() {

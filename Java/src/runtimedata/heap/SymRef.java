@@ -9,10 +9,10 @@ package runtimedata.heap;
 public class SymRef {
     RuntimeConstantPool runtimeConstantPool;   //存放符号引用所在的运行时常量池指针,可以通过符号引用访问到运行时常量池，进一步又可以访问到类数据
     String className;   //存放类的完全限定名
-    Zclass clazz;       //cp 的宿主类中的符号引用的真正类,在外面访问时，根据 clazz 是否为 null 来决定是否执行 loadClass
+    Zclass clazz;       //上述运行时常量池的宿主类中的符号引用的真正类,在外面访问时，根据 clazz 是否为 null 来决定是否执行 loadClass
 
-    public SymRef(RuntimeConstantPool cp) {
-        this.runtimeConstantPool = cp;
+    public SymRef(RuntimeConstantPool runtimeConstantPool) {
+        this.runtimeConstantPool = runtimeConstantPool;
     }
 
     //类引用转直接引用

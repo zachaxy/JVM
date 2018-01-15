@@ -24,7 +24,7 @@ public class RuntimeConstantPool {
     Zclass clazz;
     RuntimeConstantInfo[] infos;
 
-    //    主要作用是将class文件中的常量池转换为运行时常量池;这里没有做转换,而是直接拿过来用;
+    //主要作用是将class文件中的常量池转换为运行时常量池;
     public RuntimeConstantPool(Zclass clazz, ConstantPool classFileConstantPool) {
         this.clazz = clazz;
         ConstantInfo[] classFileConstantInfos = classFileConstantPool.getInfos();
@@ -77,7 +77,6 @@ public class RuntimeConstantPool {
                 default:
                     //还有一些jdk1.7才开始支持的动态属性,不在本虚拟机的实现范围内
                     break;
-
             }
         }
     }
