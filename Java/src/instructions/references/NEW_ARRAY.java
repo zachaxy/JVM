@@ -32,13 +32,13 @@ public class NEW_ARRAY extends Index8Instruction {
             throw new NegativeArraySizeException("" + count);
         }
         ZclassLoader loader = frame.getMethod().getClazz().getLoader();
-        Zclass arrClazz = getPrimitiveArrayClass(loader, this.index);
+        Zclass arrClazz = getPrimitiveArrayClass(loader);
         Zobject arr = arrClazz.newArray(count);
         operandStack.pushRef(arr);
     }
 
     //获取基本类型数组的class;如果没有加载过,需要加载进JVM
-    private Zclass getPrimitiveArrayClass(ZclassLoader loader, int index) {
+    private Zclass getPrimitiveArrayClass(ZclassLoader loader) {
         //从字节码中获取到的 index 表明的是哪种类型的数组
         switch (this.index) {
             case AT_BOOLEAN:
