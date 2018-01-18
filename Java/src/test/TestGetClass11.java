@@ -70,7 +70,11 @@ public class TestGetClass11 {
     }
 
     public static void test() {
-        String s1 = void.class.getSimpleName();
+//        String s1 = int.class.getName();
+//        String s1 = void.class.getName();
+//        String s1 = double.class.getName();
+        String s1 = int[].class.getName();
+//        String s1 = "abc".getClass().getName();
 
     }
 }
