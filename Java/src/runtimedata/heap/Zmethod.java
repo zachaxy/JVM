@@ -62,9 +62,10 @@ public class Zmethod extends ClassMember {
         return slotCount;
     }
 
-    //JVM 并没有规定如何实现和调用本地方法，这里我们依然使用 JVM 栈 来执行本地方法
+    // JVM 并没有规定如何实现和调用本地方法，这里我们依然使用 JVM 栈 来执行本地方法
     // 但是本地方法中并不包含字节码，那么本地方法的调用，这里我们利用接口来实现调用对应的方法；
-    // 同时 JVM 中预留了两条指令，操作码分别是 0xff 和 0xfe，下面使用 0xfe 来实现本地方法的返回
+    // 同时 JVM 中预留了两条指令，操作码分别是 0xff 和 0xfe，下面使用 0xfe 来当前方法为表示本地方法
+    // 第二个字节为本地方法的返回指令，该指令和普通方法的返回指令是一样的。
     private void injectCodeAttribute(String returnType) {
         //本地方法的操作数栈暂时为4;至少能容纳返回值
         this.maxStack = 4;

@@ -13,8 +13,8 @@ import znative.NativeMethod;
 
 public class Nobject {
     // static native Class<?> getPrimitiveClass(String name);
-// (Ljava/lang/String;)Ljava/lang/Class;
-//该方法是获取基本类型的类对象;
+    // (Ljava/lang/String;)Ljava/lang/Class;
+    //该方法是获取非基本类型的类对象;
     public static class getClass implements NativeMethod {
 
         @Override

@@ -45,15 +45,6 @@ public class Nclass {
         }
     }
 
-    // public native boolean isArray();
-// ()Z
-//    func isArray(frame *rtda.Frame) {
-//        vars := frame.LocalVars()
-//        this := vars.GetThis()
-//        class := this.Extra().(*heap.Class)
-//        stack := frame.OperandStack()
-//        stack.PushBoolean(class.IsArray())
-//    }
     public static class isArray implements NativeMethod {
         @Override
         public void run(Zframe frame) {
