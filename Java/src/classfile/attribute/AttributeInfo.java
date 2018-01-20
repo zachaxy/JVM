@@ -36,7 +36,14 @@ public abstract class AttributeInfo {
         return attrInfo;
     }
 
-    //读取属性表;这个和ConstantPool中的方法类似,一般都是一下全部读取出来,不会只读一个
+    /**
+     * 读取属性表;
+     * 和ConstantPool中的方法类似,一般都是一下子全部读取出来,不会只读一个
+     * 整个 JVM 中有三个地方用到了读取属性表
+     * 1. 由 class 文件转为 ClassFile 对象时，读取 Class 的属性
+     * 2. 为 class 中定义的 Field 和 Method 读取属性
+     * 3. 为 Method 中的字节码读取属性(本地变量表大小，操作数大小，字节码，异常表)
+     */
     public static AttributeInfo[] readAttributes(ClassReader reader, ConstantPool constantPool) {
         int attributesCount = reader.readUint16();
         AttributeInfo[] attributes = new AttributeInfo[attributesCount];
@@ -47,8 +54,7 @@ public abstract class AttributeInfo {
     }
 
     //Java虚拟机规范预定义了23种属性，先解析其中的8种
-    /*fixme: 各属性中没有传入attrName和attrLen,只有对应的value;
-    23种预定义属性可以分为三组。
+    /*23种预定义属性可以分为三组。
     第一组属性是实现Java虚拟机所必需的，共有5种；
     第二组属性是Java类库所必需的，共有12种；
     第三组属性主要提供给工具使用，共有6种。第三组属性是可选的，也就是说可以不出现在class文件中。
@@ -57,19 +63,19 @@ public abstract class AttributeInfo {
     private static AttributeInfo create(String attrName, int attrLen, ConstantPool constantPool) {
         if ("Code".equals(attrName)) {
             return new CodeAttribute(constantPool);
-        }else if ("ConstantValue".equals(attrName)){
+        } else if ("ConstantValue".equals(attrName)) {
             return new ConstantValueAttribute();
-        }else if ("Deprecated".equals(attrName)){
+        } else if ("Deprecated".equals(attrName)) {
             return new DeprecatedAttribute();
-        }else if ("Exceptions".equals(attrName)){
+        } else if ("Exceptions".equals(attrName)) {
             return new ExceptionsAttribute();
-        }else if ("LineNumberTable".equals(attrName)){
+        } else if ("LineNumberTable".equals(attrName)) {
             return new LineNumberTableAttribute();
-        }else if ("LocalVariableTable".equals(attrName)){
+        } else if ("LocalVariableTable".equals(attrName)) {
             return new LocalVariableTableAttribute();
-        }else if ("SourceFile".equals(attrName)){
+        } else if ("SourceFile".equals(attrName)) {
             return new SourceFileAttribute(constantPool);
-        }else if ("Synthetic".equals(attrName)){
+        } else if ("Synthetic".equals(attrName)) {
             return new SyntheticAttribute();
         } else {
             return new UnparsedAttribute(attrName, attrLen);

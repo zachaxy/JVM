@@ -83,7 +83,7 @@ public class ConstantPool {
         return ((ConstantUtf8Info) getConstantInfo(index)).val;
     }
 
-    //TODO:测试方法，正式版本祛除
+    //测试方法，正式版本祛除
     public int getConstantPoolCount() {
         return realConstantPoolCount;
     }

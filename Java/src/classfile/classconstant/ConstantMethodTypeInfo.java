@@ -5,12 +5,11 @@ import classfile.ClassReader;
 /**
  * Author: zhangxin
  * Time: 2017/5/2 0002.
- * Desc:
+ * Desc: Java7 中的属性，在本 JVM 中未实现
  */
 public class ConstantMethodTypeInfo extends ConstantInfo {
-    // TODO: 2017/5/3 0003 关于byte上界,自行处理;
-
-    int descriptorIndex;
+    //关于byte上界,自行处理;
+    private int descriptorIndex;
 
     public ConstantMethodTypeInfo(int i) {
         type = i;
@@ -20,5 +19,9 @@ public class ConstantMethodTypeInfo extends ConstantInfo {
     @Override
     void readInfo(ClassReader reader) {
         descriptorIndex = reader.readUint16();
+    }
+
+    public int getDescriptorIndex() {
+        return descriptorIndex;
     }
 }

@@ -182,9 +182,7 @@ public class Zclass {
             } else {
                 // source 是接口
                 if (!target.isInterface()) {
-                    // TODO:isJlObject()尚未实现
-                    return true;
-                    //return target.isJlObject();
+                    return target.isJlObject();
                 } else {
                     // target 也是接口
                     return target.isSuperInterfaceOf(source);
@@ -194,14 +192,11 @@ public class Zclass {
             //source 是数组
             if (!target.isArray()) {
                 if (!target.isInterface()) {
-                    //return target.isJlObject();
-                    return true;
+                    return target.isJlObject();
                 } else {
                     // target 是接口
                     // t is interface;数组默认实现了Cloneable和Serializable接口
-                    // TODO:isJlCloneable()方法和isJioSerializable()方法尚未实现；
-                    //return target.isJlCloneable() || target.isJioSerializable();
-                    return true;
+                    return target.isJlCloneable() || target.isJioSerializable();
                 }
             } else {
                 // target 也是数组
@@ -212,6 +207,17 @@ public class Zclass {
         }
     }
 
+    public boolean isJlObject() {
+        return "java/lang/Object".equals(thisClassName);
+    }
+
+    public boolean isJlCloneable() {
+        return "java/lang/Cloneable".equals(thisClassName);
+    }
+
+    public boolean isJioSerializable() {
+        return "java/io/Serializable".equals(thisClassName);
+    }
 
     public Zobject newObject() {
         return new Zobject(this);
